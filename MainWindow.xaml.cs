@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FunctionSketch.FunctionParser;
 
 namespace 函数画板
 {
@@ -23,6 +24,15 @@ namespace 函数画板
         public MainWindow()
         {
             InitializeComponent();
+            test();
+        }
+
+        private void test()
+        {
+            FunctionParser fp = new FunctionParser("x^2");
+            fp.ParseExpression();
+            var exp = fp.GetExpressionTree();
+            result.Content = exp.Calculate(2);
         }
     }
 }
