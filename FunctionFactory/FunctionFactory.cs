@@ -11,7 +11,7 @@ namespace FunctionSketch
 
         public FunctionFactory(string funcsExp)
         {
-            string[] funcs = funcsExp.ToUpper().Split(';');
+            string[] funcs = funcsExp.ToUpper().Split(';', StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var func in funcs)
             {

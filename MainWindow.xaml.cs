@@ -29,19 +29,26 @@ namespace 函数画板
 
         private void test()
         {
-            FunctionFactory ff = new FunctionFactory("2;y=2;x^2;x,x;y^2=x");
-            FunctionStorage[] fs = ff.GetFunctions();
-            foreach (var item in fs)
+            FunctionFactory ff = new FunctionFactory("0.5x,e^(0-0.5*x)*sin(20*0.5*x)");
+            var fs = (ParamVarFuncStorage)ff.GetFunctions()[0];
+            var func = fs.GetFunc();
+            List<Point> savep = new List<Point>();
+            for (double i = 0; i <= 10; i += 0.05)
             {
-                Label label = new Label();
-                if (item is DoubleVarFuncStorage)
-                    label.Content = "double" + ((DoubleVarFuncStorage)item).GetFunc().Invoke(1, 2);
-                else if (item is SingleVarFuncStorage)
-                    label.Content = "single" + ((SingleVarFuncStorage)item).GetFunc().Invoke(3);
-                else if (item is ParamVarFuncStorage)
-                    label.Content = "else" + ((ParamVarFuncStorage)item).GetFunc().Invoke(3);
-                pnl.Children.Add(label);
+                (double, double) p = func(i);
+                savep.Add(new Point(p.Item1, p.Item2));
             }
+            Pen pen = new Pen(Brushes.Black, 0.01);
+            DrawingGroup drawingGroup = new DrawingGroup();
+            using (DrawingContext paint = drawingGroup.Open())
+            {
+                for (int i = 1; i < savep.Count; i++)
+                {
+                    paint.DrawLine(pen, savep[i - 1], savep[i]);
+                }
+            }
+            img.Source = new DrawingImage(drawingGroup);
+            
         }
     }
 }
