@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FunctionSketch.FunctionParser
+namespace FunctionSketch
 {
     public abstract class FunctionStorage
     { }
