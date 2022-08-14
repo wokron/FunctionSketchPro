@@ -33,27 +33,62 @@ namespace 函数画板
 
         private void test()
         {
+            fd.SetMiddlePosition(5, 5);
             //fd.AutoRefresh = false;
             //fd.SetMiddlePosition(10, 0);
             //fd.AddFunction(x => Pow(E, -x)*Sin(20*x));
-            //fd.AddFunction(x => Sin(x));
+            fd.AddFunction(x => Sin(x));
             fd.AddFunction(x => x * x);
             //fd.AddFunction(x => Sin(100d/(x)));
             //fd.AddFunction(x => Tan(x));
+            //fd.AddFunction(x => (Sin(x), Cos(x)));
             //fd.AddFunction(x => (x, Sin(x)));
-            fd.AddFunction(x => (x, Sin(100d / (x))));
+            //fd.AddFunction(x => (x, Sin(100d / (x))));
+            //fd.AddFunction(x => (x, Tan(x)));
             fd.SaveImageTo(img);
             
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            fd.IncreaseUnitNumForWidth(-5);
+            Point p = fd.GetMiddlePosition();
+            fd.SetMiddlePosition(p.X+1, p.Y);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            img.Source = fd.SaveImage();
+            fd.ClearAllFunction();
+        }
+
+
+        bool isDown = false;
+        Point oriMiddle;
+        Point mouseDownp;
+        int detectCnt = 0;
+        private void img_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDown)
+            {
+                detectCnt++;
+                result.Content = $"探测次数：{detectCnt}";
+                Point nowp = e.GetPosition(img);
+                Vector move = nowp - mouseDownp;
+                Vector coordMove = new Vector(-move.X/100d, move.Y/100d);
+                fd.SetMiddlePosition(oriMiddle + coordMove);
+            }
+            
+        }
+
+        private void img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isDown = true;
+            oriMiddle = fd.GetMiddlePosition();
+            mouseDownp = e.GetPosition(img);
+        }
+
+        private void img_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isDown = false;
         }
     }
 }

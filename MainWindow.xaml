@@ -18,6 +18,6 @@
             <Button Content="Button2" Height="52" Click="Button_Click_1"/>
 
         </StackPanel>
-        <Image Name="img" Grid.Column="1"></Image>
+        <Image Name="img" Grid.Column="1" MouseLeftButtonDown="img_MouseLeftButtonDown" MouseLeftButtonUp="img_MouseLeftButtonUp" MouseMove="img_MouseMove"></Image>
     </Grid>
 </Window>

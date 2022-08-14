@@ -9,11 +9,11 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        List<FunctionStorage> saveFunctions = new List<FunctionStorage>();
-        DrawingGroup funcsCanvas = new DrawingGroup();
-        DrawingContext brush;
-        Image targetImage = null;
-        Point middlePoint = new Point(0d, 0d);
+        private List<FunctionStorage> saveFunctions = new List<FunctionStorage>();
+        private DrawingGroup funcsCanvas = new DrawingGroup();
+        private DrawingContext brush;
+        private Image targetImage = null;
+        private Point visualMiddlePoint = new Point(0d, 0d);
         private readonly double dx = 0.01;
 
         public double UnitNumForWidth { get; set; }
@@ -60,11 +60,11 @@ namespace FunctionSketch
             double height = UnitNumForWidth * AspectRatio;
             double halfHeight = height / 2d;
             LimitRange widthLim = new LimitRange(
-                middlePoint.X - halfWidth,
-                middlePoint.X + halfWidth);
+                visualMiddlePoint.X - halfWidth,
+                visualMiddlePoint.X + halfWidth);
             LimitRange heightLim = new LimitRange(
-                middlePoint.Y - halfHeight,
-                middlePoint.Y + halfHeight);
+                visualMiddlePoint.Y - halfHeight,
+                visualMiddlePoint.Y + halfHeight);
             return (widthLim, heightLim);
         }
 
@@ -88,14 +88,18 @@ namespace FunctionSketch
 
         public void SetMiddlePosition(double xOffset, double yOffset)
         {
-            SetMiddlePosition(new Point(xOffset, yOffset));
+            visualMiddlePoint = new Point(xOffset, -yOffset);
+            Refresh();
         }
 
         public void SetMiddlePosition(Point pointOffset)
         {
-            middlePoint = pointOffset;
+            visualMiddlePoint = new Point(pointOffset.X, -pointOffset.Y);
             Refresh();
         }
+
+        public Point GetMiddlePosition()
+            => new Point(visualMiddlePoint.X, -visualMiddlePoint.Y);
 
         public void SaveImageTo(Image target)
         {

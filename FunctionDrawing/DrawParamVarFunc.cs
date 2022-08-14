@@ -75,5 +75,15 @@ namespace FunctionSketch
                     t2, midt, t3, recurNum + 1);
             }
         }
+
+        private bool FindDiscontinuityPoint(Point p1, Point p2, LimitRange heightlim)
+        {
+            double eps = 2;
+            double from = heightlim.from, to = heightlim.to;
+            return (to - p1.Y < eps
+                && p2.Y - from < eps)
+                || (to - p2.Y < eps
+                && p1.Y - from < eps);
+        }
     }
 }
