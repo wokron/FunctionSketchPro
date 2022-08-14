@@ -39,9 +39,6 @@ namespace FunctionSketch
             }
         }
 
-        readonly double smoothRate = 0.1d;
-        readonly int maxRecur = 5;
-
         private void SmoothGraphByAddingPoint(
             SortedList<double, Point> points,
             Func<double, double> func,

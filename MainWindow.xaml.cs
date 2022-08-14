@@ -40,7 +40,8 @@ namespace 函数画板
             fd.AddFunction(x => x * x);
             //fd.AddFunction(x => Sin(100d/(x)));
             //fd.AddFunction(x => Tan(x));
-            fd.AddFunction(x => (2.5*Sin(x), 2.5*Cos(x)));
+            //fd.AddFunction(x => (x, Sin(x)));
+            fd.AddFunction(x => (x, Sin(100d / (x))));
             fd.SaveImageTo(img);
             
         }
