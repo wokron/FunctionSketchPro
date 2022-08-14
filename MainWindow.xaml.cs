@@ -37,9 +37,10 @@ namespace 函数画板
             //fd.SetMiddlePosition(10, 0);
             //fd.AddFunction(x => Pow(E, -x)*Sin(20*x));
             //fd.AddFunction(x => Sin(x));
-            //fd.AddFunction(x => x * x);
-            fd.AddFunction(x => Sin(100d/(x)));
-            fd.AddFunction(x => Tan(x));
+            fd.AddFunction(x => x * x);
+            //fd.AddFunction(x => Sin(100d/(x)));
+            //fd.AddFunction(x => Tan(x));
+            fd.AddFunction(x => (2.5*Sin(x), 2.5*Cos(x)));
             fd.SaveImageTo(img);
             
         }

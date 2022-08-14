@@ -76,7 +76,7 @@ namespace FunctionSketch
         }
     }
 
-    class ParamFuncHelper
+    internal class ParamFuncHelper
     {
         Func<double, double> funcX, funcY;
         public ParamFuncHelper(

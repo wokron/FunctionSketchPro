@@ -13,7 +13,7 @@ namespace FunctionSketch
             if (func == null)
                 return;
 
-            SortedList<double ,Point> points = new SortedList<double, Point>();
+            SortedList<double, Point> points = new SortedList<double, Point>();
             IList<Point> sortedPoints = points.Values;
             (LimitRange widthLim, LimitRange heightLim) = GetDrawingArea();
             for (double i = widthLim.from; i <= widthLim.to; i += dx)
