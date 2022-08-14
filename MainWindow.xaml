@@ -14,6 +14,9 @@
         <StackPanel x:Name="pnl">
             <Label>123</Label>
             <Label x:Name="result">123</Label>
+            <Button Content="Button" Height="52" Click="Button_Click"/>
+            <Button Content="Button2" Height="52" Click="Button_Click_1"/>
+
         </StackPanel>
         <Image Name="img" Grid.Column="1"></Image>
     </Grid>
