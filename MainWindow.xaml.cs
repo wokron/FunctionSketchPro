@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using FunctionSketch;
+using static System.Math;
 
 namespace 函数画板
 {
@@ -32,16 +33,20 @@ namespace 函数画板
 
         private void test()
         {
-            fd.AutoRefresh = false;
-            fd.AddFunction((x) => x*x);
-            fd.AddFunction(x => x);
+            //fd.AutoRefresh = false;
+            //fd.SetMiddlePosition(10, 0);
+            //fd.AddFunction(x => Pow(E, -x)*Sin(20*x));
+            //fd.AddFunction(x => Sin(x));
+            //fd.AddFunction(x => x * x);
+            fd.AddFunction(x => Sin(100d/(x)));
+            fd.AddFunction(x => Tan(x));
             fd.SaveImageTo(img);
             
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            fd.IncreaseUnitNumForWidth(0.5);
+            fd.IncreaseUnitNumForWidth(-5);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

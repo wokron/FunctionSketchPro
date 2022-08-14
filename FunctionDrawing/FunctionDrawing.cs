@@ -7,7 +7,7 @@ using static System.Math;
 
 namespace FunctionSketch
 {
-    public class FunctionDrawing
+    public partial class FunctionDrawing
     {
         List<FunctionStorage> saveFunctions = new List<FunctionStorage>();
         DrawingGroup funcsCanvas = new DrawingGroup();
@@ -48,31 +48,10 @@ namespace FunctionSketch
             Refresh();
         }
 
-        // 可以把体积大的函数拆开放
         public void AddFunction(Func<double, double> func)
         {
             saveFunctions.Add(new SingleVarFuncStorage(func));
             Refresh();
-        }
-
-        private void DrawFunction(Func<double, double> func)
-        {
-            if (func == null)
-                return;
-
-            List<Point> points = new List<Point>();
-            (LimitRange widthLim, LimitRange heightLim) = GetDrawingArea();
-            for (double i = widthLim.from; i <= widthLim.to; i += dx)
-            {
-                double y = -func(i);
-                if (heightLim.from <= y && y <= heightLim.to)
-                    points.Add(new Point(i, y));
-            }
-
-            for (int i = 1; i < points.Count; i++)
-            {
-                brush.DrawLine(FuncsPenSetting, points[i - 1], points[i]);
-            }
         }
 
         private (LimitRange, LimitRange) GetDrawingArea()
@@ -95,26 +74,10 @@ namespace FunctionSketch
             Refresh();
         }
 
-        public void DrawFunction(Func<double, (double, double)> func)
-        {
-            if (func == null)
-                return;
-
-            throw new NotImplementedException();
-        }
-
         public void AddFunction(Func<double, double, double> func)
         {
             saveFunctions.Add(new DoubleVarFuncStorage(func));
             Refresh();
-        }
-
-        public void DrawFunction(Func<double, double, double> func)
-        {
-            if (func == null)
-                return;
-
-            throw new NotImplementedException();
         }
 
         public void ClearAllFunction()
@@ -195,5 +158,8 @@ namespace FunctionSketch
             this.from = from;
             this.to = to;
         }
+
+        public bool Contains(double num)
+            => from <= num && num <= to;
     }
 }
