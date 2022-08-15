@@ -7,6 +7,9 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
+        private LimitRange widthLim { get => GetDrawingArea().Item1; }
+        private LimitRange heightLim { get => GetDrawingArea().Item2; }
+
         private void DrawFunction(Func<double, (double, double)> func, double start = 0d, double end = 50d)
         {
             if (func == null)
@@ -15,7 +18,6 @@ namespace FunctionSketch
             SortedList<double, Point> points = new SortedList<double, Point>();
             IList<Point> sortedPoints = points.Values;
             IList<double> saveArguments = points.Keys;
-            (LimitRange widthLim, LimitRange heightLim) = GetDrawingArea();
             for (double i = start; i <= end; i += dx)
             {
                 (double, double) result = func(i);
@@ -28,7 +30,7 @@ namespace FunctionSketch
                     double t3 = saveArguments[points.Count - 1],
                         t2 = saveArguments[points.Count - 2],
                         t1 = saveArguments[points.Count - 3];
-                    SmoothGraphByAddingPoint(points, func, widthLim, heightLim, t1, t2, t3);
+                    SmoothGraphByAddingPoint(points, func, t1, t2, t3);
                 }
             }
 
@@ -47,7 +49,6 @@ namespace FunctionSketch
         private void SmoothGraphByAddingPoint(
             SortedList<double, Point> points,
             Func<double, (double, double)> func,
-            LimitRange widthLim, LimitRange heightLim,
             double t1, double t2, double t3, int recurNum = 1)
         {
             Point p1 = points[t1], p2 = points[t2], p3 = points[t3];
@@ -61,7 +62,7 @@ namespace FunctionSketch
             {
                 points.Add(midt, new Point(x, -y));
                 SmoothGraphByAddingPoint(
-                    points, func, widthLim, heightLim,
+                    points, func,
                     t1, midt, t2, recurNum + 1);
             }
 
@@ -71,7 +72,7 @@ namespace FunctionSketch
             {
                 points.Add(midt, new Point(x, -y));
                 SmoothGraphByAddingPoint(
-                    points, func, widthLim, heightLim,
+                    points, func,
                     t2, midt, t3, recurNum + 1);
             }
         }
