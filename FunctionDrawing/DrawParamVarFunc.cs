@@ -22,9 +22,11 @@ namespace FunctionSketch
             {
                 (double, double) result = func(i);
                 double x = result.Item1;
-                double y = -result.Item2;
+                double y = result.Item2;
                 if (widthLim.Contains(x) && heightLim.Contains(y))
                     points.Add(i, new Point(x, y));
+                else
+                    points.Add(i, new Point(double.NaN, double.NaN));
                 if (points.Count >= 3)
                 {
                     double t3 = saveArguments[points.Count - 1],
@@ -37,7 +39,7 @@ namespace FunctionSketch
             for (int i = 1; i < points.Count; i++)
             {
                 Point p1 = sortedPoints[i - 1], p2 = sortedPoints[i];
-                if (FindDiscontinuityPoint(p1, p2, heightLim))
+                if (FindDiscontinuityPoint(p1, p2))
                     continue;
                 brush.DrawLine(FuncsPenSetting, p1, p2);
             }
@@ -53,14 +55,15 @@ namespace FunctionSketch
         {
             Point p1 = points[t1], p2 = points[t2], p3 = points[t3];
             if (Abs((p2.Y - p1.Y) + (p2.Y - p3.Y)) < smoothRate
+                || p1.X == double.NaN || p2.X == double.NaN || p3.X == double.NaN
                 || recurNum > maxRecur)
                 return;
 
             double midt = (t1 + t2) / 2d;
             (double x, double y) = func(midt);
-            if (widthLim.Contains(x) && heightLim.Contains(-y))
+            if (widthLim.Contains(x) && heightLim.Contains(y))
             {
-                points.Add(midt, new Point(x, -y));
+                points.Add(midt, new Point(x, y));
                 SmoothGraphByAddingPoint(
                     points, func,
                     t1, midt, t2, recurNum + 1);
@@ -68,23 +71,18 @@ namespace FunctionSketch
 
             midt = (t2 + t3) / 2d;
             (x, y) = func(midt);
-            if (widthLim.Contains(x) && heightLim.Contains(-y))
+            if (widthLim.Contains(x) && heightLim.Contains(y))
             {
-                points.Add(midt, new Point(x, -y));
+                points.Add(midt, new Point(x, y));
                 SmoothGraphByAddingPoint(
                     points, func,
                     t2, midt, t3, recurNum + 1);
             }
         }
 
-        private bool FindDiscontinuityPoint(Point p1, Point p2, LimitRange heightlim)
+        private bool FindDiscontinuityPoint(Point p1, Point p2)
         {
-            double eps = 2;
-            double from = heightlim.from, to = heightlim.to;
-            return (to - p1.Y < eps
-                && p2.Y - from < eps)
-                || (to - p2.Y < eps
-                && p1.Y - from < eps);
+            return p1.X == double.NaN || p2.X == double.NaN;
         }
     }
 }
