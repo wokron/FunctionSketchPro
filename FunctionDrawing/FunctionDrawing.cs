@@ -141,14 +141,20 @@ namespace FunctionSketch
             }
         }
 
+        private void DrawLineWithCoordPoints(Pen pen, Point p1, Point p2)
+        {
+            Point actp1 = new Point(p1.X, -p1.Y), actp2 = new Point(p2.X, -p2.Y);
+            brush.DrawLine(pen, actp1, actp2);
+        }
+
         private void DrawCoord()
         {
             (LimitRange widthLim, LimitRange heightLim) = GetDrawingArea();
 
             for (int i = (int)Ceiling(widthLim.from); i <= (int)Floor(widthLim.to); i++)
-                brush.DrawLine(CoordPenSetting, new Point(i, heightLim.from), new Point(i, heightLim.to));
+                DrawLineWithCoordPoints(CoordPenSetting, new Point(i, heightLim.from), new Point(i, heightLim.to));
             for (int i = (int)Ceiling(heightLim.from); i <= (int)Floor(heightLim.to); i++)
-                brush.DrawLine(CoordPenSetting, new Point(widthLim.from, i), new Point(widthLim.to, i));
+                DrawLineWithCoordPoints(CoordPenSetting, new Point(widthLim.from, i), new Point(widthLim.to, i));
         }
     }
 
