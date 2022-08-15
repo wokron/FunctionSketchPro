@@ -27,8 +27,8 @@ namespace FunctionSketch
             UnitNumForWidth = 20;
             AutoRefresh = true;
             AspectRatio = 0.618;
-            FuncsPenSetting = new Pen(Brushes.Black, 0.01);
-            CoordPenSetting = new Pen(Brushes.Gray, 0.01);
+            FuncsPenSetting = new Pen(Brushes.Black, 0.05);
+            CoordPenSetting = new Pen(Brushes.Gray, 0.07);
         }
         public FunctionDrawing(FunctionStorage[] funcsStore) : this()
         {
@@ -148,12 +148,48 @@ namespace FunctionSketch
 
         private void DrawCoord()
         {
-            (LimitRange widthLim, LimitRange heightLim) = GetDrawingArea();
+            DrawMainCoordX();
+            DrawMainCoordY();
 
-            for (int i = (int)Ceiling(widthLim.from); i <= (int)Floor(widthLim.to); i++)
-                DrawLineWithCoordPoints(CoordPenSetting, new Point(i, heightLim.from), new Point(i, heightLim.to));
-            for (int i = (int)Ceiling(heightLim.from); i <= (int)Floor(heightLim.to); i++)
-                DrawLineWithCoordPoints(CoordPenSetting, new Point(widthLim.from, i), new Point(widthLim.to, i));
+            /* 以下部分需要添加代码以绘制刻度线 */
+        }
+
+        private void DrawMainCoordX()
+        {
+            if (heightLim.Contains(0))
+                DrawLineWithCoordPoints(
+                    CoordPenSetting,
+                    new Point(widthLim.from, 0),
+                    new Point(widthLim.to, 0));
+            else if (0 < heightLim.from)
+                DrawLineWithCoordPoints(
+                    CoordPenSetting,
+                    new Point(widthLim.from, heightLim.from),
+                    new Point(widthLim.to, heightLim.from));
+            else
+                DrawLineWithCoordPoints(
+                    CoordPenSetting,
+                    new Point(widthLim.from, heightLim.to),
+                    new Point(widthLim.to, heightLim.to));
+        }
+
+        private void DrawMainCoordY()
+        {
+            if (widthLim.Contains(0))
+                DrawLineWithCoordPoints(
+                    CoordPenSetting,
+                    new Point(0, heightLim.from),
+                    new Point(0, heightLim.to));
+            else if (0 < widthLim.from)
+                DrawLineWithCoordPoints(
+                    CoordPenSetting,
+                    new Point(widthLim.from, heightLim.from),
+                    new Point(widthLim.from, heightLim.to));
+            else
+                DrawLineWithCoordPoints(
+                    CoordPenSetting,
+                    new Point(widthLim.to, heightLim.from),
+                    new Point(widthLim.to, heightLim.to));
         }
     }
 

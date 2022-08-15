@@ -45,7 +45,7 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            FunctionFactory ff = new FunctionFactory("x^2=y;x^2/4+y^2/3=1");
+            FunctionFactory ff = new FunctionFactory("x^2=y;x^2/4+y^2/3=1;sinx;cosx;tanx");
             fd.AddFunction(ff.GetFunctions());
             //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
             //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));
@@ -92,6 +92,14 @@ namespace 函数画板
         private void img_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             isDown = false;
+        }
+
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+                fd.IncreaseUnitNumForWidth(-1);
+            else if (e.Delta < 0)
+                fd.IncreaseUnitNumForWidth(1);
         }
     }
 }
