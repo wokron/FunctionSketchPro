@@ -8,17 +8,17 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private readonly double partialRate = 50d;
+        private readonly double partialRate = 12d;
         private double Deci { get => dx * partialRate; }
         public void DrawFunction(Func<double, double, double> func)
         {
             if (func == null)
                 return;
 
-            // 截取整数部分相当于向下取整
-            int blockCntForWidth = (int)((widthLim.to - widthLim.from) / Deci); 
-            int blockCntForHeight = (int)((heightLim.to - heightLim.from) / Deci);
-            
+            int blockCntForWidth = (int)((widthLim.to - widthLim.from) / Deci + 1); 
+            int blockCntForHeight = (int)((heightLim.to - heightLim.from) / Deci + 1);
+            /* 末尾加一，向上取整 */
+
             double[,] saveValues = new double[blockCntForHeight + 1, blockCntForWidth + 1];
             int jcnt = 0;
             for (double j = heightLim.to; j >= heightLim.from; j -= Deci, jcnt++)
@@ -51,73 +51,12 @@ namespace FunctionSketch
 
         private IEnumerable<(Vector, Vector)> GetTransferVectorPaires(double v1, double v2, double v3, double v4)
         {
-            double full = Deci, half = full / 2d;
-            double rate1 = 0.5, rate2 = 0.5;
-            switch (GetSquareType(v1, v2, v3, v4))
-            {
-                case 0b1111:
-                case 0b0000:
-                    yield return CreateVectorPair(0, 0, 0, 0);
-                    break;
-                case 0b1110:
-                case 0b0001:
-                    rate1 = Abs(v4 / (v1 - v4));
-                    rate2 = Abs(v3 / (v3 - v4));
-                    yield return CreateVectorPair(-full, full * rate1, -full * rate2, 0);
-                    break;
-                case 0b1101:
-                case 0b0010:
-                    rate1 = Abs(v3 / (v3 - v4));
-                    rate2 = Abs(v3 / (v2 - v3));
-                    yield return CreateVectorPair(-full * rate1, 0, 0, full * rate2);
-                    break;
-                case 0b1011:
-                case 0b0100:
-                    rate1 = Abs(v2 / (v1 - v2));
-                    rate2 = Abs(v3 / (v2 - v3));
-                    yield return CreateVectorPair(-full * rate1, full, 0, full * rate2);
-                    break;
-                case 0b0111:
-                case 0b1000:
-                    rate1 = Abs(v4 / (v1 - v4));
-                    rate2 = Abs(v2 / (v1 - v2));
-                    yield return CreateVectorPair(-full, full * rate1, -full * rate2, full);
-                    break;
-                case 0b1100:
-                case 0b0011:
-                    rate1 = Abs(v4 / (v1 - v4));
-                    rate2 = Abs(v3 / (v2 - v3));
-                    yield return CreateVectorPair(-full, full * rate1, 0, full * rate2);
-                    break;
-                case 0b1001:
-                case 0b0110:
-                    rate1 = Abs(v3 / (v3 - v4));
-                    rate2 = Abs(v2 / (v1 - v2));
-                    yield return CreateVectorPair(-full * rate1, 0, -full * rate2, full);
-                    break;
-                case 0b1010:
-                    rate1 = Abs(v4 / (v1 - v4));
-                    rate2 = Abs(v2 / (v1 - v2));
-                    yield return CreateVectorPair(-full, full * rate1, -full * rate2, full);
-                    rate1 = Abs(v3 / (v3 - v4));
-                    rate2 = Abs(v3 / (v2 - v3));
-                    yield return CreateVectorPair(-full * rate1, 0, 0, full * rate2);
-                    break;
-                case 0b0101:
-                    rate1 = Abs(v4 / (v1 - v4));
-                    rate2 = Abs(v3 / (v3 - v4));
-                    yield return CreateVectorPair(-full, full * rate1, -full * rate2, 0);
-                    rate1 = Abs(v2 / (v1 - v2));
-                    rate2 = Abs(v3 / (v2 - v3));
-                    yield return CreateVectorPair(-full * rate1, full, 0, full * rate2);
-                    break;
-                default:
-                    throw new ArgumentException("不可能出现的square类型");
-            }
+            double full = Deci;
+            SquareType type = SquareType.GetType(GetSquareType(v1, v2, v3, v4));
+            return type.GetVectorPairs(Deci, v1, v2, v3, v4);
         }
 
-        private (Vector, Vector) CreateVectorPair(double v1, double v2, double v3, double v4)
-            => (new Vector(v1, v2), new Vector(v3, v4));
+        
 
         private byte GetSquareType(double v1, double v2, double v3, double v4)
         {

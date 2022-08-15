@@ -14,7 +14,7 @@ namespace FunctionSketch
         private DrawingContext brush;
         private Image targetImage = null;
         private Point middlePoint = new Point(0d, 0d);
-        private readonly double dx = 0.01;
+        private readonly double dx = 0.05;
 
         public double UnitNumForWidth { get; set; }
         public double AspectRatio { get; set; }
