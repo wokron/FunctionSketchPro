@@ -13,7 +13,7 @@ namespace FunctionSketch
         private DrawingGroup funcsCanvas = new DrawingGroup();
         private DrawingContext brush;
         private Image targetImage = null;
-        private Point visualMiddlePoint = new Point(0d, 0d);
+        private Point middlePoint = new Point(0d, 0d);
         private readonly double dx = 0.01;
 
         public double UnitNumForWidth { get; set; }
@@ -60,11 +60,11 @@ namespace FunctionSketch
             double height = UnitNumForWidth * AspectRatio;
             double halfHeight = height / 2d;
             LimitRange widthLim = new LimitRange(
-                visualMiddlePoint.X - halfWidth,
-                visualMiddlePoint.X + halfWidth);
+                middlePoint.X - halfWidth,
+                middlePoint.X + halfWidth);
             LimitRange heightLim = new LimitRange(
-                visualMiddlePoint.Y - halfHeight,
-                visualMiddlePoint.Y + halfHeight);
+                middlePoint.Y - halfHeight,
+                middlePoint.Y + halfHeight);
             return (widthLim, heightLim);
         }
 
@@ -88,18 +88,17 @@ namespace FunctionSketch
 
         public void SetMiddlePosition(double xOffset, double yOffset)
         {
-            visualMiddlePoint = new Point(xOffset, -yOffset);
-            Refresh();
+            SetMiddlePosition(new Point(xOffset, yOffset));
         }
 
         public void SetMiddlePosition(Point pointOffset)
         {
-            visualMiddlePoint = new Point(pointOffset.X, -pointOffset.Y);
+            middlePoint = pointOffset;
             Refresh();
         }
 
         public Point GetMiddlePosition()
-            => new Point(visualMiddlePoint.X, -visualMiddlePoint.Y);
+            => middlePoint;
 
         public void SaveImageTo(Image target)
         {
@@ -143,8 +142,8 @@ namespace FunctionSketch
 
         private void DrawLineWithCoordPoints(Pen pen, Point p1, Point p2)
         {
-            Point actp1 = new Point(p1.X, -p1.Y), actp2 = new Point(p2.X, -p2.Y);
-            brush.DrawLine(pen, actp1, actp2);
+            Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
+            brush.DrawLine(pen, p1 * trans, p2 * trans);
         }
 
         private void DrawCoord()
