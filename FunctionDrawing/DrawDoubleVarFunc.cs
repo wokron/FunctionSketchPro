@@ -14,80 +14,88 @@ namespace FunctionSketch
         {
             if (func == null)
                 return;
-            int blockCntForWidth = (int)((widthLim.to - widthLim.from) / dx); // 截取整数部分相当于向下取整
-            double[][] saveResult = new double[2][]
+
+            // 截取整数部分相当于向下取整
+            int blockCntForWidth = (int)((widthLim.to - widthLim.from) / Deci); 
+            int blockCntForHeight = (int)((heightLim.to - heightLim.from) / Deci);
+            
+            double[,] saveValues = new double[blockCntForHeight + 1, blockCntForWidth + 1];
+            int jcnt = 0;
+            for (double j = heightLim.to; j >= heightLim.from; j -= Deci, jcnt++)
             {
-                new double[blockCntForWidth+1],
-                new double[blockCntForWidth+1]
-            };
-            double[] nowResult = saveResult[0], preResult = saveResult[1];
-            bool isFirstLine = true;
-            for (double j = heightLim.to; j >= heightLim.from; j -= Deci)
-            {
-                int index = 0;
-                for (double i = widthLim.from; i < widthLim.to; i += Deci, index++)
+                int icnt = 0;
+                for (double i = widthLim.from; i < widthLim.to; i += Deci, icnt++)
                 {
-                    nowResult[index] = func(i, j);
-                    if (!isFirstLine && index != 0)
+                    saveValues[jcnt, icnt] = func(i, j);
+                    if (icnt > 0 && jcnt > 0)
                     {
-                        DrawLineInSquare(new Point(i, -j),
-                            preResult[index - 1], preResult[index], nowResult[index - 1], nowResult[index]);
+                        DrawLineInSquare(new Point(i, j),
+                            saveValues[jcnt - 1, icnt - 1],
+                            saveValues[jcnt - 1, icnt],
+                            saveValues[jcnt, icnt],
+                            saveValues[jcnt, icnt - 1]);
                     }
                 }
-                isFirstLine = false;
-                double[] tmp = nowResult;
-                nowResult = preResult;
-                preResult = tmp;
             }
         }
 
         private void DrawLineInSquare(Point point, double v1, double v2, double v3, double v4)
         {
-            double x = point.X, y = point.Y;
-            double half = Deci / 2d;
-            Point from = point, to = point;
-            int val;
-            switch (val = GetSquareType(v1, v2, v3, v4))
+            var vPairs = GetTransferVectorPaires(v1, v2, v3, v4);
+            foreach ((Vector v1, Vector v2) vPair in vPairs)
+            {
+                DrawLineWithCoordPoints(FuncsPenSetting, point + vPair.v1, point + vPair.v2);
+            }
+        }
+
+        private IEnumerable<(Vector, Vector)> GetTransferVectorPaires(double v1, double v2, double v3, double v4)
+        {
+            double full = Deci, half = full / 2d;
+            switch (GetSquareType(v1, v2, v3, v4))
             {
                 case 0b1111:
                 case 0b0000:
+                    yield return CreateVectorPair(0, 0, 0, 0);
                     break;
                 case 0b1110:
                 case 0b0001:
-                    from = new Point(x - half, y);
-                    to = new Point(x - Deci, y - half);
+                    yield return CreateVectorPair(-full, half, -half, 0);
                     break;
                 case 0b1101:
                 case 0b0010:
-                    from = new Point(x - half, y);
-                    to = new Point(x, y - half);
+                    yield return CreateVectorPair(-half, 0, 0, half);
                     break;
                 case 0b1011:
                 case 0b0100:
-                    from = new Point(x, y - half);
-                    to = new Point(x - half, y - Deci);
+                    yield return CreateVectorPair(0, half, -half, full);
                     break;
                 case 0b0111:
                 case 0b1000:
-                    from = new Point(x - Deci, y - half);
-                    to = new Point(x - half, y - Deci);
+                    yield return CreateVectorPair(-full, half, -half, full);
                     break;
                 case 0b1100:
                 case 0b0011:
-                    from = new Point(x, y - half);
-                    to = new Point(x - Deci, y - half);
+                    yield return CreateVectorPair(-full, half, 0, half);
                     break;
                 case 0b1001:
                 case 0b0110:
-                    from = new Point(x - half, y);
-                    to = new Point(x - half, y - Deci);
+                    yield return CreateVectorPair(-half, 0, -half, full);
+                    break;
+                case 0b1010:
+                    yield return CreateVectorPair(-half, 0, 0, half);
+                    yield return CreateVectorPair(-full, half, -half, full);
+                    break;
+                case 0b0101:
+                    yield return CreateVectorPair(-full, half, -half, 0);
+                    yield return CreateVectorPair(0, half, -half, full);
                     break;
                 default:
-                    break;
+                    throw new ArgumentException("不可能出现的square类型");
             }
-            brush.DrawLine(FuncsPenSetting, from, to);
-            //throw new NotImplementedException();
         }
+
+        private (Vector, Vector) CreateVectorPair(double v1, double v2, double v3, double v4)
+            => (new Vector(v1, v2), new Vector(v3, v4));
 
         private int GetSquareType(double v1, double v2, double v3, double v4)
         {

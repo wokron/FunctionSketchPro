@@ -10,7 +10,7 @@ namespace FunctionSketch
         private LimitRange widthLim { get => GetDrawingArea().Item1; }
         private LimitRange heightLim { get => GetDrawingArea().Item2; }
 
-        private void DrawFunction(Func<double, (double, double)> func, double start = 0d, double end = 50d)
+        private void DrawFunction(Func<double, (double, double)> func, double start = 0d, double end = 10d)
         {
             if (func == null)
                 return;

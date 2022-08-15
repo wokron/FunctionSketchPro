@@ -27,8 +27,8 @@ namespace FunctionSketch
             UnitNumForWidth = 20;
             AutoRefresh = true;
             AspectRatio = 0.618;
-            FuncsPenSetting = new Pen(Brushes.Black, 0.05);
-            CoordPenSetting = new Pen(Brushes.Gray, 0.07);
+            FuncsPenSetting = new Pen(Brushes.Black, 0.01);
+            CoordPenSetting = new Pen(Brushes.Gray, 0.01);
         }
         public FunctionDrawing(FunctionStorage[] funcsStore) : this()
         {
