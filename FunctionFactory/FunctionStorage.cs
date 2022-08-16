@@ -5,41 +5,48 @@ using System.Text;
 namespace FunctionSketch
 {
     public abstract class FunctionStorage
-    { }
+    {
+        protected ExpressionElement[] expressionTree;
+    }
 
     public class SingleVarFuncStorage : FunctionStorage
     {
-        readonly Func<double, double> func;
-        public SingleVarFuncStorage(Func<double, double> func)
+        public SingleVarFuncStorage(ExpressionElement expression)
         {
-            this.func = func;
+            expressionTree = new ExpressionElement[] { expression };
+        }
+
+        public SingleVarFuncStorage GetDerivativeFunctionStorage()
+        {
+            var rt = new SingleVarFuncStorage(expressionTree[0].Derivative());
+            return rt;
         }
 
         public Func<double, double> GetFunc()
-            => func;
+            => expressionTree[0].Calculate;
     }
 
     public class DoubleVarFuncStorage : FunctionStorage
     {
-        readonly Func<double, double, double> func;
-        public DoubleVarFuncStorage(Func<double, double, double> func)
+        public DoubleVarFuncStorage(ExpressionElement expression)
         {
-            this.func = func;
+            expressionTree = new ExpressionElement[] { expression };
         }
 
         public Func<double, double, double> GetFunc()
-            => func;
+            => expressionTree[0].Calculate;
     }
 
     public class ParamVarFuncStorage : FunctionStorage
     {
-        readonly Func<double, (double, double)> func;
-        public ParamVarFuncStorage(Func<double, (double, double)> func)
+        public ParamVarFuncStorage(ExpressionElement express1, ExpressionElement express2)
         {
-            this.func = func;
+            expressionTree = new ExpressionElement[] { express1, express2 };
         }
 
         public Func<double, (double, double)> GetFunc()
-            => func;
+            => new ParamFuncHelper(
+                expressionTree[0].Calculate,
+                expressionTree[1].Calculate).Calculate;
     }
 }
