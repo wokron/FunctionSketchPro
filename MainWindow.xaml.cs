@@ -30,7 +30,7 @@ namespace 函数画板
         }
 
         FunctionDrawing fd = new FunctionDrawing();
-
+        FunctionStorage fs;
         private void Test()
         {
             //fd.SetMiddlePosition(5, 5);
@@ -45,7 +45,8 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            FunctionFactory ff = new FunctionFactory("y=x^2;y=2logx;x^2/8+y^2/3=1");
+            FunctionFactory ff = new FunctionFactory("y=arctanx;y=2logx;x^2/8+y^2/3=1;y=x^3;");
+            fs = ff.GetFunctions()[0];
             fd.AddFunction(ff.GetFunctions());
             foreach (var item in fd.GetFunctions())
             {
@@ -61,7 +62,9 @@ namespace 函数画板
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            fd.IncreaseUnitNumForWidth(-0.5);
+            FunctionStorage tmp = (fs as SingleVarFuncStorage).GetDerivativeFunctionStorage();
+            fd.AddFunction(tmp);
+            fs = tmp;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
