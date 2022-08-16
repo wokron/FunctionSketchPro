@@ -49,12 +49,6 @@ namespace FunctionSketch
             Refresh();
         }
 
-        public void AddFunction(Func<double, double> func)
-        {
-            saveFunctions.Add(new SingleVarFuncStorage(func));
-            Refresh();
-        }
-
         public FunctionStorage[] GetFunctions()
         {
             return saveFunctions.ToArray();
@@ -67,18 +61,6 @@ namespace FunctionSketch
                 saveFunctions.RemoveAt(index);
                 Refresh();
             }
-        }
-
-        public void AddFunction(Func<double, (double, double)> func)
-        {
-            saveFunctions.Add(new ParamVarFuncStorage(func));
-            Refresh();
-        }
-
-        public void AddFunction(Func<double, double, double> func)
-        {
-            saveFunctions.Add(new DoubleVarFuncStorage(func));
-            Refresh();
         }
 
         public void ClearAllFunction()

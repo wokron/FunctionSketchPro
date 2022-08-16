@@ -45,8 +45,13 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            FunctionFactory ff = new FunctionFactory("y=x^2;y=elogx;x^2/8+y^2/3=1");
+            FunctionFactory ff = new FunctionFactory("y=x^2;y=2logx;x^2/8+y^2/3=1");
             fd.AddFunction(ff.GetFunctions());
+            foreach (var item in fd.GetFunctions())
+            {
+                Label label = new Label() { Content = item.ToString() };
+                pnl.Children.Add(label);
+            } 
             //fd.AddFunction(x => (Sqrt(Cos(x)) * Cos(200 * x) + Sqrt(Abs(x)) - 0.7) * Pow(4 - x * x, 0.01));
             //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
             //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));

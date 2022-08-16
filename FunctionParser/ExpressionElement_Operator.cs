@@ -97,6 +97,11 @@ public class OpPlus : DoubleElementsOperator
         => left + right;
 
     protected override int GetPriority() => 1;
+
+    public override string ToString()
+    {
+        return $"({Left}+{Right})";
+    }
 }
 
 public class OpSubtract : DoubleElementsOperator
@@ -123,6 +128,11 @@ public class OpSubtract : DoubleElementsOperator
         => left - right;
 
     protected override int GetPriority() => 1;
+
+    public override string ToString()
+    {
+        return $"({Left}-{Right})";
+    }
 }
 
 public class OpMultiply : DoubleElementsOperator
@@ -154,6 +164,11 @@ public class OpMultiply : DoubleElementsOperator
         => left * right;
 
     protected override int GetPriority() => 2;
+
+    public override string ToString()
+    {
+        return $"({Left}*{Right})";
+    }
 }
 
 public class OpDivide : DoubleElementsOperator
@@ -182,6 +197,11 @@ public class OpDivide : DoubleElementsOperator
         => left / right;
 
     protected override int GetPriority() => 2;
+
+    public override string ToString()
+    {
+        return $"({Left}/{Right})";
+    }
 }
 
 public class OpExponentiation : DoubleElementsOperator
@@ -231,6 +251,11 @@ public class OpExponentiation : DoubleElementsOperator
         => Pow(left, right);
 
     protected override int GetPriority() => 3;
+
+    public override string ToString()
+    {
+        return $"({Left}^{Right})";
+    }
 }
 
 public class OpLogarithm : DoubleElementsOperator
@@ -265,6 +290,11 @@ public class OpLogarithm : DoubleElementsOperator
         => Log(right, left);
 
     protected override int GetPriority() => 4;
+
+    public override string ToString()
+    {
+        return $"log{Left}({Right})";
+    }
 }
 
 public class OpLeftBracket : SingleElementOperator
@@ -331,6 +361,11 @@ public class OpSin : SingleElementOperator
         => Sin(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"sin({ChildElem})";
+    }
 }
 
 public class OpCos : SingleElementOperator
@@ -360,6 +395,11 @@ public class OpCos : SingleElementOperator
         => Cos(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"cos({ChildElem})";
+    }
 }
 
 public class OpTan : SingleElementOperator
@@ -388,6 +428,11 @@ public class OpTan : SingleElementOperator
         => Tan(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"tan({ChildElem})";
+    }
 }
 
 public class OpArcsin : SingleElementOperator
@@ -421,6 +466,11 @@ public class OpArcsin : SingleElementOperator
         => Asin(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"arcsin({ChildElem})";
+    }
 }
 
 public class OpArccos : SingleElementOperator
@@ -447,6 +497,11 @@ public class OpArccos : SingleElementOperator
         => Acos(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"arccos({ChildElem})";
+    }
 }
 
 public class OpArctan : SingleElementOperator
@@ -477,6 +532,11 @@ public class OpArctan : SingleElementOperator
         => Atan(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"arctan({ChildElem})";
+    }
 }
 
 public static class OperatorFactory

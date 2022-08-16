@@ -13,7 +13,7 @@
             <ColumnDefinition Width="7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel x:Name="pnl">
-            <Label>123</Label>
+            <Label Name="now">123</Label>
             <Label x:Name="result">123</Label>
             <Button Content="Button" Height="52" Click="Button_Click"/>
             <Button Content="Button2" Height="52" Click="Button_Click_1"/>
