@@ -51,7 +51,7 @@ namespace FunctionSketch
                 trans = -1d * trans;
             double start;
             if (widthLim.from > 0)
-                start = widthLim.from + ((widthLim.from + ScaleLength) % ScaleLength);
+                start = widthLim.from + (ScaleLength - widthLim.from % ScaleLength);
             else
                 start = widthLim.from - (widthLim.from % ScaleLength); // 烦人的负数取模...
             for (double i = start; i < widthLim.to; i += ScaleLength)
@@ -96,7 +96,7 @@ namespace FunctionSketch
                 trans = -1d * trans;
             double start;
             if (heightLim.from > 0)
-                start = heightLim.from + ((heightLim.from + ScaleLength) % ScaleLength);
+                start = heightLim.from + (ScaleLength - heightLim.from % ScaleLength);
             else
                 start = heightLim.from - (heightLim.from % ScaleLength);
             for (double i = start; i < heightLim.to; i += ScaleLength)

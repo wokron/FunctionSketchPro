@@ -8,7 +8,7 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private readonly double partialRate = 12d;
+        private readonly double partialRate = 10d;
         private double Deci { get => dx * partialRate; }
         public void DrawFunction(Func<double, double, double> func)
         {
