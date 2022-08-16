@@ -11,16 +11,16 @@ namespace FunctionSketch
 
         public FunctionFactory(string funcsExp)
         {
-            string[] funcs = funcsExp.ToUpper().Split(';');
+            string[] funcs = funcsExp.ToUpper().Split(';', StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var func in funcs)
             {
                 if (isParamFunction(func))
-                    saveFunc.Add(new ParamVarFuncStorage(parseParamFunc(func)));
+                    saveFunc.Add(parseParamFunc(func));
                 else if (isSingleFunction(func))
-                    saveFunc.Add(new SingleVarFuncStorage(parseSingleFunc(func)));
+                    saveFunc.Add(parseSingleFunc(func));
                 else if (isDoubleFunction(func))
-                    saveFunc.Add(new DoubleVarFuncStorage(parseDoubleFunc(func)));
+                    saveFunc.Add(parseDoubleFunc(func));
                 else
                     throw new ArgumentException("表达式无法转换成函数");
             }
@@ -29,30 +29,30 @@ namespace FunctionSketch
         private bool isDoubleFunction(string func)
             => func.Contains('X') && func.Contains('Y') && func.Contains('=');
 
-        private Func<double, double, double> parseDoubleFunc(string func)
+        private DoubleVarFuncStorage parseDoubleFunc(string func)
         {
             func = func.Replace('=', '-');
             var fp = new FunctionParser(func);
             fp.ParseExpression();
-            return fp.GetExpressionTree().Calculate;
+            return new DoubleVarFuncStorage(fp.GetExpressionTree());
         }
 
         private bool isSingleFunction(string func)
             => !func.Contains('Y') || (func[0] == 'Y' && func[1] == '=');
 
-        private Func<double, double> parseSingleFunc(string func)
+        private SingleVarFuncStorage parseSingleFunc(string func)
         {
             if (func[0] == 'Y' && func[1] == '=')
                 func = func.Substring(2);
             var fp = new FunctionParser(func);
             fp.ParseExpression();
-            return fp.GetExpressionTree().Calculate;
+            return new SingleVarFuncStorage(fp.GetExpressionTree());
         }
 
         private bool isParamFunction(string func)
             => func.Contains(',');
 
-        private Func<double, (double, double)> parseParamFunc(string func)
+        private ParamVarFuncStorage parseParamFunc(string func)
         {
             string[] funcs = func.Split(',');
             if (isSingleFunction(funcs[0]) && isSingleFunction(funcs[1]))
@@ -61,10 +61,7 @@ namespace FunctionSketch
                 p1.ParseExpression();
                 var p2 = new FunctionParser(funcs[1]);
                 p2.ParseExpression();
-                var helper = new ParamFuncHelper(
-                    p1.GetExpressionTree().Calculate,
-                    p2.GetExpressionTree().Calculate);
-                return helper.Calculate;
+                return new ParamVarFuncStorage(p1.GetExpressionTree(), p2.GetExpressionTree());
             }
             else
                 throw new ArgumentException("表达式无法转换成参数函数");
@@ -76,7 +73,7 @@ namespace FunctionSketch
         }
     }
 
-    class ParamFuncHelper
+    internal class ParamFuncHelper
     {
         Func<double, double> funcX, funcY;
         public ParamFuncHelper(

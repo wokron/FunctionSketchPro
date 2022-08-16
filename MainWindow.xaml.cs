@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
 using FunctionSketch;
+using static System.Math;
 
 namespace 函数画板
 {
@@ -24,7 +26,61 @@ namespace 函数画板
         public MainWindow()
         {
             InitializeComponent();
-            test();
+            Test();
+        }
+
+        FunctionDrawing fd = new FunctionDrawing();
+
+        private void Test()
+        {
+            //fd.SetMiddlePosition(5, 5);
+            //fd.AutoRefresh = false;
+            //fd.SetMiddlePosition(10, 0);
+            //fd.AddFunction(x => Pow(E, -x)*Sin(20*x));
+            //fd.AddFunction(x => Sin(x));
+            //fd.AddFunction(x => x * x);
+            //fd.AddFunction(x => Sin(100d/(x)));
+            //fd.AddFunction(x => Tan(x));
+            //fd.AddFunction(x => (Sin(x), Cos(x)));
+            //fd.AddFunction(x => (x, Sin(x)));
+            //fd.AddFunction(x => (x, Sin(100d / (x))));
+            //fd.AddFunction(x => (x, Tan(x)));
+            FunctionFactory ff = new FunctionFactory("y=x^2;y=elogx;x^2/8+y^2/3=1");
+            fd.AddFunction(ff.GetFunctions());
+            //fd.AddFunction(x => (Sqrt(Cos(x)) * Cos(200 * x) + Sqrt(Abs(x)) - 0.7) * Pow(4 - x * x, 0.01));
+            //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
+            //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));
+            fd.SaveImageTo(img);
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            fd.IncreaseUnitNumForWidth(-0.5);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            fd.ClearAllFunction();
+        }
+
+
+        bool isDown = false;
+        Point oriMiddle;
+        Point mouseDownp;
+        int detectCnt = 0;
+        private void Img_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDown)
+            {
+                detectCnt++;
+                result.Content = $"探测次数：{detectCnt}";
+                Point nowp = e.GetPosition(img);
+                Vector move = nowp - mouseDownp;
+                Vector coordMove = new Vector(-move.X/100d, move.Y/100d);
+                fd.SetMiddlePosition(oriMiddle + coordMove);
+            }
+            
         }
 
         FunctionDrawing fd = new FunctionDrawing();

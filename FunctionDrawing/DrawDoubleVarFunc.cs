@@ -63,6 +63,7 @@ namespace FunctionSketch
 
         private IEnumerable<(Vector, Vector)> GetTransferVectorPaires(double v1, double v2, double v3, double v4)
         {
+            double full = Deci;
             SquareType type = SquareType.GetType(GetSquareType(v1, v2, v3, v4));
             return type.GetVectorPairs(Deci, v1, v2, v3, v4);
         }
