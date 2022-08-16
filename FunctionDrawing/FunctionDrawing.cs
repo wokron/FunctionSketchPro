@@ -143,6 +143,7 @@ namespace FunctionSketch
         private void DrawLineWithCoordPoints(Pen pen, Point p1, Point p2)
         {
             Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
+            pen.Thickness = ScaleLength * 0.02;
             brush.DrawLine(pen, p1 * trans, p2 * trans);
         }
     }

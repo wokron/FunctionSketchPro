@@ -26,12 +26,12 @@ namespace 函数画板
         public MainWindow()
         {
             InitializeComponent();
-            test();
+            Test();
         }
 
         FunctionDrawing fd = new FunctionDrawing();
 
-        private void test()
+        private void Test()
         {
             //fd.SetMiddlePosition(5, 5);
             //fd.AutoRefresh = false;
@@ -45,7 +45,7 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            FunctionFactory ff = new FunctionFactory("x^2=y;x^2/4+y^2/3=1");
+            FunctionFactory ff = new FunctionFactory("x^2;elogx");
             fd.AddFunction(ff.GetFunctions());
             //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
             //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));
@@ -68,7 +68,7 @@ namespace 函数画板
         Point oriMiddle;
         Point mouseDownp;
         int detectCnt = 0;
-        private void img_MouseMove(object sender, MouseEventArgs e)
+        private void Img_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDown)
             {
@@ -82,14 +82,14 @@ namespace 函数画板
             
         }
 
-        private void img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             isDown = true;
             oriMiddle = fd.GetMiddlePosition();
             mouseDownp = e.GetPosition(img);
         }
 
-        private void img_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void Img_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             isDown = false;
         }

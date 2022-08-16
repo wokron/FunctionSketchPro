@@ -39,9 +39,9 @@ namespace FunctionSketch
         private void DrawXLineAt(double y)
         {
             DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(widthLim.from, y),
-                    new Point(widthLim.to, y));
+                CoordPenSetting,
+                new Point(widthLim.from, y),
+                new Point(widthLim.to, y));
         }
 
         private void DrawXScaleAt(double y, bool isReverse = false)
@@ -53,7 +53,7 @@ namespace FunctionSketch
             if (widthLim.from > 0)
                 start = widthLim.from + ((widthLim.from + ScaleLength) % ScaleLength);
             else
-                start = widthLim.from - ((widthLim.from) % ScaleLength); // 烦人的负数取模...
+                start = widthLim.from - (widthLim.from % ScaleLength); // 烦人的负数取模...
             for (double i = start; i < widthLim.to; i += ScaleLength)
             {
                 Point begin = new Point(i, y);
@@ -84,9 +84,9 @@ namespace FunctionSketch
         private void DrawYLineAt(double x)
         {
             DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(x, heightLim.from),
-                    new Point(x, heightLim.to));
+                CoordPenSetting,
+                new Point(x, heightLim.from),
+                new Point(x, heightLim.to));
         }
 
         private void DrawYScaleAt(double x, bool isReverse = false)
@@ -98,7 +98,7 @@ namespace FunctionSketch
             if (heightLim.from > 0)
                 start = heightLim.from + ((heightLim.from + ScaleLength) % ScaleLength);
             else
-                start = heightLim.from - ((heightLim.from) % ScaleLength);
+                start = heightLim.from - (heightLim.from % ScaleLength);
             for (double i = start; i < heightLim.to; i += ScaleLength)
             {
                 Point begin = new Point(x, i);
