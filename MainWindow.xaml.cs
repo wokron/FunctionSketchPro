@@ -45,7 +45,7 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            FunctionFactory ff = new FunctionFactory("x^2=y;x^2/4+y^2/3=1;sinx;cosx;tanx");
+            FunctionFactory ff = new FunctionFactory("x^2=y;x^2/4+y^2/3=1");
             fd.AddFunction(ff.GetFunctions());
             //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
             //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));

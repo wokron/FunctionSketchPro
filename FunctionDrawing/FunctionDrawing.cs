@@ -145,52 +145,6 @@ namespace FunctionSketch
             Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
             brush.DrawLine(pen, p1 * trans, p2 * trans);
         }
-
-        private void DrawCoord()
-        {
-            DrawMainCoordX();
-            DrawMainCoordY();
-
-            /* 以下部分需要添加代码以绘制刻度线 */
-        }
-
-        private void DrawMainCoordX()
-        {
-            if (heightLim.Contains(0))
-                DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(widthLim.from, 0),
-                    new Point(widthLim.to, 0));
-            else if (0 < heightLim.from)
-                DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(widthLim.from, heightLim.from),
-                    new Point(widthLim.to, heightLim.from));
-            else
-                DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(widthLim.from, heightLim.to),
-                    new Point(widthLim.to, heightLim.to));
-        }
-
-        private void DrawMainCoordY()
-        {
-            if (widthLim.Contains(0))
-                DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(0, heightLim.from),
-                    new Point(0, heightLim.to));
-            else if (0 < widthLim.from)
-                DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(widthLim.from, heightLim.from),
-                    new Point(widthLim.from, heightLim.to));
-            else
-                DrawLineWithCoordPoints(
-                    CoordPenSetting,
-                    new Point(widthLim.to, heightLim.from),
-                    new Point(widthLim.to, heightLim.to));
-        }
     }
 
     internal struct LimitRange
