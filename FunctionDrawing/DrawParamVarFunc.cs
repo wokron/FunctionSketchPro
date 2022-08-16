@@ -7,8 +7,30 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private LimitRange widthLim { get => GetDrawingArea().Item1; }
-        private LimitRange heightLim { get => GetDrawingArea().Item2; }
+        private LimitRange widthLim
+        {
+            get
+            {
+                double halfWidth = UnitNumForWidth / 2d;
+                LimitRange widthLim = new LimitRange(
+                    middlePoint.X - halfWidth,
+                    middlePoint.X + halfWidth);
+                return widthLim;
+            }
+        }
+
+        private LimitRange heightLim
+        {
+            get
+            {
+                double height = UnitNumForWidth * AspectRatio;
+                double halfHeight = height / 2d;
+                LimitRange heightLim = new LimitRange(
+                    middlePoint.Y - halfHeight,
+                    middlePoint.Y + halfHeight);
+                return heightLim;
+            }
+        }
 
         private void DrawFunction(Func<double, (double, double)> func, double start = 0d, double end = 10d)
         {
@@ -46,7 +68,7 @@ namespace FunctionSketch
         }
 
         private readonly double smoothRate = 0.1d;
-        private readonly int maxRecur = 3;
+        private readonly int maxRecur = 10;
 
         private void SmoothGraphByAddingPoint(
             SortedList<double, Point> points,

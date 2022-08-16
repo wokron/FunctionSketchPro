@@ -55,18 +55,18 @@ namespace FunctionSketch
             Refresh();
         }
 
-        private (LimitRange, LimitRange) GetDrawingArea()
+        public FunctionStorage[] GetFunctions()
         {
-            double halfWidth = UnitNumForWidth / 2d;
-            double height = UnitNumForWidth * AspectRatio;
-            double halfHeight = height / 2d;
-            LimitRange widthLim = new LimitRange(
-                middlePoint.X - halfWidth,
-                middlePoint.X + halfWidth);
-            LimitRange heightLim = new LimitRange(
-                middlePoint.Y - halfHeight,
-                middlePoint.Y + halfHeight);
-            return (widthLim, heightLim);
+            return saveFunctions.ToArray();
+        }
+
+        public void RemoveFunctionAt(int index)
+        {
+            if (0 <= index && index < saveFunctions.Count)
+            {
+                saveFunctions.RemoveAt(index);
+                Refresh();
+            }
         }
 
         public void AddFunction(Func<double, (double, double)> func)
