@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 
 namespace FunctionSketch
 {
@@ -35,12 +36,12 @@ namespace FunctionSketch
             }
         }
 
-        private void DrawXLineAt(double height)
+        private void DrawXLineAt(double y)
         {
             DrawLineWithCoordPoints(
                     CoordPenSetting,
-                    new Point(widthLim.from, height),
-                    new Point(widthLim.to, height));
+                    new Point(widthLim.from, y),
+                    new Point(widthLim.to, y));
         }
 
         private void DrawXScaleAt(double y, bool isReverse = false)
@@ -57,6 +58,7 @@ namespace FunctionSketch
             {
                 Point begin = new Point(i, y);
                 DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
+                DrawTextAt($"{i:N2}", begin);
             }
         }
 
@@ -79,12 +81,12 @@ namespace FunctionSketch
             }
         }
 
-        private void DrawYLineAt(double width)
+        private void DrawYLineAt(double x)
         {
             DrawLineWithCoordPoints(
                     CoordPenSetting,
-                    new Point(width, heightLim.from),
-                    new Point(width, heightLim.to));
+                    new Point(x, heightLim.from),
+                    new Point(x, heightLim.to));
         }
 
         private void DrawYScaleAt(double x, bool isReverse = false)
@@ -101,7 +103,33 @@ namespace FunctionSketch
             {
                 Point begin = new Point(x, i);
                 DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
+                if (i < -ScaleLength/2d || i > ScaleLength/2d)
+                    DrawTextAt($"{i:N2}", begin);
             }
+        }
+
+        private void DrawTextAt(string text ,Point p)
+        {
+            var numsTextSetting = new FormattedText(
+                text, System.Globalization.CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface("Times New Roman"),
+                ScaleLength / 3d, Brushes.Gray,
+                1.25);
+
+            Vector move = new Vector(0, 0);
+            if (p.X + numsTextSetting.Width > widthLim.to)
+                move += new Vector(widthLim.to - (p.X + numsTextSetting.Width), 0);
+            if (p.Y - numsTextSetting.Height < heightLim.from)
+                move += new Vector(0, heightLim.from - (p.Y - numsTextSetting.Height));
+
+            DrawTextWithCoordPoint(numsTextSetting, p + move);
+        }
+
+        private void DrawTextWithCoordPoint(FormattedText formattedText, Point p)
+        {
+            Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
+            brush.DrawText(formattedText, p * trans);
         }
     }
 }
