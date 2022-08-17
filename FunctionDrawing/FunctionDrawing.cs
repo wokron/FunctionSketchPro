@@ -116,11 +116,11 @@ namespace FunctionSketch
                 foreach (var save in saveFunctions)
                 {
                     if (save is SingleVarFuncStorage singleVar)
-                        DrawFunction(singleVar.GetFunc());
+                        DrawFunction(singleVar.GetFunc(), singleVar.Transform);
+                    if (save is ParamVarFuncStorage paramVar)
+                        DrawFunction(paramVar.GetFunc(), paramVar.Transform, paramVar.GetRange().from, paramVar.GetRange().to);
                     if (save is DoubleVarFuncStorage doubleVar)
                         DrawFunction(doubleVar.GetFunc());
-                    if (save is ParamVarFuncStorage paramVar)
-                        DrawFunction(paramVar.GetFunc(), paramVar.GetRange().from, paramVar.GetRange().to);
                 }
                 if (AutoRefresh)
                     SaveImageTo();

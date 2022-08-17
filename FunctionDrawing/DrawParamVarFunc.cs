@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using static System.Math;
 namespace FunctionSketch
 {
@@ -32,7 +33,7 @@ namespace FunctionSketch
             }
         }
 
-        private void DrawFunction(Func<double, (double, double)> func, double start = 0d, double end = 10d)
+        private void DrawFunction(Func<double, (double, double)> func, Matrix trans = default, double start = 0d, double end = 10d)
         {
             if (func == null)
                 return;
@@ -47,8 +48,9 @@ namespace FunctionSketch
                 double y = result.Item2;
                 if (IsPolarPlot)
                     (x, y) = PolarTransform(x, y);
-                if (widthLim.Contains(x) && heightLim.Contains(y))
-                    points.Add(i, new Point(x, y));
+                Point draw = new Point(x, y) * trans;
+                if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
+                    points.Add(i, draw);
                 else
                     points.Add(i, new Point(double.NaN, double.NaN));
                 if (points.Count >= 3)
@@ -56,7 +58,7 @@ namespace FunctionSketch
                     double t3 = saveArguments[points.Count - 1],
                         t2 = saveArguments[points.Count - 2],
                         t1 = saveArguments[points.Count - 3];
-                    SmoothGraphByAddingPoint(points, func, t1, t2, t3);
+                    SmoothGraphByAddingPoint(points, func, t1, t2, t3, trans);
                 }
             }
 
@@ -75,7 +77,7 @@ namespace FunctionSketch
         private void SmoothGraphByAddingPoint(
             SortedList<double, Point> points,
             Func<double, (double, double)> func,
-            double t1, double t2, double t3, int recurNum = 1)
+            double t1, double t2, double t3, Matrix trans, int recurNum = 1)
         {
             Point p1 = points[t1], p2 = points[t2], p3 = points[t3];
             if (Abs((p2.Y - p1.Y) + (p2.Y - p3.Y)) < smoothRate
@@ -87,24 +89,26 @@ namespace FunctionSketch
             (double x, double y) = func(midt);
             if (IsPolarPlot)
                 (x, y) = PolarTransform(x, y);
-            if (widthLim.Contains(x) && heightLim.Contains(y))
+            Point draw = new Point(x, y) * trans;
+            if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
             {
-                points.Add(midt, new Point(x, y));
+                points.Add(midt, draw);
                 SmoothGraphByAddingPoint(
                     points, func,
-                    t1, midt, t2, recurNum + 1);
+                    t1, midt, t2, trans, recurNum + 1);
             }
 
             midt = (t2 + t3) / 2d;
             (x, y) = func(midt);
             if (IsPolarPlot)
                 (x, y) = PolarTransform(x, y);
-            if (widthLim.Contains(x) && heightLim.Contains(y))
+            draw = new Point(x, y) * trans;
+            if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
             {
-                points.Add(midt, new Point(x, y));
+                points.Add(midt, draw);
                 SmoothGraphByAddingPoint(
                     points, func,
-                    t2, midt, t3, recurNum + 1);
+                    t2, midt, t3, trans, recurNum + 1);
             }
         }
 

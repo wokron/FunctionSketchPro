@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using static System.Math;
 
 namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private void DrawFunction(Func<double, double> func)
+        private void DrawFunction(Func<double, double> func, Matrix matrix = default)
         {
             if (func == null)
                 return;
@@ -16,9 +17,9 @@ namespace FunctionSketch
             /* 单变量函数是一种特殊的参数函数 */
             ParamFuncHelper helper = new ParamFuncHelper(x => x, func);
             if (!IsPolarPlot)
-                DrawFunction(helper.Calculate, widthLim.from, widthLim.to);
+                DrawFunction(helper.Calculate, matrix, widthLim.from, widthLim.to);
             else
-                DrawFunction(helper.Calculate, 0, 2 * PI);
+                DrawFunction(helper.Calculate, matrix, 0, 2 * PI);
         }
     }
 }

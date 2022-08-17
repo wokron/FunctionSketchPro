@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media;
 
 namespace FunctionSketch
 {
@@ -12,14 +13,52 @@ namespace FunctionSketch
         {
             string rt = string.Empty;
             foreach (var exp in expressionTree)
-            {
                 rt += exp + ";";
-            }
             return rt;
         }
     }
 
-    public class SingleVarFuncStorage : FunctionStorage
+    public class DoubleVarFuncStorage : FunctionStorage
+    {
+        public DoubleVarFuncStorage(ExpressionElement expression)
+        {
+            expressionTree = new ExpressionElement[] { expression };
+        }
+
+        public Func<double, double, double> GetFunc()
+            => expressionTree[0].Calculate;
+
+        public override string ToString()
+        {
+            return $"f(x,y)={expressionTree[0]}=0";
+        }
+    }
+
+    public abstract class AbstractParamFuncStorage : FunctionStorage
+    {
+        private LimitRange range = new LimitRange(0, 2 * Math.PI);
+        public Matrix Transform { get; set; }
+
+        public AbstractParamFuncStorage() { Transform = new Matrix(); }
+
+        public LimitRange GetRange()
+        {
+            return range;
+        }
+
+        public void SetRange(double end)
+        {
+            range.to = end;
+        }
+
+        public void SetRange(double start, double end)
+        {
+            range.from = start;
+            range.to = end;
+        }
+    }
+
+    public class SingleVarFuncStorage : AbstractParamFuncStorage
     {
         public SingleVarFuncStorage(ExpressionElement expression)
         {
@@ -41,45 +80,11 @@ namespace FunctionSketch
         }
     }
 
-    public class DoubleVarFuncStorage : FunctionStorage
+    public class ParamVarFuncStorage : AbstractParamFuncStorage
     {
-        public DoubleVarFuncStorage(ExpressionElement expression)
-        {
-            expressionTree = new ExpressionElement[] { expression };
-        }
-
-        public Func<double, double, double> GetFunc()
-            => expressionTree[0].Calculate;
-
-        public override string ToString()
-        {
-            return $"f(x,y)={expressionTree[0]}=0";
-        }
-    }
-
-    public class ParamVarFuncStorage : FunctionStorage
-    {
-        private LimitRange range = new LimitRange(0, 2 * Math.PI);
-
         public ParamVarFuncStorage(ExpressionElement express1, ExpressionElement express2)
         {
             expressionTree = new ExpressionElement[] { express1, express2 };
-        }
-
-        public LimitRange GetRange()
-        {
-            return range;
-        }
-
-        public void SetRange(double end)
-        {
-            range.to = end;
-        }
-
-        public void SetRange(double start, double end)
-        {
-            range.from = start;
-            range.to = end;
         }
 
         public Func<double, (double, double)> GetFunc()

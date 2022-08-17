@@ -45,9 +45,11 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            fd.IsPolarPlot = true;
-            FunctionFactory ff = new FunctionFactory("(x^2+y^2-1)^2=x^2*y^2");
+            //fd.IsPolarPlot = true;
+            FunctionFactory ff = new FunctionFactory("y=sinx");
             fs = ff.GetFunctions()[0];
+            fd.AddFunction(fs);
+            (fs as SingleVarFuncStorage).Transform = new Matrix(1.732/2, -0.5, 0.5, 1.732 / 2, 2, 2);
             fd.AddFunction(ff.GetFunctions());
             foreach (var item in fd.GetFunctions())
             {
