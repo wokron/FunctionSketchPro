@@ -7,9 +7,9 @@ public abstract class Operator : ExpressionElement
 {
     protected abstract int GetPriority();
 
-    public bool IsSmallerThan(Operator op2)
+    public bool IsSmallerOrEqualThan(Operator op2)
     {
-        return this.GetPriority() < op2.GetPriority();
+        return this.GetPriority() <= op2.GetPriority();
     }
 }
 

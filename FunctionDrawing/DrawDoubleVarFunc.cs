@@ -16,7 +16,6 @@ namespace FunctionSketch
                 return;
 
             int blockCntForWidth = (int)((widthLim.to - widthLim.from) / Deci + 1); 
-            int blockCntForHeight = (int)((heightLim.to - heightLim.from) / Deci + 1);
             /* 末尾加一，向上取整 */
 
             double[][] saveValues = new double[2][] // 滚动数组

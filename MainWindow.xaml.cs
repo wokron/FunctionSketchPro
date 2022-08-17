@@ -46,10 +46,15 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
             //fd.IsPolarPlot = true;
-            FunctionFactory ff = new FunctionFactory("y=sinx");
+            //FunctionFactory ff = new FunctionFactory("(y^4)-(y^2)+(x+0.5)^2=0");
+            FunctionFactory ff = new FunctionFactory("x^2^(1/3)+y^2^(1/3)=1");
             fs = ff.GetFunctions()[0];
-            fd.AddFunction(fs);
-            (fs as SingleVarFuncStorage).Transform = new Matrix(1.732/2, -0.5, 0.5, 1.732 / 2, 2, 2);
+            if (fs is DoubleVarFuncStorage)
+                now.Content = true;
+            //if (fs is ParamVarFuncStorage param)
+                //param.SetRange(100);
+            //fd.AddFunction(fs);
+            //(fs as SingleVarFuncStorage).Transform = new Matrix(1.732/2, -0.5, 0.5, 1.732 / 2, 2, 2);
             fd.AddFunction(ff.GetFunctions());
             foreach (var item in fd.GetFunctions())
             {
@@ -72,7 +77,7 @@ namespace 函数画板
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            fd.ClearAllFunction();
+            fd.RemoveFunctionAt(0);
         }
 
 

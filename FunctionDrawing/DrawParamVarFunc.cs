@@ -43,12 +43,8 @@ namespace FunctionSketch
             IList<double> saveArguments = points.Keys;
             for (double i = start; i <= end; i += dx)
             {
-                (double, double) result = func(i);
-                double x = result.Item1;
-                double y = result.Item2;
-                if (IsPolarPlot)
-                    (x, y) = PolarTransform(x, y);
-                Point draw = new Point(x, y) * trans;
+                (double x, double y) = func(i);
+                Point draw = PointTransform(new Point(x, y), trans);
                 if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
                     points.Add(i, draw);
                 else
@@ -58,7 +54,7 @@ namespace FunctionSketch
                     double t3 = saveArguments[points.Count - 1],
                         t2 = saveArguments[points.Count - 2],
                         t1 = saveArguments[points.Count - 3];
-                    SmoothGraphByAddingPoint(points, func, t1, t2, t3, trans);
+                        SmoothGraphByAddingPoint(points, func, t1, t2, t3, trans);
                 }
             }
 
@@ -87,9 +83,7 @@ namespace FunctionSketch
 
             double midt = (t1 + t2) / 2d;
             (double x, double y) = func(midt);
-            if (IsPolarPlot)
-                (x, y) = PolarTransform(x, y);
-            Point draw = new Point(x, y) * trans;
+            Point draw = PointTransform(new Point(x, y), trans);
             if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
             {
                 points.Add(midt, draw);
@@ -100,9 +94,7 @@ namespace FunctionSketch
 
             midt = (t2 + t3) / 2d;
             (x, y) = func(midt);
-            if (IsPolarPlot)
-                (x, y) = PolarTransform(x, y);
-            draw = new Point(x, y) * trans;
+            draw = PointTransform(new Point(x, y), trans);
             if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
             {
                 points.Add(midt, draw);
@@ -112,8 +104,18 @@ namespace FunctionSketch
             }
         }
 
-        private (double, double) PolarTransform(double theta, double r)
-            => (r * Cos(theta), r * Sin(theta));
+        private Point PointTransform(Point point, Matrix trans)
+        {
+            if (IsPolarPlot)
+                point = PolarTransform(point);
+            return point * trans;
+        }
+
+        private Point PolarTransform(Point p)
+        {
+            double theta = p.X, r = p.Y;
+            return new Point(r * Cos(theta), r * Sin(theta));
+        }
 
         private bool FindDiscontinuityPoint(Point p1, Point p2)
         {
