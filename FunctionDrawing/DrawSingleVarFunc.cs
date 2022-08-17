@@ -21,6 +21,19 @@ namespace FunctionSketch
             else
                 param.SetRange(2 * PI);
             DrawFunction(param);
+
+            if (save.HasIntegration())
+            {
+                var func = save.GetFunc();
+                LimitRange interationRange = save.GetInterationRange();
+                double leftBorder = WidthLim.RestrictNum(interationRange.from);
+                double rightBorder = WidthLim.RestrictNum(interationRange.to);
+                double leftVal = HeightLim.RestrictNum(func(leftBorder));
+                double rightVal = HeightLim.RestrictNum(func(rightBorder));
+                DrawLineWithCoordPoints(FuncsPenSetting ,new Point(leftBorder, 0), new Point(leftBorder, leftVal));
+                DrawLineWithCoordPoints(FuncsPenSetting ,new Point(rightBorder, 0), new Point(rightBorder, rightVal));
+
+            }
         }
     }
 }

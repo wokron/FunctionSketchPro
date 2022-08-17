@@ -49,6 +49,10 @@ namespace 函数画板
             //FunctionFactory ff = new FunctionFactory("(y^4)-(y^2)+(x+0.5)^2=0");
             FunctionFactory ff = new FunctionFactory("y=sinx");
             fs = ff.GetFunctions()[0];
+            if (fs is SingleVarFuncStorage svf)
+            {
+                svf.GetIntegration(new LimitRange(0.5, PI / 2d));
+            }
             //if (fs is ParamVarFuncStorage param)
                 //param.SetRange(100);
             //fd.AddFunction(fs);

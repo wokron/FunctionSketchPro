@@ -145,6 +145,9 @@ namespace FunctionSketch
             this.to = to;
         }
 
+        public double RestrictNum(double num)
+            => Max(Min(to, num), from);
+
         public bool Contains(double num)
             => from <= num && num <= to;
     }
