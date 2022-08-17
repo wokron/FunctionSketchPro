@@ -8,7 +8,7 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private LimitRange widthLim
+        private LimitRange WidthLim
         {
             get
             {
@@ -20,7 +20,7 @@ namespace FunctionSketch
             }
         }
 
-        private LimitRange heightLim
+        private LimitRange HeightLim
         {
             get
             {
@@ -33,19 +33,23 @@ namespace FunctionSketch
             }
         }
 
-        private void DrawFunction(Func<double, (double, double)> func, Matrix trans = default, double start = 0d, double end = 10d)
+        private void DrawFunction(ParamVarFuncStorage save)
         {
-            if (func == null)
+            if (save == null)
                 return;
+
+            Func<double, (double, double)> func = save.GetFunc();
+            Matrix trans = save.Transform;
+            LimitRange range = save.GetRange();
 
             SortedList<double, Point> points = new SortedList<double, Point>();
             IList<Point> sortedPoints = points.Values;
             IList<double> saveArguments = points.Keys;
-            for (double i = start; i <= end; i += dx)
+            for (double i = range.from; i <= range.to; i += dx)
             {
                 (double x, double y) = func(i);
                 Point draw = PointTransform(new Point(x, y), trans);
-                if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
+                if (WidthLim.Contains(draw.X) && HeightLim.Contains(draw.Y))
                     points.Add(i, draw);
                 else
                     points.Add(i, new Point(double.NaN, double.NaN));
@@ -54,7 +58,7 @@ namespace FunctionSketch
                     double t3 = saveArguments[points.Count - 1],
                         t2 = saveArguments[points.Count - 2],
                         t1 = saveArguments[points.Count - 3];
-                        SmoothGraphByAddingPoint(points, func, t1, t2, t3, trans);
+                    SmoothGraphByAddingPoint(points, func, t1, t2, t3, trans);
                 }
             }
 
@@ -84,7 +88,7 @@ namespace FunctionSketch
             double midt = (t1 + t2) / 2d;
             (double x, double y) = func(midt);
             Point draw = PointTransform(new Point(x, y), trans);
-            if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
+            if (WidthLim.Contains(draw.X) && HeightLim.Contains(draw.Y))
             {
                 points.Add(midt, draw);
                 SmoothGraphByAddingPoint(
@@ -95,7 +99,7 @@ namespace FunctionSketch
             midt = (t2 + t3) / 2d;
             (x, y) = func(midt);
             draw = PointTransform(new Point(x, y), trans);
-            if (widthLim.Contains(draw.X) && heightLim.Contains(draw.Y))
+            if (WidthLim.Contains(draw.X) && HeightLim.Contains(draw.Y))
             {
                 points.Add(midt, draw);
                 SmoothGraphByAddingPoint(

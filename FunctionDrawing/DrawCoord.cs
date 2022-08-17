@@ -19,20 +19,20 @@ namespace FunctionSketch
 
         private void DrawMainCoordX()
         {
-            if (heightLim.Contains(0))
+            if (HeightLim.Contains(0))
             {
                 DrawXLineAt(0);
                 DrawXScaleAt(0);
             }
-            else if (0 < heightLim.from)
+            else if (0 < HeightLim.from)
             {
-                DrawXLineAt(heightLim.from);
-                DrawXScaleAt(heightLim.from);
+                DrawXLineAt(HeightLim.from);
+                DrawXScaleAt(HeightLim.from);
             }
             else
             {
-                DrawXLineAt(heightLim.to);
-                DrawXScaleAt(heightLim.to, isReverse: true);
+                DrawXLineAt(HeightLim.to);
+                DrawXScaleAt(HeightLim.to, isReverse: true);
             }
         }
 
@@ -40,8 +40,8 @@ namespace FunctionSketch
         {
             DrawLineWithCoordPoints(
                 CoordPenSetting,
-                new Point(widthLim.from, y),
-                new Point(widthLim.to, y));
+                new Point(WidthLim.from, y),
+                new Point(WidthLim.to, y));
         }
 
         private void DrawXScaleAt(double y, bool isReverse = false)
@@ -50,11 +50,11 @@ namespace FunctionSketch
             if (isReverse)
                 trans = -1d * trans;
             double start;
-            if (widthLim.from > 0)
-                start = widthLim.from + (ScaleLength - widthLim.from % ScaleLength);
+            if (WidthLim.from > 0)
+                start = WidthLim.from + (ScaleLength - WidthLim.from % ScaleLength);
             else
-                start = widthLim.from - (widthLim.from % ScaleLength); // 烦人的负数取模...
-            for (double i = start; i < widthLim.to; i += ScaleLength)
+                start = WidthLim.from - (WidthLim.from % ScaleLength); // 烦人的负数取模...
+            for (double i = start; i < WidthLim.to; i += ScaleLength)
             {
                 Point begin = new Point(i, y);
                 DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
@@ -64,20 +64,20 @@ namespace FunctionSketch
 
         private void DrawMainCoordY()
         {
-            if (widthLim.Contains(0))
+            if (WidthLim.Contains(0))
             {
                 DrawYLineAt(0);
                 DrawYScaleAt(0);
             }
-            else if (0 < widthLim.from)
+            else if (0 < WidthLim.from)
             {
-                DrawYLineAt(widthLim.from);
-                DrawYScaleAt(widthLim.from);
+                DrawYLineAt(WidthLim.from);
+                DrawYScaleAt(WidthLim.from);
             }
             else
             {
-                DrawYLineAt(widthLim.to);
-                DrawYScaleAt(widthLim.to, isReverse: true);
+                DrawYLineAt(WidthLim.to);
+                DrawYScaleAt(WidthLim.to, isReverse: true);
             }
         }
 
@@ -85,8 +85,8 @@ namespace FunctionSketch
         {
             DrawLineWithCoordPoints(
                 CoordPenSetting,
-                new Point(x, heightLim.from),
-                new Point(x, heightLim.to));
+                new Point(x, HeightLim.from),
+                new Point(x, HeightLim.to));
         }
 
         private void DrawYScaleAt(double x, bool isReverse = false)
@@ -95,11 +95,11 @@ namespace FunctionSketch
             if (isReverse)
                 trans = -1d * trans;
             double start;
-            if (heightLim.from > 0)
-                start = heightLim.from + (ScaleLength - heightLim.from % ScaleLength);
+            if (HeightLim.from > 0)
+                start = HeightLim.from + (ScaleLength - HeightLim.from % ScaleLength);
             else
-                start = heightLim.from - (heightLim.from % ScaleLength);
-            for (double i = start; i < heightLim.to; i += ScaleLength)
+                start = HeightLim.from - (HeightLim.from % ScaleLength);
+            for (double i = start; i < HeightLim.to; i += ScaleLength)
             {
                 Point begin = new Point(x, i);
                 DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
@@ -118,10 +118,10 @@ namespace FunctionSketch
                 1.25);
 
             Vector move = new Vector(0, 0);
-            if (p.X + numsTextSetting.Width > widthLim.to)
-                move += new Vector(widthLim.to - (p.X + numsTextSetting.Width), 0);
-            if (p.Y - numsTextSetting.Height < heightLim.from)
-                move += new Vector(0, heightLim.from - (p.Y - numsTextSetting.Height));
+            if (p.X + numsTextSetting.Width > WidthLim.to)
+                move += new Vector(WidthLim.to - (p.X + numsTextSetting.Width), 0);
+            if (p.Y - numsTextSetting.Height < HeightLim.from)
+                move += new Vector(0, HeightLim.from - (p.Y - numsTextSetting.Height));
 
             DrawTextWithCoordPoint(numsTextSetting, p + move);
         }

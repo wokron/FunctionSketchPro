@@ -9,17 +9,18 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private void DrawFunction(Func<double, double> func, Matrix matrix = default)
+        private void DrawFunction(SingleVarFuncStorage save)
         {
-            if (func == null)
+            if (save == null)
                 return;
 
             /* 单变量函数是一种特殊的参数函数 */
-            ParamFuncHelper helper = new ParamFuncHelper(x => x, func);
+            ParamVarFuncStorage param = save.ConvertToParamFunc();
             if (!IsPolarPlot)
-                DrawFunction(helper.Calculate, matrix, widthLim.from, widthLim.to);
+                param.SetRange(WidthLim.from, WidthLim.to);
             else
-                DrawFunction(helper.Calculate, matrix, 0, 2 * PI);
+                param.SetRange(2 * PI);
+            DrawFunction(param);
         }
     }
 }

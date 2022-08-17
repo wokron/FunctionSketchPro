@@ -115,12 +115,9 @@ namespace FunctionSketch
                 DrawCoord();
                 foreach (var save in saveFunctions)
                 {
-                    if (save is SingleVarFuncStorage singleVar)
-                        DrawFunction(singleVar.GetFunc(), singleVar.Transform);
-                    if (save is ParamVarFuncStorage paramVar)
-                        DrawFunction(paramVar.GetFunc(), paramVar.Transform, paramVar.GetRange().from, paramVar.GetRange().to);
-                    if (save is DoubleVarFuncStorage doubleVar)
-                        DrawFunction(doubleVar.GetFunc());
+                    DrawFunction(save as SingleVarFuncStorage);
+                    DrawFunction(save as ParamVarFuncStorage);
+                    DrawFunction(save as DoubleVarFuncStorage);
                 }
                 if (AutoRefresh)
                     SaveImageTo();

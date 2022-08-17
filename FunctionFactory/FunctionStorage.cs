@@ -105,6 +105,11 @@ namespace FunctionSketch
         {
             return $"f(x)={expressionTree[0]}";
         }
+
+        public ParamVarFuncStorage ConvertToParamFunc()
+        {
+            return new ParamVarFuncStorage(new ArgumentX(), this.expressionTree[0]);
+        }
     }
 
     public class ParamVarFuncStorage : AbstractParamFuncStorage

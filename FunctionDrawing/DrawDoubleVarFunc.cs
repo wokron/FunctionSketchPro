@@ -10,12 +10,14 @@ namespace FunctionSketch
     {
         private readonly double partialRate = 10d;
         private double Deci { get => dx * partialRate; }
-        public void DrawFunction(Func<double, double, double> func)
+        public void DrawFunction(DoubleVarFuncStorage save)
         {
-            if (func == null)
+            if (save == null)
                 return;
 
-            int blockCntForWidth = (int)((widthLim.to - widthLim.from) / Deci + 1); 
+            var func = save.GetFunc();
+
+            int blockCntForWidth = (int)((WidthLim.to - WidthLim.from) / Deci + 1); 
             /* 末尾加一，向上取整 */
 
             double[][] saveValues = new double[2][] // 滚动数组
@@ -25,10 +27,10 @@ namespace FunctionSketch
             };
             double[] nowVals = saveValues[0], preVals = saveValues[1];
             int jcnt = 0;
-            for (double j = heightLim.to; j >= heightLim.from; j -= Deci, jcnt++)
+            for (double j = HeightLim.to; j >= HeightLim.from; j -= Deci, jcnt++)
             {
                 int icnt = 0;
-                for (double i = widthLim.from; i < widthLim.to; i += Deci, icnt++)
+                for (double i = WidthLim.from; i < WidthLim.to; i += Deci, icnt++)
                 {
                     nowVals[icnt] = func(i, j);
                     if (icnt > 0 && jcnt > 0)
