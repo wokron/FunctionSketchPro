@@ -19,21 +19,10 @@ namespace FunctionSketch
 
         private void DrawMainCoordX()
         {
-            if (HeightLim.Contains(0))
-            {
-                DrawXLineAt(0);
-                DrawXScaleAt(0);
-            }
-            else if (0 < HeightLim.from)
-            {
-                DrawXLineAt(HeightLim.from);
-                DrawXScaleAt(HeightLim.from);
-            }
-            else
-            {
-                DrawXLineAt(HeightLim.to);
-                DrawXScaleAt(HeightLim.to, isReverse: true);
-            }
+            double position = HeightLim.RestrictNum(0);
+            bool reverse = 0 > HeightLim.to;
+            DrawXLineAt(position);
+            DrawXScaleAt(position, reverse);
         }
 
         private void DrawXLineAt(double y)
@@ -64,21 +53,10 @@ namespace FunctionSketch
 
         private void DrawMainCoordY()
         {
-            if (WidthLim.Contains(0))
-            {
-                DrawYLineAt(0);
-                DrawYScaleAt(0);
-            }
-            else if (0 < WidthLim.from)
-            {
-                DrawYLineAt(WidthLim.from);
-                DrawYScaleAt(WidthLim.from);
-            }
-            else
-            {
-                DrawYLineAt(WidthLim.to);
-                DrawYScaleAt(WidthLim.to, isReverse: true);
-            }
+            double position = WidthLim.RestrictNum(0);
+            bool reverse = 0 > WidthLim.to;
+            DrawYLineAt(position);
+            DrawYScaleAt(position, reverse);
         }
 
         private void DrawYLineAt(double x)
