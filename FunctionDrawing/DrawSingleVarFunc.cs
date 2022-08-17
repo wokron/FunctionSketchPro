@@ -15,7 +15,10 @@ namespace FunctionSketch
 
             /* 单变量函数是一种特殊的参数函数 */
             ParamFuncHelper helper = new ParamFuncHelper(x => x, func);
-            DrawFunction(helper.Calculate, widthLim.from, widthLim.to);
+            if (!IsPolarPlot)
+                DrawFunction(helper.Calculate, widthLim.from, widthLim.to);
+            else
+                DrawFunction(helper.Calculate, 0, 2 * PI);
         }
     }
 }

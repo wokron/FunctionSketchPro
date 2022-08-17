@@ -45,6 +45,8 @@ namespace FunctionSketch
                 (double, double) result = func(i);
                 double x = result.Item1;
                 double y = result.Item2;
+                if (IsPolarPlot)
+                    (x, y) = PolarTransform(x, y);
                 if (widthLim.Contains(x) && heightLim.Contains(y))
                     points.Add(i, new Point(x, y));
                 else
@@ -83,6 +85,8 @@ namespace FunctionSketch
 
             double midt = (t1 + t2) / 2d;
             (double x, double y) = func(midt);
+            if (IsPolarPlot)
+                (x, y) = PolarTransform(x, y);
             if (widthLim.Contains(x) && heightLim.Contains(y))
             {
                 points.Add(midt, new Point(x, y));
@@ -93,6 +97,8 @@ namespace FunctionSketch
 
             midt = (t2 + t3) / 2d;
             (x, y) = func(midt);
+            if (IsPolarPlot)
+                (x, y) = PolarTransform(x, y);
             if (widthLim.Contains(x) && heightLim.Contains(y))
             {
                 points.Add(midt, new Point(x, y));
@@ -101,6 +107,9 @@ namespace FunctionSketch
                     t2, midt, t3, recurNum + 1);
             }
         }
+
+        private (double, double) PolarTransform(double theta, double r)
+            => (r * Cos(theta), r * Sin(theta));
 
         private bool FindDiscontinuityPoint(Point p1, Point p2)
         {

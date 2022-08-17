@@ -59,9 +59,27 @@ namespace FunctionSketch
 
     public class ParamVarFuncStorage : FunctionStorage
     {
+        private LimitRange range = new LimitRange(0, 2 * Math.PI);
+
         public ParamVarFuncStorage(ExpressionElement express1, ExpressionElement express2)
         {
             expressionTree = new ExpressionElement[] { express1, express2 };
+        }
+
+        public LimitRange GetRange()
+        {
+            return range;
+        }
+
+        public void SetRange(double end)
+        {
+            range.to = end;
+        }
+
+        public void SetRange(double start, double end)
+        {
+            range.from = start;
+            range.to = end;
         }
 
         public Func<double, (double, double)> GetFunc()

@@ -360,7 +360,7 @@ public class OpSin : SingleElementOperator
 
     public override string ToString()
     {
-        return $"sin({ChildElem})";
+        return $"sin{ChildElem}";
     }
 }
 
@@ -392,7 +392,7 @@ public class OpCos : SingleElementOperator
 
     public override string ToString()
     {
-        return $"cos({ChildElem})";
+        return $"cos{ChildElem}";
     }
 }
 
@@ -424,7 +424,7 @@ public class OpTan : SingleElementOperator
 
     public override string ToString()
     {
-        return $"tan({ChildElem})";
+        return $"tan{ChildElem}";
     }
 }
 
@@ -457,7 +457,7 @@ public class OpArcsin : SingleElementOperator
 
     public override string ToString()
     {
-        return $"arcsin({ChildElem})";
+        return $"arcsin{ChildElem}";
     }
 }
 
@@ -488,7 +488,7 @@ public class OpArccos : SingleElementOperator
 
     public override string ToString()
     {
-        return $"arccos({ChildElem})";
+        return $"arccos{ChildElem}";
     }
 }
 
@@ -520,7 +520,7 @@ public class OpArctan : SingleElementOperator
 
     public override string ToString()
     {
-        return $"arctan({ChildElem})";
+        return $"arctan{ChildElem}";
     }
 }
 

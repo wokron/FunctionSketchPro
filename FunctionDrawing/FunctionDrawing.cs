@@ -21,6 +21,7 @@ namespace FunctionSketch
         public Pen FuncsPenSetting { get; set; }
         public Pen CoordPenSetting { get; set; }
         public bool AutoRefresh { get; set; }
+        public bool IsPolarPlot { get; set; }
 
         public FunctionDrawing()
         {
@@ -114,9 +115,12 @@ namespace FunctionSketch
                 DrawCoord();
                 foreach (var save in saveFunctions)
                 {
-                    DrawFunction((save as SingleVarFuncStorage)?.GetFunc());
-                    DrawFunction((save as DoubleVarFuncStorage)?.GetFunc());
-                    DrawFunction((save as ParamVarFuncStorage)?.GetFunc());
+                    if (save is SingleVarFuncStorage singleVar)
+                        DrawFunction(singleVar.GetFunc());
+                    if (save is DoubleVarFuncStorage doubleVar)
+                        DrawFunction(doubleVar.GetFunc());
+                    if (save is ParamVarFuncStorage paramVar)
+                        DrawFunction(paramVar.GetFunc(), paramVar.GetRange().from, paramVar.GetRange().to);
                 }
                 if (AutoRefresh)
                     SaveImageTo();
@@ -131,7 +135,7 @@ namespace FunctionSketch
         }
     }
 
-    internal struct LimitRange
+    public struct LimitRange
     {
         public double from;
         public double to;
