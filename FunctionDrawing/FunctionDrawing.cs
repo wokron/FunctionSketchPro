@@ -142,6 +142,8 @@ namespace FunctionSketch
 
         public LimitRange(double from, double to)
         {
+            if (from > to)
+                throw new ArgumentException("from必须小于或等于to");
             this.from = from;
             this.to = to;
         }

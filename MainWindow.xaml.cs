@@ -47,10 +47,8 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Tan(x)));
             //fd.IsPolarPlot = true;
             //FunctionFactory ff = new FunctionFactory("(y^4)-(y^2)+(x+0.5)^2=0");
-            FunctionFactory ff = new FunctionFactory("x^2^(1/3)+y^2^(1/3)=1");
+            FunctionFactory ff = new FunctionFactory("y=sinx");
             fs = ff.GetFunctions()[0];
-            if (fs is DoubleVarFuncStorage)
-                now.Content = true;
             //if (fs is ParamVarFuncStorage param)
                 //param.SetRange(100);
             //fd.AddFunction(fs);
@@ -70,9 +68,7 @@ namespace 函数画板
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            FunctionStorage tmp = (fs as SingleVarFuncStorage).GetDerivativeFunctionStorage();
-            fd.AddFunction(tmp);
-            fs = tmp;
+            now.Content = (fs as SingleVarFuncStorage).GetIntegration(new LimitRange(0.5, 2));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

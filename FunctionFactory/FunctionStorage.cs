@@ -60,6 +60,7 @@ namespace FunctionSketch
 
     public class SingleVarFuncStorage : AbstractParamFuncStorage
     {
+        private IntegrationHelper integration = null;
         public SingleVarFuncStorage(ExpressionElement expression)
         {
             expressionTree = new ExpressionElement[] { expression };
@@ -70,6 +71,32 @@ namespace FunctionSketch
             var rt = new SingleVarFuncStorage(expressionTree[0].Derivative());
             return rt;
         }
+
+        public double GetIntegration(LimitRange range)
+        {
+            integration = new IntegrationHelper(GetFunc(), range);
+            return integration.Answer;
+        }
+
+        public double GetIntegration()
+        {
+            if (integration == null)
+                throw new InvalidOperationException("该函数未设置积分范围，请事先检查是否已经设置积分");
+            return integration.Answer;
+        }
+
+        public LimitRange GetInterationRange()
+        {
+            if (integration == null)
+                throw new InvalidOperationException("该函数未设置积分范围，请事先检查是否已经设置积分");
+            return integration.Range;
+        }
+
+        public void DeleteIntegration()
+            => integration = null;
+
+        public bool HasIntegration() 
+            => integration != null;
 
         public Func<double, double> GetFunc()
             => expressionTree[0].Calculate;
@@ -95,6 +122,34 @@ namespace FunctionSketch
         public override string ToString()
         {
             return $"x={expressionTree[0]},y={expressionTree[1]}";
+        }
+    }
+
+    public class IntegrationHelper
+    {
+        private Func<double, double> func;
+        private double dx = 0.005;
+        private double ans;
+        public LimitRange Range { get; }
+        public double Answer { get => ans; }
+
+        public IntegrationHelper(Func<double, double> func, LimitRange range)
+        {
+            Range = range;
+            this.func = func;
+            ans = 0;
+            DoIntegration();
+        }
+
+        private void DoIntegration()
+        {
+            double preY = func(Range.from);
+            for (double i = Range.from + dx; i <= Range.to; i += dx)
+            {
+                double nowY = func(i);
+                ans += dx * (preY + nowY) / 2d;
+                preY = nowY;
+            }
         }
     }
 }
