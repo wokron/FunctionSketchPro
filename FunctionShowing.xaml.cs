@@ -21,16 +21,20 @@ namespace 函数画板
     {
         private FunctionStorage save;
         private EventHandler returnEvent;
+        private EventHandler deleteEvent;
         public FunctionShowing()
         {
             InitializeComponent();
         }
 
-        public FunctionShowing(FunctionStorage save, EventHandler e = null) : this()
+        public FunctionShowing(
+            FunctionStorage save,
+            EventHandler e = null,
+            EventHandler delete = null) : this()
         {
             this.save = save;
             returnEvent = e;
-
+            deleteEvent = delete;
             SetFunctionInfo(save);
         }
 
@@ -93,11 +97,9 @@ namespace 函数画板
             Pop.IsOpen = true;
         }
 
-        private void Chick1(object sender, RoutedEventArgs e)
+        private void DeleteClick(object sender, RoutedEventArgs e)
         {
-            var s = save as AbstractParamFuncStorage;
-            s.IsPolarPlot = !s.IsPolarPlot;
-            returnEvent?.Invoke(sender, e);
+            deleteEvent.Invoke(sender, e);
         }
     }
 }

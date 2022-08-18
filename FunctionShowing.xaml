@@ -12,16 +12,26 @@
             <ColumnDefinition Width="8*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="pnl" Background="Aqua"/>
-        <Button x:Name="method" Content="···" Grid.Column="1" FontSize="30" Click="ShowPopSetting"/>
-        <Popup x:Name="Pop" PopupAnimation="None" Width="auto" Height="auto" Placement="Bottom" AllowsTransparency="True" StaysOpen="False">
-            <Grid>
-                <Rectangle Fill="White" Margin="5">
-                </Rectangle>
-                <StackPanel x:Name="popPnl" Margin="15">
-                    <TextBlock Text="设置" FontSize="14" Margin="0 0 0 5"/>
-                </StackPanel>
-            </Grid>
-        </Popup>
+        <StackPanel x:Name="pnl" Background="Aqua">
+            
+        </StackPanel>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Button Content="X" Grid.Row="0" FontSize="30" Click="DeleteClick"/>
+            <Button x:Name="method" Grid.Row="1" Content="···" Grid.Column="1" FontSize="30" Click="ShowPopSetting"/>
+            <Popup x:Name="Pop" PopupAnimation="None" Width="auto" Height="auto" Placement="Bottom" AllowsTransparency="True" StaysOpen="False">
+                <Grid>
+                    <Rectangle Fill="White" Margin="5">
+                    </Rectangle>
+                    <StackPanel x:Name="popPnl" Margin="15">
+                        <TextBlock Text="设置" FontSize="14" Margin="0 0 0 5"/>
+                    </StackPanel>
+                </Grid>
+            </Popup>
+        </Grid>
     </Grid>
 </UserControl>

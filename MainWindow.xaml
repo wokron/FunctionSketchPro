@@ -15,11 +15,8 @@
         <Image Name="img" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
         <ScrollViewer  Grid.Column="1" VerticalScrollBarVisibility="Hidden">
             <StackPanel x:Name="pnl">
-                <Label Name="now">123</Label>
-                <Label x:Name="result">123</Label>
                 <Button Content="Button" Height="52" Click="Button_Click"/>
                 <Button Content="Button2" Height="52" Click="Button_Click_1"/>
-                <local:FunctionShowing/>
             </StackPanel>
 
         </ScrollViewer>

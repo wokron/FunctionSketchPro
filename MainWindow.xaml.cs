@@ -41,39 +41,44 @@ namespace 函数画板
                 svf.IsPolarPlot = true;
             }
             fd.AddFunction(ff.GetFunctions());
-            foreach (var item in fd.GetFunctions())
-            {
-                Label label = new Label() { Content = item.ToString() };
-                pnl.Children.Add(label);
-            } 
+            //foreach (var item in fd.GetFunctions())
+            //{
+            //    Label label = new Label() { Content = item.ToString() };
+            //    pnl.Children.Add(label);
+            //} 
             fd.SaveImageTo(img);
             
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            int i = 0;
             foreach (var func in fd.GetFunctions())
             {
-                pnl.Children.Add(new FunctionShowing(func, (sender, e) => fd.Refresh()));
+                pnl.Children.Add(new FunctionShowing(func,
+                    (sender, e) => fd.Refresh(),
+                    (sender, e) => {
+                        fd.RemoveFunctionAt(i); // 不能这样使用lambda
+                        pnl.Children.RemoveAt(i+2);
+                    }));
+                i++;
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             fd.RemoveFunctionAt(0);
+            pnl.Children.RemoveAt(2);
         }
 
 
         bool isDown = false;
         Point oriMiddle;
         Point mouseDownp;
-        int detectCnt = 0;
         private void Img_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDown)
             {
-                detectCnt++;
-                result.Content = $"探测次数：{detectCnt}";
                 Point nowp = e.GetPosition(img);
                 Vector move = nowp - mouseDownp;
                 Vector coordMove = new Vector(-move.X/100d, move.Y/100d);
