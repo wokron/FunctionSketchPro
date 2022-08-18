@@ -36,16 +36,20 @@ namespace FunctionSketch
             double leftBorder = WidthLim.RestrictNum(interationRange.from);
             double rightBorder = WidthLim.RestrictNum(interationRange.to);
             double preY = func(leftBorder);
+            double prei = leftBorder;
             for (double i = leftBorder + dx; i <= rightBorder; i += dx)
             {
+                if (i + dx > rightBorder) // 最后一个位置
+                    i = rightBorder;
                 double y = func(i);
                 double zeroY = 0;
-                Point p1 = RestrictPoint(PointTransform(new Point(i - dx, preY), save)),
+                Point p1 = RestrictPoint(PointTransform(new Point(prei, preY), save)),
                     p2 = RestrictPoint(PointTransform(new Point(i, y), save)),
                     p3 = RestrictPoint(PointTransform(new Point(i, zeroY), save)),
-                    p4 = RestrictPoint(PointTransform(new Point(i - dx, zeroY), save));
+                    p4 = RestrictPoint(PointTransform(new Point(prei, zeroY), save));
                 FillQuadrangleArea(p1, p2, p3, p4);
                 preY = y;
+                prei = i;
             }
         }
 

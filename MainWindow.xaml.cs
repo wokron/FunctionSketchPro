@@ -33,39 +33,19 @@ namespace 函数画板
         FunctionStorage fs;
         private void Test()
         {
-            //fd.SetMiddlePosition(5, 5);
-            //fd.AutoRefresh = false;
-            //fd.SetMiddlePosition(10, 0);
-            //fd.AddFunction(x => Pow(E, -x)*Sin(20*x));
-            //fd.AddFunction(x => Sin(x));
-            //fd.AddFunction(x => x * x);
-            //fd.AddFunction(x => Sin(100d/(x)));
-            //fd.AddFunction(x => Tan(x));
-            //fd.AddFunction(x => (Sin(x), Cos(x)));
-            //fd.AddFunction(x => (x, Sin(x)));
-            //fd.AddFunction(x => (x, Sin(100d / (x))));
-            //fd.AddFunction(x => (x, Tan(x)));
-            //FunctionFactory ff = new FunctionFactory("(y^4)-(y^2)+(x+0.5)^2=0");
             FunctionFactory ff = new FunctionFactory("y=sinx");
             fs = ff.GetFunctions()[0];
             if (fs is SingleVarFuncStorage svf)
             {
-                svf.GetIntegration(new LimitRange(0.5, PI / 2d));
+                svf.GetIntegration(new LimitRange(0.5, PI * 3d / 2d));
                 //svf.IsPolarPlot = true;
             }
-            //if (fs is ParamVarFuncStorage param)
-                //param.SetRange(100);
-            //fd.AddFunction(fs);
-            //(fs as SingleVarFuncStorage).Transform = new Matrix(1.732/2, -0.5, 0.5, 1.732 / 2, 2, 2);
             fd.AddFunction(fs);
             foreach (var item in fd.GetFunctions())
             {
                 Label label = new Label() { Content = item.ToString() };
                 pnl.Children.Add(label);
             } 
-            //fd.AddFunction(x => (Sqrt(Cos(x)) * Cos(200 * x) + Sqrt(Abs(x)) - 0.7) * Pow(4 - x * x, 0.01));
-            //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
-            //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));
             fd.SaveImageTo(img);
             
         }
