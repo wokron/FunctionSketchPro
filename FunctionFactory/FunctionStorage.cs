@@ -39,6 +39,8 @@ namespace FunctionSketch
         private LimitRange range = new LimitRange(0, 2 * Math.PI);
         public Matrix Transform { get; set; }
 
+        public bool IsPolarPlot { get; set; }
+
         public AbstractParamFuncStorage() { Transform = new Matrix(); }
 
         public LimitRange GetRange()
@@ -108,7 +110,11 @@ namespace FunctionSketch
 
         public ParamVarFuncStorage ConvertToParamFunc()
         {
-            return new ParamVarFuncStorage(new ArgumentX(), this.expressionTree[0]);
+            var rt = new ParamVarFuncStorage(new ArgumentX(), expressionTree[0])
+            {
+                IsPolarPlot = this.IsPolarPlot
+            };
+            return rt;
         }
     }
 

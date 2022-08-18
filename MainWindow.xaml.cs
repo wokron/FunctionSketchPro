@@ -45,19 +45,19 @@ namespace 函数画板
             //fd.AddFunction(x => (x, Sin(x)));
             //fd.AddFunction(x => (x, Sin(100d / (x))));
             //fd.AddFunction(x => (x, Tan(x)));
-            //fd.IsPolarPlot = true;
             //FunctionFactory ff = new FunctionFactory("(y^4)-(y^2)+(x+0.5)^2=0");
             FunctionFactory ff = new FunctionFactory("y=sinx");
             fs = ff.GetFunctions()[0];
             if (fs is SingleVarFuncStorage svf)
             {
                 svf.GetIntegration(new LimitRange(0.5, PI / 2d));
+                //svf.IsPolarPlot = true;
             }
             //if (fs is ParamVarFuncStorage param)
                 //param.SetRange(100);
             //fd.AddFunction(fs);
             //(fs as SingleVarFuncStorage).Transform = new Matrix(1.732/2, -0.5, 0.5, 1.732 / 2, 2, 2);
-            fd.AddFunction(ff.GetFunctions());
+            fd.AddFunction(fs);
             foreach (var item in fd.GetFunctions())
             {
                 Label label = new Label() { Content = item.ToString() };

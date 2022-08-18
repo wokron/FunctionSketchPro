@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using static System.Math;
 
 namespace FunctionSketch
@@ -16,7 +17,7 @@ namespace FunctionSketch
 
             /* 单变量函数是一种特殊的参数函数 */
             ParamVarFuncStorage param = save.ConvertToParamFunc();
-            if (!IsPolarPlot)
+            if (!save.IsPolarPlot)
                 param.SetRange(WidthLim.from, WidthLim.to);
             else
                 param.SetRange(2 * PI);
@@ -24,16 +25,58 @@ namespace FunctionSketch
 
             if (save.HasIntegration())
             {
-                var func = save.GetFunc();
-                LimitRange interationRange = save.GetInterationRange();
-                double leftBorder = WidthLim.RestrictNum(interationRange.from);
-                double rightBorder = WidthLim.RestrictNum(interationRange.to);
-                double leftVal = HeightLim.RestrictNum(func(leftBorder));
-                double rightVal = HeightLim.RestrictNum(func(rightBorder));
-                DrawLineWithCoordPoints(FuncsPenSetting ,new Point(leftBorder, 0), new Point(leftBorder, leftVal));
-                DrawLineWithCoordPoints(FuncsPenSetting ,new Point(rightBorder, 0), new Point(rightBorder, rightVal));
-
+                DrawIntegrationArea(save);
             }
+        }
+
+        private void DrawIntegrationArea(SingleVarFuncStorage save)
+        {
+            var func = save.GetFunc();
+            var interationRange = save.GetInterationRange();
+            double leftBorder = WidthLim.RestrictNum(interationRange.from);
+            double rightBorder = WidthLim.RestrictNum(interationRange.to);
+            double preY = func(leftBorder);
+            for (double i = leftBorder + dx; i <= rightBorder; i += dx)
+            {
+                double y = func(i);
+                double zeroY = 0;
+                Point p1 = RestrictPoint(PointTransform(new Point(i - dx, preY), save)),
+                    p2 = RestrictPoint(PointTransform(new Point(i, y), save)),
+                    p3 = RestrictPoint(PointTransform(new Point(i, zeroY), save)),
+                    p4 = RestrictPoint(PointTransform(new Point(i - dx, zeroY), save));
+                FillQuadrangleArea(p1, p2, p3, p4);
+                preY = y;
+            }
+        }
+
+        private Point RestrictPoint(Point p)
+        {
+            double x = WidthLim.RestrictNum(p.X);
+            double y = HeightLim.RestrictNum(p.Y);
+            return new Point(x, y);
+        }
+
+        private void FillQuadrangleArea(Point p1, Point p2, Point p3, Point p4)
+        {
+            Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
+            PathGeometry geometry = new PathGeometry()
+            {
+                Figures = new PathFigureCollection()
+                {
+                    new PathFigure()
+                    {
+                        StartPoint = p1 * trans,
+                        IsClosed = true,
+                        Segments = new PathSegmentCollection()
+                        {
+                            new LineSegment(p2 * trans, false),
+                            new LineSegment(p3 * trans, false),
+                            new LineSegment(p4 * trans, false)
+                        }
+                    }
+                }
+            };
+            brush.DrawGeometry(Brushes.Red, null, geometry);
         }
     }
 }

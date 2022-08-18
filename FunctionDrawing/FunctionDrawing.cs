@@ -21,7 +21,6 @@ namespace FunctionSketch
         public Pen FuncsPenSetting { get; set; }
         public Pen CoordPenSetting { get; set; }
         public bool AutoRefresh { get; set; }
-        public bool IsPolarPlot { get; set; }
 
         public FunctionDrawing()
         {
