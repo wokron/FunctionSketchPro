@@ -9,34 +9,16 @@
         MouseWheel="Window_MouseWheel">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Image Name="img" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
-        <ScrollViewer  Grid.Column="1">
-            <StackPanel x:Name="pnl">
-                <Label Name="now">123</Label>
-                <Label x:Name="result">123</Label>
-                <Button Content="Button" Height="52" Click="Button_Click"/>
-                <Button Content="Button2" Height="52" Click="Button_Click_1"/>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-            </StackPanel>
+        <StackPanel x:Name="pnl">
+            <Label Name="now">123</Label>
+            <Label x:Name="result">123</Label>
+            <Button Content="Button" Height="52" Click="Button_Click"/>
+            <Button Content="Button2" Height="52" Click="Button_Click_1"/>
 
-        </ScrollViewer>
+        </StackPanel>
+        <Image Name="img" Grid.Column="1" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
     </Grid>
 </Window>
