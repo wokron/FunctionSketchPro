@@ -13,28 +13,13 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Image Name="img" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
-        <ScrollViewer  Grid.Column="1">
+        <ScrollViewer  Grid.Column="1" VerticalScrollBarVisibility="Hidden">
             <StackPanel x:Name="pnl">
                 <Label Name="now">123</Label>
                 <Label x:Name="result">123</Label>
                 <Button Content="Button" Height="52" Click="Button_Click"/>
                 <Button Content="Button2" Height="52" Click="Button_Click_1"/>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
-                <Label>123</Label>
+                <local:FunctionShowing/>
             </StackPanel>
 
         </ScrollViewer>

@@ -33,14 +33,14 @@ namespace 函数画板
         FunctionStorage fs;
         private void Test()
         {
-            FunctionFactory ff = new FunctionFactory("y=sinx");
+            FunctionFactory ff = new FunctionFactory("y=1/x;sinx,cosx;x^2/5+y^2/4=1");
             fs = ff.GetFunctions()[0];
             if (fs is SingleVarFuncStorage svf)
             {
                 svf.GetIntegration(new LimitRange(0.5, PI * 3d / 2d));
-                //svf.IsPolarPlot = true;
+                svf.IsPolarPlot = true;
             }
-            fd.AddFunction(fs);
+            fd.AddFunction(ff.GetFunctions());
             foreach (var item in fd.GetFunctions())
             {
                 Label label = new Label() { Content = item.ToString() };
@@ -52,7 +52,10 @@ namespace 函数画板
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            now.Content = (fs as SingleVarFuncStorage).GetIntegration(new LimitRange(0.5, 2));
+            foreach (var func in fd.GetFunctions())
+            {
+                pnl.Children.Add(new FunctionShowing(func));
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
