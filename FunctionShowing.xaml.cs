@@ -19,51 +19,85 @@ namespace 函数画板
     /// </summary>
     public partial class FunctionShowing : UserControl
     {
+        private FunctionStorage save;
+        private EventHandler returnEvent;
         public FunctionShowing()
         {
             InitializeComponent();
-            //Pop.HorizontalOffset = method.Width;
         }
 
-        public FunctionShowing(FunctionStorage save) : this()
+        public FunctionShowing(FunctionStorage save, EventHandler e = null) : this()
         {
-            pnl.Children.Add(new Label() { Content = save });
+            this.save = save;
+            returnEvent = e;
+
+            SetFunctionInfo(save);
+        }
+
+        private void SetFunctionInfo(FunctionStorage save)
+        {
+            SetFunction(save);
             if (save is AbstractParamFuncStorage abstractParam)
             {
-                pnl.Children.Add(
-                    new Label(){
-                        Content = abstractParam.IsPolarPlot ? "极坐标" : "直角坐标"
-                    });
-                Matrix trans = abstractParam.Transform;
-                pnl.Children.Add(
-                    new Label()
-                    {
-                        Content = $"线性变换:[" +
-                        $"[{trans.M11},{trans.M12}]," +
-                        $"[{trans.M21},{trans.M22}]]"
-                    });
-                pnl.Children.Add(new Label() { Content = $"位移:({trans.OffsetX},{trans.OffsetY})" });
+                SetCoordType(abstractParam);
+                SetTransform(abstractParam);
 
                 if (abstractParam is SingleVarFuncStorage singleVar
                     && singleVar.HasIntegration())
                 {
-                    LimitRange range = singleVar.GetInterationRange();
-                    pnl.Children.Add(
-                        new Label(){
-                            Content = $"积分{range.from:N2}->{range.to:N2}=" +
-                            $"{singleVar.GetIntegration():N2}"
-                        });
+                    SetInteration(singleVar);
+                    AddSingleVarSetting(singleVar);
                 }
                 else
-                {
-                    LimitRange range = (abstractParam as ParamVarFuncStorage).GetRange();
-                    pnl.Children.Add(new Label() { Content = $"系数范围:{range.from:N2}->{range.to:N2}" });
-                }
+                    SetParamRange(abstractParam as ParamVarFuncStorage);
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void SetFunction(FunctionStorage save)
+            => AddPanelContent(pnl, save.ToString());
+
+        private void SetCoordType(AbstractParamFuncStorage abstractParam)
+            => AddPanelContent(pnl, abstractParam.IsPolarPlot ? "极坐标" : "直角坐标");
+
+        private void SetTransform(AbstractParamFuncStorage abstractParam)
+        {
+            Matrix trans = abstractParam.Transform;
+            AddPanelContent(pnl, $"线性变换:[[{trans.M11},{trans.M12}],[{trans.M21},{trans.M22}]]");
+            AddPanelContent(pnl, $"位移:({trans.OffsetX},{trans.OffsetY})");
+        }
+
+        private void SetInteration(SingleVarFuncStorage singleVar)
+        {
+            LimitRange range = singleVar.GetInterationRange();
+            AddPanelContent(pnl, $"积分{range.from:N2}->{range.to:N2}={singleVar.GetIntegration():N2}");
+        }
+
+        private void SetParamRange(ParamVarFuncStorage param)
+        {
+            LimitRange range = param.GetRange();
+            AddPanelContent(pnl, $"自变量范围:{range.from:N2}->{range.to:N2}");
+        }
+
+        private void AddPanelContent(StackPanel panel, string content)
+        {
+            panel.Children.Add(new Label() { Content = content });
+        }
+
+        private void AddSingleVarSetting(SingleVarFuncStorage save)
+        {
+            popPnl.Children.Add(new SettingForSingleFunc(save, returnEvent));
+        }
+
+        private void ShowPopSetting(object sender, RoutedEventArgs e)
         {
             Pop.IsOpen = true;
+        }
+
+        private void Chick1(object sender, RoutedEventArgs e)
+        {
+            var s = save as AbstractParamFuncStorage;
+            s.IsPolarPlot = !s.IsPolarPlot;
+            returnEvent?.Invoke(sender, e);
         }
     }
 }

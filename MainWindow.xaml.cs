@@ -54,7 +54,7 @@ namespace 函数画板
         {
             foreach (var func in fd.GetFunctions())
             {
-                pnl.Children.Add(new FunctionShowing(func));
+                pnl.Children.Add(new FunctionShowing(func, (sender, e) => fd.Refresh()));
             }
         }
 

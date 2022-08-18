@@ -106,7 +106,7 @@ namespace FunctionSketch
             Refresh();
         }
 
-        private void Refresh()
+        public void Refresh()
         {
             funcsCanvas = new DrawingGroup();
             using (brush = funcsCanvas.Open())

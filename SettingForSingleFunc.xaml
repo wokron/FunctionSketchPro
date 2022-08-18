@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="函数画板.SettingForSingleFunc"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:函数画板"
+             mc:Ignorable="d" 
+             d:DesignHeight="221.2" Width="174">
+    <Grid>
+        <StackPanel Background="White">
+            <Label>转换极/直坐标:</Label>
+            <Button x:Name="swapGetter" Content="Button" Click="SwapGetter_Click"/>
+            <Label>线性变换:</Label>
+            <TextBox x:Name="linearGetter" Text="TextBox" TextWrapping="Wrap" Width="120"/>
+            <Label>位移:</Label>
+            <TextBox x:Name="moveGetter" Text="TextBox" TextWrapping="Wrap" Width="120"/>
+            <Label>积分范围:</Label>
+            <TextBox x:Name="integrationGetter" Text="TextBox" TextWrapping="Wrap" Width="120"/>
+            <Button Content="应用" Click="ApplySetting"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
