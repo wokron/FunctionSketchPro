@@ -112,7 +112,8 @@ namespace FunctionSketch
         {
             var rt = new ParamVarFuncStorage(new ArgumentX(), expressionTree[0])
             {
-                IsPolarPlot = this.IsPolarPlot
+                IsPolarPlot = this.IsPolarPlot,
+                Transform = this.Transform
             };
             return rt;
         }
