@@ -33,7 +33,7 @@ namespace 函数画板
         FunctionStorage fs;
         private void Test()
         {
-            FunctionFactory ff = new FunctionFactory("y=1/x;");
+            FunctionFactory ff = new FunctionFactory("y=1/x;y=x^2;x^2+y^2=4");
             fs = ff.GetFunctions()[0];
             if (fs is SingleVarFuncStorage svf)
             {
@@ -52,12 +52,12 @@ namespace 函数画板
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int i = 0;
             foreach (var func in fd.GetFunctions())
             {
-                pnl.Children.Add(new FunctionShowing(func,
-                    (sender, e) => fd.Refresh()));
-                i++;
+                var show = new FunctionShowing(func);
+                show.RefreshEvent = (s, e) => fd.Refresh();
+                show.DeleteEvent = (s, e) => { fd.RemoveFunction(func); pnl.Children.Remove(show); fd.Refresh(); };
+                pnl.Children.Add(show);
             }
         }
 

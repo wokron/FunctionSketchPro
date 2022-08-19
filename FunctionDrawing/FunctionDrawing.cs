@@ -54,6 +54,11 @@ namespace FunctionSketch
             return saveFunctions.ToArray();
         }
 
+        public void RemoveFunction(FunctionStorage save)
+        {
+            saveFunctions.Remove(save);
+        }
+
         public void RemoveFunctionAt(int index)
         {
             if (0 <= index && index < saveFunctions.Count)

@@ -20,18 +20,17 @@ namespace 函数画板
     public partial class FunctionShowing : UserControl
     {
         private FunctionStorage save;
-        private EventHandler returnEvent;
+        public EventHandler RefreshEvent { get; set; }
+        public EventHandler DeleteEvent { get; set; }
         public FunctionShowing()
         {
             InitializeComponent();
         }
 
         public FunctionShowing(
-            FunctionStorage save,
-            EventHandler e = null) : this()
+            FunctionStorage save) : this()
         {
             this.save = save;
-            returnEvent = e;
             SetFunctionInfo(save);
         }
 
@@ -103,7 +102,7 @@ namespace 函数画板
 
         private void ReturnAndRefresh(object sender, EventArgs e)
         {
-            returnEvent.Invoke(sender, e);
+            RefreshEvent?.Invoke(sender, e);
             SetFunctionInfo(save);
         }
 
@@ -111,6 +110,11 @@ namespace 函数画板
         {
             Pop.IsOpen = true;
             Pop.Width = this.ActualWidth;
+        }
+
+        private void DeleteButtonClick(object sender, RoutedEventArgs e)
+        {
+            DeleteEvent?.Invoke(sender, e);
         }
     }
 }
