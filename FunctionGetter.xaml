@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:函数画板"
              mc:Ignorable="d" 
-             d:DesignHeight="75.169" d:DesignWidth="158.489"
+             d:DesignHeight="60.991" d:DesignWidth="158.489"
              MinHeight="50">
     <Grid>
-        <StackPanel x:Name="pnl" Background="#3F3F46" Margin="5">
+        <StackPanel x:Name="pnl" Background="#3F3F46" Margin="5,5,5,0" Height="50" VerticalAlignment="Top">
             <Button Content="+" FontSize="30" Click="AddFunctionClick" Height="50" Background="Gray" Foreground="White"></Button>
         </StackPanel>
     </Grid>

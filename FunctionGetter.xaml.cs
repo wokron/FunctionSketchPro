@@ -32,14 +32,30 @@ namespace 函数画板
         {
             button = (Button)pnl.Children[0];
             pnl.Children.Clear();
-            pnl.Children.Add(new Label { Content = "输入函数：", Foreground = Brushes.White });
+            SetFuncText();
+        }
+
+        private Brush tipBrush = 
+            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8C8C8C"));
+
+        private void SetFuncText()
+        {
             funcText = new TextBox();
-            funcText.Foreground = Brushes.White;
-            funcText.Background = Brushes.Gray;
-            funcText.MinHeight = 40;
+            funcText.Foreground = tipBrush;
+            funcText.Text = "请输入函数(以分号分隔)";
+            funcText.BorderBrush = Brushes.Gray;
+            funcText.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
+            funcText.MinHeight = 50;
             pnl.Children.Add(funcText);
             funcText.LostFocus += FuncText_LostFocus;
+            funcText.GotFocus += FuncText_GotFocus;
             funcText.KeyDown += FuncText_KeyDown;
+        }
+
+        private void FuncText_GotFocus(object sender, RoutedEventArgs e)
+        {
+            funcText.Foreground = Brushes.White;
+            funcText.Text = "";
         }
 
         private void FuncText_KeyDown(object sender, KeyEventArgs e)
