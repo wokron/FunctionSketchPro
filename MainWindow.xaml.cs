@@ -29,22 +29,21 @@ namespace 函数画板
             Test();
         }
 
-        FunctionDrawing fd = new FunctionDrawing();
+        FunctionDrawing drawing = new FunctionDrawing();
         private void Test()
         {
-            fd.SaveImageTo(img);
-
+            drawing.SaveImageTo(img);
             FunctionGetter getter = new FunctionGetter();
             getter.AddFunctionEvent = (s, e) =>
             {
                 GetFuncEventArgs args = (GetFuncEventArgs)e;
-                fd.AddFunction(args.GetFuncs());
+                drawing.AddFunction(args.GetFuncs());
                 foreach (var func in args.GetFuncs())
                 {
                     var show = new FunctionShowing(func);
-                    show.RefreshEvent = (s, e) => fd.Refresh();
-                    show.DeleteEvent = (s, e) => { fd.RemoveFunction(func); pnl.Children.Remove(show); fd.Refresh(); };
-                    pnl.Children.Add(show);
+                    show.RefreshEvent = (s, e) => drawing.Refresh();
+                    show.DeleteEvent = (s, e) => { drawing.RemoveFunction(func); pnl.Children.Remove(show); };
+                    pnl.Children.Insert(pnl.Children.Count-1, show);
                 }
             };
             pnl.Children.Add(getter);
@@ -60,7 +59,7 @@ namespace 函数画板
                 Point nowp = e.GetPosition(img);
                 Vector move = nowp - mouseDownp;
                 Vector coordMove = new Vector(-move.X/200d, move.Y/200d);
-                fd.SetMiddlePosition(oriMiddle + coordMove);
+                drawing.SetMiddlePosition(oriMiddle + coordMove);
             }
             
         }
@@ -68,7 +67,7 @@ namespace 函数画板
         private void Img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             isDown = true;
-            oriMiddle = fd.GetMiddlePosition();
+            oriMiddle = drawing.GetMiddlePosition();
             mouseDownp = e.GetPosition(img);
         }
 
@@ -80,9 +79,14 @@ namespace 函数画板
         private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
-                fd.IncreaseUnitNumForWidth(-1);
+                drawing.IncreaseUnitNumForWidth(-1);
             else if (e.Delta < 0)
-                fd.IncreaseUnitNumForWidth(1);
+                drawing.IncreaseUnitNumForWidth(1);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            drawing.SaveImageToFile();
         }
     }
 }

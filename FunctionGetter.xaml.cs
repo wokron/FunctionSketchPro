@@ -36,6 +36,16 @@ namespace 函数画板
             funcText = new TextBox();
             pnl.Children.Add(funcText);
             funcText.LostFocus += FuncText_LostFocus;
+            funcText.KeyDown += FuncText_KeyDown;
+        }
+
+        private void FuncText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                pnl.Children.Clear();
+                pnl.Children.Add(button);
+            }
         }
 
         private void FuncText_LostFocus(object sender, RoutedEventArgs e)
@@ -55,7 +65,6 @@ namespace 函数画板
                 pnl.Children.Clear();
                 pnl.Children.Add(button);
             }
-            
         }
     }
 

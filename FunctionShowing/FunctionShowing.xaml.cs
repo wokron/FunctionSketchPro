@@ -115,6 +115,7 @@ namespace 函数画板
         private void DeleteButtonClick(object sender, RoutedEventArgs e)
         {
             DeleteEvent?.Invoke(sender, e);
+            RefreshEvent?.Invoke(sender, e);
         }
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using static System.Math;
+using System.IO;
 
 namespace FunctionSketch
 {
@@ -14,7 +16,7 @@ namespace FunctionSketch
         private DrawingContext brush;
         private Image targetImage = null;
         private Point middlePoint = new Point(0d, 0d);
-        private readonly double dx = 0.05;
+        private readonly double dx = 0.1;
 
         public double UnitNumForWidth { get; set; }
         public double AspectRatio { get; set; }
@@ -26,9 +28,9 @@ namespace FunctionSketch
         {
             UnitNumForWidth = 20;
             AutoRefresh = true;
-            AspectRatio = 0.618;
-            FuncsPenSetting = new Pen(Brushes.Black, 0.05);
-            CoordPenSetting = new Pen(Brushes.Gray, 0.07);
+            AspectRatio = 412.8 / 549.92;
+            FuncsPenSetting = new Pen(Brushes.White, 0.05);
+            CoordPenSetting = new Pen(Brushes.Green, 0.07);
             Refresh();
         }
         public FunctionDrawing(FunctionStorage[] funcsStore) : this()
@@ -136,6 +138,24 @@ namespace FunctionSketch
             Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
             pen.Thickness = ScaleLength * 0.02;
             brush.DrawLine(pen, p1 * trans, p2 * trans);
+        }
+
+        public void SaveImageToFile(string imgName = "image", string path = "./SaveImage/")
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            string savePath = path + imgName + ".jpg";
+
+            using (FileStream fs = new FileStream(path + imgName + ".jpg", FileMode.Create))
+            {
+                RenderTargetBitmap render = new RenderTargetBitmap(
+                    (int)(targetImage.ActualWidth+1), (int)(targetImage.ActualHeight+1),
+                    96d, 96d, PixelFormats.Pbgra32);
+                render.Render(targetImage);
+                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(render));
+                encoder.Save(fs);
+            }
         }
     }
 
