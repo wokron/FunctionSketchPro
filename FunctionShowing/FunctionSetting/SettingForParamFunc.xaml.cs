@@ -15,18 +15,18 @@ using FunctionSketch;
 namespace 函数画板
 {
     /// <summary>
-    /// SettingForSingleFunc.xaml 的交互逻辑
+    /// SettingForParamFunc.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingForSingleFunc : UserControl
+    public partial class SettingForParamFunc : UserControl
     {
-        SingleVarFuncStorage save;
+        ParamVarFuncStorage save;
         EventHandler e;
-        public SettingForSingleFunc()
+        public SettingForParamFunc()
         {
             InitializeComponent();
         }
 
-        public SettingForSingleFunc(SingleVarFuncStorage save, EventHandler e) : this()
+        public SettingForParamFunc(ParamVarFuncStorage save, EventHandler e) : this()
         {
             this.save = save;
             this.e = e;
@@ -42,8 +42,8 @@ namespace 函数画板
             var trans = save.Transform;
             linearGetter.Text = $"[[{trans.M11:N2},{trans.M12:N2}],[{trans.M21:N2},{trans.M22:N2}]]";
             moveGetter.Text = $"({trans.OffsetX:N2},{trans.OffsetY:N2})";
-            LimitRange range = save.HasIntegration() ? save.GetInterationRange() : new LimitRange(double.NaN, double.NaN);
-            integrationGetter.Text = $"{range.from:N2},{range.to:N2}";
+            LimitRange range = save.GetRange();
+            paramGetter.Text = $"{range.from:N2},{range.to:N2}";
         }
 
         private void SwapGetter_Click(object sender, RoutedEventArgs e)
@@ -63,9 +63,9 @@ namespace 函数画板
                 values[2], values[3],
                 values2[0], values2[1]);
 
-            double[] values3 = TransformToValues(integrationGetter.Text, 2);
+            double[] values3 = TransformToValues(paramGetter.Text, 2);
             LimitRange range = new LimitRange(values3[0], values3[1]);
-            save.GetIntegration(range);
+            save.SetRange(range);
 
             this.e.Invoke(sender, e);
             ShowSetting();

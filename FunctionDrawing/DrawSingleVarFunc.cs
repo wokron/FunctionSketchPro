@@ -18,15 +18,13 @@ namespace FunctionSketch
             /* 单变量函数是一种特殊的参数函数 */
             ParamVarFuncStorage param = save.ConvertToParamFunc();
             if (!save.IsPolarPlot)
-                param.SetRange(WidthLim.from, WidthLim.to);
+                param.SetRange(WidthLim);
             else
                 param.SetRange(2 * PI);
             DrawFunction(param);
 
             if (save.HasIntegration())
-            {
                 DrawIntegrationArea(save);
-            }
         }
 
         private void DrawIntegrationArea(SingleVarFuncStorage save)

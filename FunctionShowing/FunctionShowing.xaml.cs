@@ -37,20 +37,24 @@ namespace 函数画板
 
         private void SetFunctionInfo(FunctionStorage save)
         {
+            pnl.Children.Clear();
+            
             SetFunction(save);
             if (save is AbstractParamFuncStorage abstractParam)
             {
                 SetCoordType(abstractParam);
                 SetTransform(abstractParam);
 
-                if (abstractParam is SingleVarFuncStorage singleVar
-                    && singleVar.HasIntegration())
+                if (abstractParam is SingleVarFuncStorage singleVar)
                 {
                     SetInteration(singleVar);
-                    AddSingleVarSetting(singleVar);
+                    AddSingleFuncSetting(singleVar);
                 }
                 else
+                {
                     SetParamRange(abstractParam as ParamVarFuncStorage);
+                    AddParamFuncSetting(abstractParam as ParamVarFuncStorage);
+                }
             }
         }
 
@@ -69,8 +73,9 @@ namespace 函数画板
 
         private void SetInteration(SingleVarFuncStorage singleVar)
         {
-            LimitRange range = singleVar.GetInterationRange();
-            AddPanelContent(pnl, $"积分{range.from:N2}->{range.to:N2}={singleVar.GetIntegration():N2}");
+            LimitRange range = singleVar.HasIntegration() ? singleVar.GetInterationRange() : new LimitRange(double.NaN, double.NaN);
+            double result = singleVar.HasIntegration() ? singleVar.GetIntegration() : 0;
+            AddPanelContent(pnl, $"积分{range.from:N2}->{range.to:N2}={result:N2}");
         }
 
         private void SetParamRange(ParamVarFuncStorage param)
@@ -84,9 +89,22 @@ namespace 函数画板
             panel.Children.Add(new Label() { Content = content });
         }
 
-        private void AddSingleVarSetting(SingleVarFuncStorage save)
+        private void AddSingleFuncSetting(SingleVarFuncStorage save)
         {
-            popPnl.Children.Add(new SettingForSingleFunc(save, returnEvent));
+            popPnl.Children.Clear();
+            popPnl.Children.Add(new SettingForSingleFunc(save, ReturnAndRefresh));
+        }
+
+        private void AddParamFuncSetting(ParamVarFuncStorage save)
+        {
+            popPnl.Children.Clear();
+            popPnl.Children.Add(new SettingForParamFunc(save, ReturnAndRefresh));
+        }
+
+        private void ReturnAndRefresh(object sender, EventArgs e)
+        {
+            returnEvent.Invoke(sender, e);
+            SetFunctionInfo(save);
         }
 
         private void ShowPopSetting(object sender, RoutedEventArgs e)

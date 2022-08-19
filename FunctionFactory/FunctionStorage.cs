@@ -48,6 +48,11 @@ namespace FunctionSketch
             return range;
         }
 
+        public void SetRange(LimitRange range)
+        {
+            this.range = range;
+        }
+
         public void SetRange(double end)
         {
             range.to = end;

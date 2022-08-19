@@ -33,11 +33,11 @@ namespace 函数画板
         FunctionStorage fs;
         private void Test()
         {
-            FunctionFactory ff = new FunctionFactory("y=1/x;sinx,cosx;x^2/5+y^2/4=1");
+            FunctionFactory ff = new FunctionFactory("y=1/x;");
             fs = ff.GetFunctions()[0];
             if (fs is SingleVarFuncStorage svf)
             {
-                svf.GetIntegration(new LimitRange(0.5, PI * 3d / 2d));
+                //svf.GetIntegration(new LimitRange(0.5, PI * 3d / 2d));
                 svf.IsPolarPlot = true;
             }
             fd.AddFunction(ff.GetFunctions());
