@@ -13,13 +13,19 @@
             <ColumnDefinition Width="7*"></ColumnDefinition>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-
-        <Image Name="img" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
-        <ScrollViewer  Grid.Column="1" VerticalScrollBarVisibility="Hidden">
-            <StackPanel x:Name="pnl">
-                <Button Content="Button" Click="Button_Click"/>
-
-            </StackPanel>
-        </ScrollViewer>
+        <Border BorderBrush="#3F3F46" BorderThickness="5,5,0,5">
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <Image Name="img" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
+            </Border>
+        </Border>
+        <Border Grid.Column="1" BorderBrush="#3F3F46" BorderThickness="5">
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <StackPanel x:Name="pnl" Background="#2D2D30">
+                        
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Border>
     </Grid>
 </Window>

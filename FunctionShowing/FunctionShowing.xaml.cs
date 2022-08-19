@@ -85,7 +85,7 @@ namespace 函数画板
 
         private void AddPanelContent(StackPanel panel, string content)
         {
-            panel.Children.Add(new Label() { Content = content });
+            panel.Children.Add(new Label() { Content = content, Foreground = Brushes.White });
         }
 
         private void AddSingleFuncSetting(SingleVarFuncStorage save)
