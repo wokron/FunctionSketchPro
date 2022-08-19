@@ -21,7 +21,6 @@ namespace 函数画板
     {
         private FunctionStorage save;
         private EventHandler returnEvent;
-        private EventHandler deleteEvent;
         public FunctionShowing()
         {
             InitializeComponent();
@@ -29,12 +28,10 @@ namespace 函数画板
 
         public FunctionShowing(
             FunctionStorage save,
-            EventHandler e = null,
-            EventHandler delete = null) : this()
+            EventHandler e = null) : this()
         {
             this.save = save;
             returnEvent = e;
-            deleteEvent = delete;
             SetFunctionInfo(save);
         }
 
@@ -95,11 +92,7 @@ namespace 函数画板
         private void ShowPopSetting(object sender, RoutedEventArgs e)
         {
             Pop.IsOpen = true;
-        }
-
-        private void DeleteClick(object sender, RoutedEventArgs e)
-        {
-            deleteEvent.Invoke(sender, e);
+            Pop.Width = this.ActualWidth;
         }
     }
 }

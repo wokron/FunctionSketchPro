@@ -56,11 +56,7 @@ namespace 函数画板
             foreach (var func in fd.GetFunctions())
             {
                 pnl.Children.Add(new FunctionShowing(func,
-                    (sender, e) => fd.Refresh(),
-                    (sender, e) => {
-                        fd.RemoveFunctionAt(i); // 不能这样使用lambda
-                        pnl.Children.RemoveAt(i+2);
-                    }));
+                    (sender, e) => fd.Refresh()));
                 i++;
             }
         }

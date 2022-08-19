@@ -21,7 +21,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button Content="X" Grid.Row="0" FontSize="30" Click="DeleteClick"/>
+            <Button Content="X" Grid.Row="0" FontSize="30"/>
             <Button x:Name="method" Grid.Row="1" Content="···" Grid.Column="1" FontSize="30" Click="ShowPopSetting"/>
             <Popup x:Name="Pop" PopupAnimation="None" Width="auto" Height="auto" Placement="Bottom" AllowsTransparency="True" StaysOpen="False">
                 <Grid>
