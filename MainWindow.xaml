@@ -21,11 +21,15 @@
         </Border>
         <Border Grid.Column="1" BorderBrush="#3F3F46" BorderThickness="0,5,5,5">
             <Border BorderBrush="Gray" BorderThickness="1">
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                    <StackPanel x:Name="pnl" Background="#2D2D30">
-                        <local:FunctionGetter AddFunctionEvent="GetFunctionEvent"></local:FunctionGetter>
-                    </StackPanel>
-                </ScrollViewer>
+                <StackPanel x:Name="measurePnl" Background="#2D2D30">
+                    <Label Foreground="LightGray" FontWeight="Thin">函数列表</Label>
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <StackPanel x:Name="pnl" >
+                            <local:FunctionGetter AddFunctionEvent="GetFunctionEvent" ToolTip="创建新函数"></local:FunctionGetter>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                </StackPanel>
             </Border>
         </Border>
     </Grid>

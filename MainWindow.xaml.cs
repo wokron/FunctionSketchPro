@@ -52,7 +52,7 @@ namespace 函数画板
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            drawing.AspectRatio = pnl.ActualHeight / imageGrid.ActualWidth;
+            drawing.AspectRatio = measurePnl.ActualHeight / imageGrid.ActualWidth;
             drawing.Refresh();
         }
 

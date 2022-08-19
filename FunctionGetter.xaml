@@ -8,7 +8,7 @@
              d:DesignHeight="60.991" d:DesignWidth="158.489"
              MinHeight="50">
     <Grid>
-        <StackPanel x:Name="pnl" Background="#3F3F46" Margin="5,5,5,0" Height="50" VerticalAlignment="Top">
+        <StackPanel x:Name="pnl" Background="#3F3F46" Margin="5,0,5,0" Height="50" VerticalAlignment="Top">
             <Button Content="+" FontSize="30" Click="AddFunctionClick" Height="50" Background="Gray" Foreground="White"></Button>
         </StackPanel>
     </Grid>
