@@ -58,7 +58,14 @@ namespace 函数画板
         }
 
         private void SetFunction(FunctionStorage save)
-            => AddPanelContent(pnl, save.ToString());
+        {
+            pnl.Children.Add(new TextBlock()
+            {
+                Text = save.ToString(),
+                Foreground = Brushes.White,
+                TextWrapping = TextWrapping.Wrap
+            });
+        }
 
         private void SetCoordType(AbstractParamFuncStorage abstractParam)
             => AddPanelContent(pnl, abstractParam.IsPolarPlot ? "极坐标" : "直角坐标");

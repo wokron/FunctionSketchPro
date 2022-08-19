@@ -40,16 +40,19 @@ namespace 函数画板
 
         private void SetFuncText()
         {
-            funcText = new TextBox();
-            funcText.Foreground = tipBrush;
-            funcText.Text = "请输入函数(以分号分隔)";
-            funcText.BorderBrush = Brushes.Gray;
-            funcText.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
-            funcText.MinHeight = 50;
-            pnl.Children.Add(funcText);
+            funcText = new TextBox
+            {
+                Foreground = tipBrush,
+                Text = "请输入函数(以分号分隔)",
+                BorderBrush = Brushes.Gray,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333")),
+                MinHeight = 50,
+                TextWrapping = TextWrapping.Wrap
+            };
             funcText.LostFocus += FuncText_LostFocus;
             funcText.GotFocus += FuncText_GotFocus;
             funcText.KeyDown += FuncText_KeyDown;
+            pnl.Children.Add(funcText);
         }
 
         private void FuncText_GotFocus(object sender, RoutedEventArgs e)

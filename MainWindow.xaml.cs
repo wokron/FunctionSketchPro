@@ -65,7 +65,7 @@ namespace 函数画板
             {
                 Point nowp = e.GetPosition(img);
                 Vector move = nowp - mouseDownp;
-                Vector coordMove = new Vector(-move.X/200d, move.Y/200d);
+                Vector coordMove = new Vector(-move.X / 100d, move.Y / 100d);
                 drawing.SetMiddlePosition(oriMiddle + coordMove);
             }
             
