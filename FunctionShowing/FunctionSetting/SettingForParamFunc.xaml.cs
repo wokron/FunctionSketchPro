@@ -64,7 +64,15 @@ namespace 函数画板
                 values2[0], values2[1]);
 
             double[] values3 = TransformToValues(paramGetter.Text, 2);
-            LimitRange range = new LimitRange(values3[0], values3[1]);
+            LimitRange range;
+            try
+            {
+                range = new LimitRange(values3[0], values3[1]);
+            }
+            catch (Exception)
+            {
+                range = save.GetRange();
+            }
             save.SetRange(range);
 
             this.e.Invoke(sender, e);

@@ -107,7 +107,10 @@ namespace FunctionSketch
 
         public void IncreaseUnitNumForWidth(double inc)
         {
-            UnitNumForWidth += inc;
+            if (UnitNumForWidth + inc > 0)
+                UnitNumForWidth += inc;
+            else
+                UnitNumForWidth = 1;
             Refresh();
         }
 

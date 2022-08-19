@@ -14,11 +14,7 @@
         </Grid.ColumnDefinitions>
         <Image Name="img" MouseLeftButtonDown="Img_MouseLeftButtonDown" MouseLeftButtonUp="Img_MouseLeftButtonUp" MouseMove="Img_MouseMove"></Image>
         <ScrollViewer  Grid.Column="1" VerticalScrollBarVisibility="Hidden">
-            <StackPanel x:Name="pnl">
-                <Button Content="Button" Height="52" Click="Button_Click"/>
-                <Button Content="Button2" Height="52" Click="Button_Click_1"/>
-            </StackPanel>
-
+            <StackPanel x:Name="pnl"/>
         </ScrollViewer>
     </Grid>
 </Window>

@@ -30,43 +30,25 @@ namespace 函数画板
         }
 
         FunctionDrawing fd = new FunctionDrawing();
-        FunctionStorage fs;
         private void Test()
         {
-            FunctionFactory ff = new FunctionFactory("y=1/x;y=x^2;x^2+y^2=4");
-            fs = ff.GetFunctions()[0];
-            if (fs is SingleVarFuncStorage svf)
-            {
-                //svf.GetIntegration(new LimitRange(0.5, PI * 3d / 2d));
-                svf.IsPolarPlot = true;
-            }
-            fd.AddFunction(ff.GetFunctions());
-            //foreach (var item in fd.GetFunctions())
-            //{
-            //    Label label = new Label() { Content = item.ToString() };
-            //    pnl.Children.Add(label);
-            //} 
             fd.SaveImageTo(img);
-            
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var func in fd.GetFunctions())
+            FunctionGetter getter = new FunctionGetter();
+            getter.AddFunctionEvent = (s, e) =>
             {
-                var show = new FunctionShowing(func);
-                show.RefreshEvent = (s, e) => fd.Refresh();
-                show.DeleteEvent = (s, e) => { fd.RemoveFunction(func); pnl.Children.Remove(show); fd.Refresh(); };
-                pnl.Children.Add(show);
-            }
+                GetFuncEventArgs args = (GetFuncEventArgs)e;
+                fd.AddFunction(args.GetFuncs());
+                foreach (var func in args.GetFuncs())
+                {
+                    var show = new FunctionShowing(func);
+                    show.RefreshEvent = (s, e) => fd.Refresh();
+                    show.DeleteEvent = (s, e) => { fd.RemoveFunction(func); pnl.Children.Remove(show); fd.Refresh(); };
+                    pnl.Children.Add(show);
+                }
+            };
+            pnl.Children.Add(getter);
         }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            fd.RemoveFunctionAt(0);
-            pnl.Children.RemoveAt(2);
-        }
-
 
         bool isDown = false;
         Point oriMiddle;
@@ -77,7 +59,7 @@ namespace 函数画板
             {
                 Point nowp = e.GetPosition(img);
                 Vector move = nowp - mouseDownp;
-                Vector coordMove = new Vector(-move.X/100d, move.Y/100d);
+                Vector coordMove = new Vector(-move.X/200d, move.Y/200d);
                 fd.SetMiddlePosition(oriMiddle + coordMove);
             }
             

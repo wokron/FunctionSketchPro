@@ -64,7 +64,15 @@ namespace 函数画板
                 values2[0], values2[1]);
 
             double[] values3 = TransformToValues(integrationGetter.Text, 2);
-            LimitRange range = new LimitRange(values3[0], values3[1]);
+            LimitRange range;
+            try
+            {
+                range = new LimitRange(values3[0], values3[1]); 
+            }
+            catch (Exception) // 出现from > to的情况
+            {
+                range = save.GetInterationRange(); // 不改变原范围
+            }
             save.GetIntegration(range);
 
             this.e.Invoke(sender, e);
@@ -79,7 +87,19 @@ namespace 函数画板
             {
                 if (strValues[j] == string.Empty)
                     continue;
-                values[i++] = Convert.ToDouble(strValues[j]);
+                try
+                {
+                    values[i] = Convert.ToDouble(strValues[j]);
+                }
+                catch (Exception)
+                {
+                    values[i] = 0;
+                    // 输入了非数字，只需要置零
+                }
+                finally
+                {
+                    i++;
+                }
             }
             return values;
         }
