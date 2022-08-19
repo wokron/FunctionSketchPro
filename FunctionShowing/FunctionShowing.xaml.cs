@@ -68,7 +68,8 @@ namespace 函数画板
             {
                 Text = save.ToString(),
                 Foreground = Brushes.White,
-                TextWrapping = TextWrapping.Wrap
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(5)
             });
         }
 

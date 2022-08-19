@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="函数画板" Height="450" Width="800"
         MouseWheel="Window_MouseWheel"
-        Background="Black">
+        Background="#1E1E1E">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="25"></RowDefinition>
