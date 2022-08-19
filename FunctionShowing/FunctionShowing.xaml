@@ -22,7 +22,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button Content="X" Grid.Row="0" FontSize="30" Click="DeleteButtonClick" Background="#3F3F46" Foreground="White"/>
+            <Button Content="x" Grid.Row="0" FontSize="30" Click="DeleteButtonClick" Background="#3F3F46" Foreground="White"/>
             <Button x:Name="method" Grid.Row="1" Content="···" Grid.Column="1" FontSize="30" Click="ShowPopSetting" Background="#3F3F46" Foreground="White"/>
             <Popup x:Name="Pop" PopupAnimation="None" Width="auto" Height="auto" Placement="Bottom" AllowsTransparency="True" StaysOpen="False">
                 <Grid>

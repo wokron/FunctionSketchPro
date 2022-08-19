@@ -32,8 +32,11 @@ namespace 函数画板
         {
             button = (Button)pnl.Children[0];
             pnl.Children.Clear();
-            pnl.Children.Add(new Label { Content = "输入函数：" });
+            pnl.Children.Add(new Label { Content = "输入函数：", Foreground = Brushes.White });
             funcText = new TextBox();
+            funcText.Foreground = Brushes.White;
+            funcText.Background = Brushes.Gray;
+            funcText.MinHeight = 40;
             pnl.Children.Add(funcText);
             funcText.LostFocus += FuncText_LostFocus;
             funcText.KeyDown += FuncText_KeyDown;

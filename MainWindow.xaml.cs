@@ -23,30 +23,37 @@ namespace 函数画板
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FunctionDrawing drawing = new FunctionDrawing();
+
         public MainWindow()
         {
             InitializeComponent();
-            Test();
+            DrawingInit();
         }
 
-        FunctionDrawing drawing = new FunctionDrawing();
-        private void Test()
+        private void DrawingInit()
         {
             drawing.SaveImageTo(img);
-            FunctionGetter getter = new FunctionGetter();
-            getter.AddFunctionEvent = (s, e) =>
+            this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void GetFunctionEvent(object sender, EventArgs e)
+        {
+            GetFuncEventArgs args = (GetFuncEventArgs)e;
+            drawing.AddFunction(args.GetFuncs());
+            foreach (var func in args.GetFuncs())
             {
-                GetFuncEventArgs args = (GetFuncEventArgs)e;
-                drawing.AddFunction(args.GetFuncs());
-                foreach (var func in args.GetFuncs())
-                {
-                    var show = new FunctionShowing(func);
-                    show.RefreshEvent = (s, e) => drawing.Refresh();
-                    show.DeleteEvent = (s, e) => { drawing.RemoveFunction(func); pnl.Children.Remove(show); };
-                    pnl.Children.Insert(pnl.Children.Count-1, show);
-                }
-            };
-            pnl.Children.Add(getter);
+                var show = new FunctionShowing(func);
+                show.RefreshEvent = (s, e) => drawing.Refresh();
+                show.DeleteEvent = (s, e) => { drawing.RemoveFunction(func); pnl.Children.Remove(show); };
+                pnl.Children.Insert(pnl.Children.Count - 1, show);
+            }
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            drawing.AspectRatio = pnl.ActualHeight / imageGrid.ActualWidth;
+            drawing.Refresh();
         }
 
         bool isDown = false;
