@@ -37,7 +37,7 @@ namespace 函数画板
         private void SetFunctionInfo(FunctionStorage save)
         {
             pnl.Children.Clear();
-            
+
             SetFunction(save);
             if (save is AbstractParamFuncStorage abstractParam)
             {
@@ -54,6 +54,11 @@ namespace 函数画板
                     SetParamRange(abstractParam as ParamVarFuncStorage);
                     AddParamFuncSetting(abstractParam as ParamVarFuncStorage);
                 }
+            }
+            else
+            {
+                AddPanelContent(pnl, "直角坐标");
+                AddPanelContent(pnl, "隐函数");
             }
         }
 
