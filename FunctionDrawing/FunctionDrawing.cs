@@ -140,6 +140,17 @@ namespace FunctionSketch
             brush.DrawLine(pen, p1 * trans, p2 * trans);
         }
 
+        public void SaveImageToFile(FileStream fs)
+        {
+            RenderTargetBitmap render = new RenderTargetBitmap(
+                    (int)(targetImage.ActualWidth + 1), (int)(targetImage.ActualHeight + 1),
+                    96d, 96d, PixelFormats.Pbgra32);
+            render.Render(targetImage);
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(render));
+            encoder.Save(fs);
+        }
+
         public void SaveImageToFile(string imgName = "image", string path = "./SaveImage/")
         {
             if (!Directory.Exists(path))
@@ -148,13 +159,7 @@ namespace FunctionSketch
 
             using (FileStream fs = new FileStream(path + imgName + ".jpg", FileMode.Create))
             {
-                RenderTargetBitmap render = new RenderTargetBitmap(
-                    (int)(targetImage.ActualWidth+1), (int)(targetImage.ActualHeight+1),
-                    96d, 96d, PixelFormats.Pbgra32);
-                render.Render(targetImage);
-                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(render));
-                encoder.Save(fs);
+                SaveImageToFile(fs);
             }
         }
     }
