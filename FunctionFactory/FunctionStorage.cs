@@ -75,7 +75,7 @@ namespace FunctionSketch
 
         public SingleVarFuncStorage GetDerivativeFunctionStorage()
         {
-            var rt = new SingleVarFuncStorage(expressionTree[0].Derivative());
+            var rt = new SingleVarFuncStorage(expressionTree[0].Derivative().Simplified());
             return rt;
         }
 

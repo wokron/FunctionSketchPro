@@ -11,6 +11,14 @@ public abstract class Operator : ExpressionElement
     {
         return this.GetPriority() <= op2.GetPriority();
     }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
+    }
+
+    protected abstract void SimplifiedChildren();
 }
 
 public abstract class SingleElementOperator : Operator
@@ -30,6 +38,12 @@ public abstract class SingleElementOperator : Operator
         get => childElements[0];
         set => childElements[0] = value;
     }
+
+    protected override void SimplifiedChildren()
+    {
+        ChildElem = ChildElem.Simplified();
+    }
+
     public override double Calculate(double x)
     {
         double num = ChildElem.Calculate(x);
@@ -69,6 +83,13 @@ public abstract class DoubleElementsOperator : Operator
         get => childElements[1];
         set => childElements[1] = value;
     }
+
+    protected override void SimplifiedChildren()
+    {
+        Left = Left.Simplified();
+        Right = Right.Simplified();
+    }
+
     public override double Calculate(double x)
     {
         double numLeft = Left.Calculate(x), numRight = Right.Calculate(x);
@@ -94,6 +115,16 @@ public class OpPlus : DoubleElementsOperator
     {
         OpPlus rt = new OpPlus(Left.Clone(), Right.Clone());
         return rt;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        if (Left is Value val1 && val1.Val == 0)
+            return Right;
+        if (Right is Value val2 && val2.Val == 0)
+            return Left;
+        return this;
     }
 
     public override ExpressionElement Derivative()
@@ -135,6 +166,14 @@ public class OpSubtract : DoubleElementsOperator
         return rt;
     }
 
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        if (Right is Value val && val.Val == 0)
+            return Left;
+        return this;
+    }
+
     protected override double DoCalculation(double left, double right)
         => left - right;
 
@@ -142,7 +181,10 @@ public class OpSubtract : DoubleElementsOperator
 
     public override string ToString()
     {
-        return $"({Left}-{Right})";
+        if (Left is Value v && v.Val == 0)
+            return $"-{Right}";
+        else
+            return $"({Left}-{Right})";
     }
 }
 
@@ -168,6 +210,27 @@ public class OpMultiply : DoubleElementsOperator
         return rt;
     }
 
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+
+        if (Left is Value v1)
+        {
+            if (v1.Val == 0)
+                return Left;
+            if (v1.Val == 1)
+                return Right;
+        }
+        if (Right is Value v2)
+        {
+            if (v2.Val == 0)
+                return Right;
+            if (v2.Val == 1)
+                return Left;
+        }
+        return this;
+    }
+
     protected override double DoCalculation(double left, double right)
         => left * right;
 
@@ -175,7 +238,10 @@ public class OpMultiply : DoubleElementsOperator
 
     public override string ToString()
     {
-        return $"({Left}*{Right})";
+        if (Left is Value v && v.Val == -1)
+            return $"-{Right}";
+        else
+            return $"({Left}*{Right})";
     }
 }
 
@@ -197,6 +263,15 @@ public class OpDivide : DoubleElementsOperator
         OpMultiply root = new OpMultiply(Left.Clone(), pow);
 
         return root.Derivative();
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        if (Left is Value v1 && v1.Val == 0)
+            return Left;
+        if (Right is Value v2 && v2.Val == 1)
+            return Left;
+        return this;
     }
 
     protected override double DoCalculation(double left, double right)
@@ -243,6 +318,25 @@ public class OpExponentiation : DoubleElementsOperator
         }
         else
             throw new InvalidOperationException("过于困难的求导");
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+
+        if (Left is Value v1)
+        {
+            if (v1.Val == 0 || v1.Val == 1)
+                return Left;
+        }
+        if (Right is Value v2)
+        {
+            if (v2.Val == 0)
+                return new Value(1);
+            if (v2.Val == 1)
+                return Left;
+        }
+        return this;
     }
 
     protected override double DoCalculation(double left, double right)
@@ -345,6 +439,12 @@ public class OpSin : SingleElementOperator
         return rt;
     }
 
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
+    }
+
     public override ExpressionElement Derivative()
     {
         OpCos cos = new OpCos(ChildElem.Clone());
@@ -380,9 +480,15 @@ public class OpCos : SingleElementOperator
     {
         OpSin sin = new OpSin(ChildElem.Clone());
         OpMultiply mul = new OpMultiply(sin, ChildElem.Derivative());
-        OpDivide divide = new OpDivide(new Value(0), mul);
+        OpSubtract divide = new OpSubtract(new Value(0), mul);
 
         return divide;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
@@ -415,6 +521,12 @@ public class OpTan : SingleElementOperator
         OpDivide divide = new OpDivide(sin, cos);
 
         return divide.Derivative();
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
@@ -450,6 +562,12 @@ public class OpArcsin : SingleElementOperator
         return divide;
     }
 
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
+    }
+
     protected override double DoCalculation(double right)
         => Asin(right);
 
@@ -479,6 +597,12 @@ public class OpArccos : SingleElementOperator
         OpSubtract subtract = new OpSubtract(new Value(0), arcsin.Derivative());
 
         return subtract;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
@@ -511,6 +635,12 @@ public class OpArctan : SingleElementOperator
         OpDivide divide = new OpDivide(ChildElem.Derivative(), plus);
 
         return divide;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)

@@ -7,8 +7,11 @@ public abstract class ExpressionElement
     public abstract double Calculate(double x);
     public abstract double Calculate(double x, double y);
     public abstract ExpressionElement Derivative();
-
     public abstract ExpressionElement Clone();
+    public virtual ExpressionElement Simplified()
+    {
+        return this;
+    }
 }
 
 public class Value : ExpressionElement

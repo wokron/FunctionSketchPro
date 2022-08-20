@@ -21,6 +21,8 @@ namespace 函数画板
     {
         SingleVarFuncStorage save;
         EventHandler e;
+
+        public EventHandler DerivationEvent { get; set; }
         public SettingForSingleFunc()
         {
             InitializeComponent();
@@ -102,6 +104,11 @@ namespace 函数画板
                 }
             }
             return values;
+        }
+
+        private void DerivationClick(object sender, RoutedEventArgs e)
+        {
+            DerivationEvent?.Invoke(sender, e);
         }
     }
 }

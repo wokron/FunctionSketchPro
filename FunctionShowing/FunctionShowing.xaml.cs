@@ -22,6 +22,7 @@ namespace 函数画板
         private FunctionStorage save;
         public EventHandler RefreshEvent { get; set; }
         public EventHandler DeleteEvent { get; set; }
+        public EventHandler CreateNewEvent { get; set; }
         public FunctionShowing()
         {
             InitializeComponent();
@@ -104,7 +105,21 @@ namespace 函数画板
         private void AddSingleFuncSetting(SingleVarFuncStorage save)
         {
             popPnl.Children.Clear();
-            popPnl.Children.Add(new SettingForSingleFunc(save, ReturnAndRefresh));
+            var setting = new SettingForSingleFunc(save, ReturnAndRefresh);
+            setting.DerivationEvent = DealDerivation;
+            popPnl.Children.Add(setting);
+        }
+
+        private void DealDerivation(object sender, EventArgs e)
+        {
+            CreateNewEvent?.Invoke(
+                sender,
+                new GetFuncEventArgs(
+                    new FunctionStorage[]
+                    {
+                        (save as SingleVarFuncStorage).
+                        GetDerivativeFunctionStorage()
+                    }));
         }
 
         private void AddParamFuncSetting(ParamVarFuncStorage save)

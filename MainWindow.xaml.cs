@@ -46,6 +46,7 @@ namespace 函数画板
                 var show = new FunctionShowing(func);
                 show.RefreshEvent = (s, e) => drawing.Refresh();
                 show.DeleteEvent = (s, e) => { drawing.RemoveFunction(func); pnl.Children.Remove(show); };
+                show.CreateNewEvent = GetFunctionEvent;
                 pnl.Children.Insert(pnl.Children.Count - 1, show);
             }
         }
