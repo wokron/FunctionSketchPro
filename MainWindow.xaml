@@ -19,7 +19,7 @@
                 <MenuItem Header="保存" Foreground="Black" Click="SaveImageClick"></MenuItem>
                 <MenuItem Header="打开默认保存位置" Foreground="Black" Click="CheckDefaultSavePath"></MenuItem>
             </MenuItem>
-            <MenuItem Header="设置" Foreground="White" Margin="5,5,0,0"></MenuItem>
+            <MenuItem Header="设置" Foreground="White" Margin="5,5,0,0" Click="DrawingSettingClick"></MenuItem>
             <MenuItem Header="帮助" Foreground="White" Margin="5,5,0,0">
                 <MenuItem Header="源代码" Foreground="Black" Click="SourceCodeClick"></MenuItem>
                 <MenuItem Header="操作说明" Foreground="Black" Click="ShowHelper"></MenuItem>

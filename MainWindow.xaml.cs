@@ -134,5 +134,11 @@ namespace 函数画板
             var helper = new Helper();
             helper.Show();
         }
+
+        private void DrawingSettingClick(object sender, RoutedEventArgs e)
+        {
+            var drawingSetting = new DrawingSetting(drawing);
+            drawingSetting.ShowDialog();
+        }
     }
 }
