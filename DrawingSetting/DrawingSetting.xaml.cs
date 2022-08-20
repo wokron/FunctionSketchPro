@@ -39,6 +39,7 @@ namespace 函数画板
         private void SetLineColor(object sender, RoutedEventArgs e)
         {
             ChooseThisOne(sender as ToggleButton);
+            mainFrame.Content = new LineColorSetting();
         }
 
         private void SetLineStickness(object sender, RoutedEventArgs e)
@@ -58,6 +59,16 @@ namespace 函数画板
             {
                 ((ToggleButton)child).IsChecked = false;
             }
+        }
+
+        private void ApplySetting(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DisApplySetting(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

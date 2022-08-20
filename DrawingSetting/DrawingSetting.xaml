@@ -23,9 +23,9 @@
                 <Border BorderBrush="Gray" BorderThickness="1">
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
                         <StackPanel x:Name="selectPnl" Background="#2D2D30">
-                            <ToggleButton Content="显示范围" Height="30" Click="SetShowArea" Margin="0,0,0,10"></ToggleButton>
-                            <ToggleButton Content="线条颜色" Height="30" Click="SetLineColor" Margin="0,0,0,10"></ToggleButton>
-                            <ToggleButton Content="线条宽度" Height="30" Click="SetLineStickness" Margin="0,0,0,10"></ToggleButton>
+                            <ToggleButton Content="显示范围" Height="30" Click="SetShowArea" Margin="5,5,5,0"></ToggleButton>
+                            <ToggleButton Content="线条颜色" Height="30" Click="SetLineColor" Margin="5,5,5,0"></ToggleButton>
+                            <ToggleButton Content="线条宽度" Height="30" Click="SetLineStickness" Margin="5,5,5,0"></ToggleButton>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
@@ -33,16 +33,18 @@
 
             <Border Grid.Column="1" BorderBrush="#3F3F46" BorderThickness="5">
                 <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
-                    <Frame x:Name="mainFrame">
-
-                    </Frame>
+                    <Frame x:Name="mainFrame"/>
                 </Border>
             </Border>
             
         </Grid>
 
         <Grid Grid.Row="1" Background="#3F3F46">
-            
+            <StackPanel FlowDirection="RightToLeft" Orientation="Horizontal">
+                <Button Content="取消" Margin="5,0,5,5" Width="50" Click="DisApplySetting"></Button>
+                <Button Content="确定" Margin="5,0,5,5" Width="50" Click="ApplySetting"></Button>
+            </StackPanel>
         </Grid>
+        
     </Grid>
 </Window>
