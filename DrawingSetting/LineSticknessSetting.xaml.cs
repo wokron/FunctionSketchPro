@@ -15,17 +15,17 @@ using FunctionSketch;
 namespace 函数画板
 {
     /// <summary>
-    /// RangeSetting.xaml 的交互逻辑
+    /// LineSticknessSetting.xaml 的交互逻辑
     /// </summary>
-    public partial class RangeSetting : Page
+    public partial class LineSticknessSetting : Page
     {
         private FunctionDrawing drawing;
-        public RangeSetting()
+        public LineSticknessSetting()
         {
             InitializeComponent();
         }
 
-        public RangeSetting(FunctionDrawing drawing) : this()
+        public LineSticknessSetting(FunctionDrawing drawing) : this()
         {
             this.drawing = drawing;
             ShowOldSettings();
@@ -33,13 +33,13 @@ namespace 函数画板
 
         private void ShowOldSettings()
         {
-            positionGetter.Text = drawing.GetMiddlePosition().ToString();
-            unitLengthGetter.Text = drawing.UnitNumForWidth.ToString();
+            funcThicknessGetter.Text = drawing.FunctionLineThickness.ToString();
+            coordTicknessGetter.Text = drawing.CoordLineThickness.ToString();
         }
 
         public (string, string) GetSettings()
         {
-            return (positionGetter.Text, unitLengthGetter.Text);
+            return (funcThicknessGetter.Text, coordTicknessGetter.Text);
         }
     }
 }

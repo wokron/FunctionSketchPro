@@ -11,11 +11,11 @@
     <Grid>
         <StackPanel Background="#2D2D30" Margin="10">
             <Label Foreground="White">曲线颜色：</Label>
-            <TextBox Background="#333333" Foreground="White"></TextBox>
+            <TextBox x:Name="funcColorGetter" Background="#333333" Foreground="White"></TextBox>
             <Label Foreground="White">坐标轴颜色：</Label>
-            <TextBox Background="#333333" Foreground="White"></TextBox>
+            <TextBox x:Name="coordColorGetter" Background="#333333" Foreground="White"></TextBox>
             <Label Foreground="White">积分区域颜色：</Label>
-            <TextBox Background="#333333" Foreground="White"></TextBox>
+            <TextBox x:Name="integrateColorGetter" Background="#333333" Foreground="White"></TextBox>
         </StackPanel>
     </Grid>
 </Page>

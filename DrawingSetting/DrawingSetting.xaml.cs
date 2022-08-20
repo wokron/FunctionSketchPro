@@ -33,18 +33,19 @@ namespace 函数画板
         private void SetShowArea(object sender, RoutedEventArgs e)
         {
             ChooseThisOne(sender as ToggleButton);
-            mainFrame.Content = new RangeSetting();
+            mainFrame.Content = new RangeSetting(drawing);
         }
 
         private void SetLineColor(object sender, RoutedEventArgs e)
         {
             ChooseThisOne(sender as ToggleButton);
-            mainFrame.Content = new LineColorSetting();
+            mainFrame.Content = new LineColorSetting(drawing);
         }
 
         private void SetLineStickness(object sender, RoutedEventArgs e)
         {
             ChooseThisOne(sender as ToggleButton);
+            mainFrame.Content = new LineSticknessSetting(drawing);
         }
 
         private void ChooseThisOne(ToggleButton button)
@@ -63,7 +64,7 @@ namespace 函数画板
 
         private void ApplySetting(object sender, RoutedEventArgs e)
         {
-
+            throw new NotImplementedException();
         }
 
         private void DisApplySetting(object sender, RoutedEventArgs e)
