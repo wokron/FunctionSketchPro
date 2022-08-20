@@ -59,7 +59,7 @@ namespace FunctionSketch
             var vPairs = GetTransferVectorPaires(v1, v2, v3, v4);
             foreach ((Vector v1, Vector v2) vPair in vPairs)
             {
-                DrawLineWithCoordPoints(FuncsPenSetting, point + vPair.v1, point + vPair.v2);
+                DrawLineWithCoordPoints(FuncsPenSetting, FunctionLineThickness, point + vPair.v1, point + vPair.v2);
             }
         }
 

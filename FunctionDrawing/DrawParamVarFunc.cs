@@ -67,7 +67,7 @@ namespace FunctionSketch
                 Point p1 = sortedPoints[i - 1], p2 = sortedPoints[i];
                 if (FindDiscontinuityPoint(p1, p2))
                     continue;
-                DrawLineWithCoordPoints(FuncsPenSetting, p1, p2);
+                DrawLineWithCoordPoints(FuncsPenSetting, FunctionLineThickness, p1, p2);
             }
         }
 

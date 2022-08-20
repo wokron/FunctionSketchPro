@@ -29,6 +29,7 @@ namespace FunctionSketch
         {
             DrawLineWithCoordPoints(
                 CoordPenSetting,
+                CoordLineThickness,
                 new Point(WidthLim.from, y),
                 new Point(WidthLim.to, y));
         }
@@ -46,7 +47,7 @@ namespace FunctionSketch
             for (double i = start; i < WidthLim.to; i += ScaleLength)
             {
                 Point begin = new Point(i, y);
-                DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
+                DrawLineWithCoordPoints(CoordPenSetting, CoordLineThickness, begin, begin + trans);
                 DrawTextAt($"{i:N2}", begin);
             }
         }
@@ -63,6 +64,7 @@ namespace FunctionSketch
         {
             DrawLineWithCoordPoints(
                 CoordPenSetting,
+                CoordLineThickness,
                 new Point(x, HeightLim.from),
                 new Point(x, HeightLim.to));
         }
@@ -80,7 +82,7 @@ namespace FunctionSketch
             for (double i = start; i < HeightLim.to; i += ScaleLength)
             {
                 Point begin = new Point(x, i);
-                DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
+                DrawLineWithCoordPoints(CoordPenSetting, CoordLineThickness, begin, begin + trans);
                 if (i < -ScaleLength/2d || i > ScaleLength/2d)
                     DrawTextAt($"{i:N2}", begin);
             }

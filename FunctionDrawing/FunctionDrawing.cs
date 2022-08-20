@@ -20,8 +20,11 @@ namespace FunctionSketch
 
         public double UnitNumForWidth { get; set; }
         public double AspectRatio { get; set; }
-        public Pen FuncsPenSetting { get; set; }
-        public Pen CoordPenSetting { get; set; }
+        public Brush FuncsPenSetting { get; set; }
+        public Brush CoordPenSetting { get; set; }
+        public Brush IntegrationAreaSetting { get; set; }
+        public double FunctionLineThickness { get; set; }
+        public double CoordLineThickness { get; set; }
         public bool AutoRefresh { get; set; }
 
         public FunctionDrawing()
@@ -29,8 +32,10 @@ namespace FunctionSketch
             UnitNumForWidth = 20;
             AutoRefresh = true;
             AspectRatio = 412.8 / 549.92;
-            FuncsPenSetting = new Pen(Brushes.White, 0.05);
-            CoordPenSetting = new Pen(Brushes.Green, 0.07);
+            FuncsPenSetting = Brushes.White;
+            CoordPenSetting = Brushes.Green;
+            IntegrationAreaSetting = Brushes.OrangeRed;
+            FunctionLineThickness = CoordLineThickness = 0.02;
             Refresh();
         }
         public FunctionDrawing(FunctionStorage[] funcsStore) : this()
@@ -133,10 +138,10 @@ namespace FunctionSketch
             }
         }
 
-        private void DrawLineWithCoordPoints(Pen pen, Point p1, Point p2)
+        private void DrawLineWithCoordPoints(Brush color, double thickness, Point p1, Point p2)
         {
             Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
-            pen.Thickness = ScaleLength * 0.02;
+            Pen pen = new Pen(color, ScaleLength * thickness);
             brush.DrawLine(pen, p1 * trans, p2 * trans);
         }
 
