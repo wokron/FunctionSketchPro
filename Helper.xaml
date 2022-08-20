@@ -1,0 +1,31 @@
+﻿<Window x:Class="函数画板.Helper"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:函数画板"
+        mc:Ignorable="d"
+        Title="Helper" Height="450" Width="400" MaxHeight="450" MaxWidth="400">
+    <Grid>
+        <Border BorderBrush="#3F3F46" BorderThickness="5,5,5,5">
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <TextBlock Background="#2D2D30" Foreground="White" TextWrapping="Wrap" FontWeight="Thin" Padding="10">
+                    <Bold>简介：</Bold><LineBreak/>
+                    <Bold>函数画板（FunctionSketch）</Bold>是一个轻量的函数绘制软件。支持单变量函数、参数方程、隐函数的绘制。可以采用直角坐标和极坐标绘制简单图像，并带有求导、积分、二维线性变换等功能。<LineBreak/>
+                    <LineBreak/>
+                    <Bold>函数输入：</Bold><LineBreak/>
+                    请点击主界面右侧函数列表内的加号按钮，之后输入函数表达式。表达式支持初等函数（请注意三角函数只使用sin、cos、tan；对数如logm(n)请使用mlogn表示）。参数方程请用逗号间隔，并以x或t作为参数。可一次输入多个函数，每个函数之间以分号分割。<LineBreak/>
+                    <LineBreak/>
+                    <Bold>更多功能：</Bold><LineBreak/>
+                    更多功能请点击函数信息框右侧省略号。用以设置包括坐标形式、线性变换、平移、求导、积分等额外内容。设置完成后按应用键以应用设置。<LineBreak/>
+                    <LineBreak/>
+                    <Bold>移动、缩放：</Bold><LineBreak/>
+                    小范围的移动与缩放功能可以直接使用鼠标拖动和滚轮实现。较大范围的移动请使用菜单栏“设置”按钮来设置。<LineBreak/>
+                    <LineBreak/>
+                    <Bold>设置：</Bold><LineBreak/>
+                    利用设置来改变更多内容。如曲线、坐标轴颜色；曲线宽度；显示范围等等。
+                </TextBlock>
+            </Border>
+        </Border>
+    </Grid>
+</Window>

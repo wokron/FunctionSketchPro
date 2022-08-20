@@ -115,7 +115,7 @@ namespace FunctionSketch
                 {
                     while (saveOp.Count != 0
                         && !(saveOp.Peek() is OpLeftBracket)
-                        && op.IsSmallerThan(saveOp.Peek()))
+                        && op.IsSmallerOrEqualThan(saveOp.Peek()))
                     {
                         AddOperatorToTree(saveOp.Pop());
                     }

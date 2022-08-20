@@ -10,10 +10,12 @@ namespace FunctionSketch
     {
         private readonly double partialRate = 10d;
         private double Deci { get => dx * partialRate; }
-        public void DrawFunction(Func<double, double, double> func)
+        public void DrawFunction(DoubleVarFuncStorage save)
         {
-            if (func == null)
+            if (save == null)
                 return;
+
+            var func = save.GetFunc();
 
             int blockCntForWidth = (int)((WidthLim.to - WidthLim.from) / Deci + 1); 
             /* 末尾加一，向上取整 */
@@ -57,7 +59,7 @@ namespace FunctionSketch
             var vPairs = GetTransferVectorPaires(v1, v2, v3, v4);
             foreach ((Vector v1, Vector v2) vPair in vPairs)
             {
-                DrawLineWithCoordPoints(FuncsPenSetting, point + vPair.v1, point + vPair.v2);
+                DrawLineWithCoordPoints(FuncsPenSetting, FunctionLineThickness, point + vPair.v1, point + vPair.v2);
             }
         }
 

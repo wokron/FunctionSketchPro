@@ -7,8 +7,11 @@ public abstract class ExpressionElement
     public abstract double Calculate(double x);
     public abstract double Calculate(double x, double y);
     public abstract ExpressionElement Derivative();
-
     public abstract ExpressionElement Clone();
+    public virtual ExpressionElement Simplified()
+    {
+        return this;
+    }
 }
 
 public class Value : ExpressionElement
@@ -56,6 +59,16 @@ public class Value : ExpressionElement
     {
         return new Value(0);
     }
+
+    public override string ToString()
+    {
+        if (val == E)
+            return "e";
+        else if (val == PI)
+            return "Pi";
+        else
+            return val.ToString();
+    }
 }
 
 public class ArgumentX : ExpressionElement
@@ -74,6 +87,11 @@ public class ArgumentX : ExpressionElement
     public override ExpressionElement Derivative()
     {
         return new Value(1);
+    }
+
+    public override string ToString()
+    {
+        return "x";
     }
 }
 
@@ -95,5 +113,10 @@ public class ArgumentY : ExpressionElement
     public override ExpressionElement Derivative()
     {
         throw new InvalidOperationException("y对x求导，无法得到表达式树");
+    }
+
+    public override string ToString()
+    {
+        return "y";
     }
 }

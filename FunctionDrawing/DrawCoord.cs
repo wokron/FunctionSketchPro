@@ -19,27 +19,17 @@ namespace FunctionSketch
 
         private void DrawMainCoordX()
         {
-            if (HeightLim.Contains(0))
-            {
-                DrawXLineAt(0);
-                DrawXScaleAt(0);
-            }
-            else if (0 < HeightLim.from)
-            {
-                DrawXLineAt(HeightLim.from);
-                DrawXScaleAt(HeightLim.from);
-            }
-            else
-            {
-                DrawXLineAt(HeightLim.to);
-                DrawXScaleAt(HeightLim.to, isReverse: true);
-            }
+            double position = HeightLim.RestrictNum(0);
+            bool reverse = 0 > HeightLim.to;
+            DrawXLineAt(position);
+            DrawXScaleAt(position, reverse);
         }
 
         private void DrawXLineAt(double y)
         {
             DrawLineWithCoordPoints(
                 CoordPenSetting,
+                CoordLineThickness,
                 new Point(WidthLim.from, y),
                 new Point(WidthLim.to, y));
         }
@@ -57,34 +47,24 @@ namespace FunctionSketch
             for (double i = start; i < WidthLim.to; i += ScaleLength)
             {
                 Point begin = new Point(i, y);
-                DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
+                DrawLineWithCoordPoints(CoordPenSetting, CoordLineThickness, begin, begin + trans);
                 DrawTextAt($"{i:N2}", begin);
             }
         }
 
         private void DrawMainCoordY()
         {
-            if (WidthLim.Contains(0))
-            {
-                DrawYLineAt(0);
-                DrawYScaleAt(0);
-            }
-            else if (0 < WidthLim.from)
-            {
-                DrawYLineAt(WidthLim.from);
-                DrawYScaleAt(WidthLim.from);
-            }
-            else
-            {
-                DrawYLineAt(WidthLim.to);
-                DrawYScaleAt(WidthLim.to, isReverse: true);
-            }
+            double position = WidthLim.RestrictNum(0);
+            bool reverse = 0 > WidthLim.to;
+            DrawYLineAt(position);
+            DrawYScaleAt(position, reverse);
         }
 
         private void DrawYLineAt(double x)
         {
             DrawLineWithCoordPoints(
                 CoordPenSetting,
+                CoordLineThickness,
                 new Point(x, HeightLim.from),
                 new Point(x, HeightLim.to));
         }
@@ -102,7 +82,7 @@ namespace FunctionSketch
             for (double i = start; i < HeightLim.to; i += ScaleLength)
             {
                 Point begin = new Point(x, i);
-                DrawLineWithCoordPoints(CoordPenSetting, begin, begin + trans);
+                DrawLineWithCoordPoints(CoordPenSetting, CoordLineThickness, begin, begin + trans);
                 if (i < -ScaleLength/2d || i > ScaleLength/2d)
                     DrawTextAt($"{i:N2}", begin);
             }

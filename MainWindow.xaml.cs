@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Threading;
 using FunctionSketch;
 using static System.Math;
+using Microsoft.Win32;
+using System.IO;
 
 namespace 函数画板
 {
@@ -23,62 +25,51 @@ namespace 函数画板
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FunctionDrawing drawing = new FunctionDrawing();
+
         public MainWindow()
         {
             InitializeComponent();
-            Test();
+            DrawingInit();
         }
 
-        FunctionDrawing fd = new FunctionDrawing();
-
-        private void Test()
+        private void DrawingInit()
         {
-            //fd.SetMiddlePosition(5, 5);
-            //fd.AutoRefresh = false;
-            //fd.SetMiddlePosition(10, 0);
-            //fd.AddFunction(x => Pow(E, -x)*Sin(20*x));
-            //fd.AddFunction(x => Sin(x));
-            //fd.AddFunction(x => x * x);
-            //fd.AddFunction(x => Sin(100d/(x)));
-            //fd.AddFunction(x => Tan(x));
-            //fd.AddFunction(x => (Sin(x), Cos(x)));
-            //fd.AddFunction(x => (x, Sin(x)));
-            //fd.AddFunction(x => (x, Sin(100d / (x))));
-            //fd.AddFunction(x => (x, Tan(x)));
-            FunctionFactory ff = new FunctionFactory("y=x^2;y=elogx;x^2/8+y^2/3=1");
-            fd.AddFunction(ff.GetFunctions());
-            //fd.AddFunction(x => (Sqrt(Cos(x)) * Cos(200 * x) + Sqrt(Abs(x)) - 0.7) * Pow(4 - x * x, 0.01));
-            //fd.AddFunction(x => (2*Sin(x), 2*Cos(x)));
-            //fd.AddFunction((x, y) => y * y * y + Pow(3, x) - x * x * x - Pow(3, y));
-            fd.SaveImageTo(img);
-            
+            drawing.SaveImageTo(img);
+            this.SizeChanged += MainWindow_SizeChanged;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void GetFunctionEvent(object sender, EventArgs e)
         {
-            fd.IncreaseUnitNumForWidth(-0.5);
+            GetFuncEventArgs args = (GetFuncEventArgs)e;
+            drawing.AddFunction(args.GetFuncs());
+            foreach (var func in args.GetFuncs())
+            {
+                var show = new FunctionShowing(func);
+                show.RefreshEvent = (s, e) => drawing.Refresh();
+                show.DeleteEvent = (s, e) => { drawing.RemoveFunction(func); pnl.Children.Remove(show); };
+                show.CreateNewEvent = GetFunctionEvent;
+                pnl.Children.Insert(pnl.Children.Count - 1, show);
+            }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            fd.ClearAllFunction();
+            drawing.AspectRatio = measureGrid.ActualHeight / imageGrid.ActualWidth;
+            drawing.Refresh();
         }
 
-
-        bool isDown = false;
-        Point oriMiddle;
-        Point mouseDownp;
-        int detectCnt = 0;
+        private bool isDown = false;
+        private Point oriMiddle;
+        private Point mouseDownp;
         private void Img_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDown)
             {
-                detectCnt++;
-                result.Content = $"探测次数：{detectCnt}";
                 Point nowp = e.GetPosition(img);
                 Vector move = nowp - mouseDownp;
-                Vector coordMove = new Vector(-move.X/100d, move.Y/100d);
-                fd.SetMiddlePosition(oriMiddle + coordMove);
+                Vector coordMove = new Vector(-move.X / 100d, move.Y / 100d);
+                drawing.SetMiddlePosition(oriMiddle + coordMove);
             }
             
         }
@@ -132,7 +123,7 @@ namespace 函数画板
         private void Img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             isDown = true;
-            oriMiddle = fd.GetMiddlePosition();
+            oriMiddle = drawing.GetMiddlePosition();
             mouseDownp = e.GetPosition(img);
         }
 
@@ -144,9 +135,55 @@ namespace 函数画板
         private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
-                fd.IncreaseUnitNumForWidth(-1);
+                drawing.IncreaseUnitNumForWidth(-1);
             else if (e.Delta < 0)
-                fd.IncreaseUnitNumForWidth(1);
+                drawing.IncreaseUnitNumForWidth(1);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            drawing.SaveImageToFile();
+        }
+
+        private void SourceCodeClick(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("Explorer.exe", "https://github.com/wokron/FunctionSketchPro");
+        }
+
+        private void SaveImageClick(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists("./SaveImage/"))
+                Directory.CreateDirectory("./SaveImage/");
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JPeg Image|*.jpg";
+            saveFileDialog.Title = "保存函数图像";
+            saveFileDialog.FileName = "FunctionImage";
+
+            if ((bool)saveFileDialog.ShowDialog() && saveFileDialog.FileName != "")
+            {
+                using (FileStream fs = (FileStream)saveFileDialog.OpenFile())
+                {
+                    drawing.SaveImageToFile(fs);
+                }
+            }
+        }
+
+        private void CheckDefaultSavePath(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("Explorer.exe", ".\\SaveImage");
+        }
+
+        private void ShowHelper(object sender, RoutedEventArgs e)
+        {
+            var helper = new Helper();
+            helper.Show();
+        }
+
+        private void DrawingSettingClick(object sender, RoutedEventArgs e)
+        {
+            var drawingSetting = new DrawingSetting(drawing);
+            drawingSetting.ShowDialog();
         }
     }
 }

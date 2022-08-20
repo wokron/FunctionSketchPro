@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using static System.Math;
 namespace FunctionSketch
 {
@@ -32,21 +33,24 @@ namespace FunctionSketch
             }
         }
 
-        private void DrawFunction(Func<double, (double, double)> func, double start = 0d, double end = 10d)
+        private void DrawFunction(ParamVarFuncStorage save)
         {
-            if (func == null)
+            if (save == null)
                 return;
+
+            Func<double, (double, double)> func = save.GetFunc();
+            Matrix trans = save.Transform;
+            LimitRange range = save.GetRange();
 
             SortedList<double, Point> points = new SortedList<double, Point>();
             IList<Point> sortedPoints = points.Values;
             IList<double> saveArguments = points.Keys;
-            for (double i = start; i <= end; i += dx)
+            for (double i = range.from; i <= range.to; i += dx)
             {
-                (double, double) result = func(i);
-                double x = result.Item1;
-                double y = result.Item2;
-                if (WidthLim.Contains(x) && HeightLim.Contains(y))
-                    points.Add(i, new Point(x, y));
+                (double x, double y) = func(i);
+                Point draw = PointTransform(new Point(x, y), save);
+                if (WidthLim.Contains(draw.X) && HeightLim.Contains(draw.Y))
+                    points.Add(i, draw);
                 else
                     points.Add(i, new Point(double.NaN, double.NaN));
                 if (points.Count >= 3)
@@ -54,7 +58,7 @@ namespace FunctionSketch
                     double t3 = saveArguments[points.Count - 1],
                         t2 = saveArguments[points.Count - 2],
                         t1 = saveArguments[points.Count - 3];
-                    SmoothGraphByAddingPoint(points, func, t1, t2, t3);
+                    SmoothGraphByAddingPoint(points, save, t1, t2, t3);
                 }
             }
 
@@ -63,16 +67,16 @@ namespace FunctionSketch
                 Point p1 = sortedPoints[i - 1], p2 = sortedPoints[i];
                 if (FindDiscontinuityPoint(p1, p2))
                     continue;
-                DrawLineWithCoordPoints(FuncsPenSetting, p1, p2);
+                DrawLineWithCoordPoints(FuncsPenSetting, FunctionLineThickness, p1, p2);
             }
         }
 
         private readonly double smoothRate = 0.1d;
-        private readonly int maxRecur = 10;
+        private readonly int maxRecur = 5;
 
         private void SmoothGraphByAddingPoint(
             SortedList<double, Point> points,
-            Func<double, (double, double)> func,
+            ParamVarFuncStorage save,
             double t1, double t2, double t3, int recurNum = 1)
         {
             Point p1 = points[t1], p2 = points[t2], p3 = points[t3];
@@ -81,25 +85,43 @@ namespace FunctionSketch
                 || recurNum > maxRecur)
                 return;
 
+            var func = save.GetFunc();
+            var trans = save.Transform;
+
             double midt = (t1 + t2) / 2d;
             (double x, double y) = func(midt);
-            if (WidthLim.Contains(x) && HeightLim.Contains(y))
+            Point draw = PointTransform(new Point(x, y), save);
+            if (WidthLim.Contains(draw.X) && HeightLim.Contains(draw.Y))
             {
-                points.Add(midt, new Point(x, y));
+                points.Add(midt, draw);
                 SmoothGraphByAddingPoint(
-                    points, func,
+                    points, save,
                     t1, midt, t2, recurNum + 1);
             }
 
             midt = (t2 + t3) / 2d;
             (x, y) = func(midt);
-            if (WidthLim.Contains(x) && HeightLim.Contains(y))
+            draw = PointTransform(new Point(x, y), save);
+            if (WidthLim.Contains(draw.X) && HeightLim.Contains(draw.Y))
             {
-                points.Add(midt, new Point(x, y));
+                points.Add(midt, draw);
                 SmoothGraphByAddingPoint(
-                    points, func,
+                    points, save,
                     t2, midt, t3, recurNum + 1);
             }
+        }
+
+        private Point PointTransform(Point point, AbstractParamFuncStorage save)
+        {
+            if (save.IsPolarPlot)
+                point = PolarTransform(point);
+            return point * save.Transform;
+        }
+
+        private Point PolarTransform(Point p)
+        {
+            double theta = p.X, r = p.Y;
+            return new Point(r * Cos(theta), r * Sin(theta));
         }
 
         private bool FindDiscontinuityPoint(Point p1, Point p2)

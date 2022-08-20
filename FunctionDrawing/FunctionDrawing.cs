@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using static System.Math;
+using System.IO;
 
 namespace FunctionSketch
 {
@@ -18,17 +20,22 @@ namespace FunctionSketch
 
         public double UnitNumForWidth { get; set; }
         public double AspectRatio { get; set; }
-        public Pen FuncsPenSetting { get; set; }
-        public Pen CoordPenSetting { get; set; }
+        public Brush FuncsPenSetting { get; set; }
+        public Brush CoordPenSetting { get; set; }
+        public Brush IntegrationAreaSetting { get; set; }
+        public double FunctionLineThickness { get; set; }
+        public double CoordLineThickness { get; set; }
         public bool AutoRefresh { get; set; }
 
         public FunctionDrawing()
         {
             UnitNumForWidth = 20;
             AutoRefresh = true;
-            AspectRatio = 0.618;
-            FuncsPenSetting = new Pen(Brushes.Black, 0.05);
-            CoordPenSetting = new Pen(Brushes.Gray, 0.07);
+            AspectRatio = 412.8 / 549.92;
+            FuncsPenSetting = Brushes.White;
+            CoordPenSetting = Brushes.Green;
+            IntegrationAreaSetting = Brushes.OrangeRed;
+            FunctionLineThickness = CoordLineThickness = 0.02;
             Refresh();
         }
         public FunctionDrawing(FunctionStorage[] funcsStore) : this()
@@ -52,6 +59,11 @@ namespace FunctionSketch
         public FunctionStorage[] GetFunctions()
         {
             return saveFunctions.ToArray();
+        }
+
+        public void RemoveFunction(FunctionStorage save)
+        {
+            saveFunctions.Remove(save);
         }
 
         public void RemoveFunctionAt(int index)
@@ -102,11 +114,14 @@ namespace FunctionSketch
 
         public void IncreaseUnitNumForWidth(double inc)
         {
-            UnitNumForWidth += inc;
+            if (UnitNumForWidth + inc > 0)
+                UnitNumForWidth += inc;
+            else
+                UnitNumForWidth = 1;
             Refresh();
         }
 
-        private void Refresh()
+        public void Refresh()
         {
             funcsCanvas = new DrawingGroup();
             using (brush = funcsCanvas.Open())
@@ -114,33 +129,61 @@ namespace FunctionSketch
                 DrawCoord();
                 foreach (var save in saveFunctions)
                 {
-                    DrawFunction((save as SingleVarFuncStorage)?.GetFunc());
-                    DrawFunction((save as DoubleVarFuncStorage)?.GetFunc());
-                    DrawFunction((save as ParamVarFuncStorage)?.GetFunc());
+                    DrawFunction(save as SingleVarFuncStorage);
+                    DrawFunction(save as ParamVarFuncStorage);
+                    DrawFunction(save as DoubleVarFuncStorage);
                 }
                 if (AutoRefresh)
                     SaveImageTo();
             }
         }
 
-        private void DrawLineWithCoordPoints(Pen pen, Point p1, Point p2)
+        private void DrawLineWithCoordPoints(Brush color, double thickness, Point p1, Point p2)
         {
             Matrix trans = new Matrix(1, 0, 0, -1, 0, 0);
-            pen.Thickness = ScaleLength * 0.02;
+            Pen pen = new Pen(color, ScaleLength * thickness);
             brush.DrawLine(pen, p1 * trans, p2 * trans);
+        }
+
+        public void SaveImageToFile(FileStream fs)
+        {
+            RenderTargetBitmap render = new RenderTargetBitmap(
+                    (int)(targetImage.ActualWidth + 1), (int)(targetImage.ActualHeight + 1),
+                    96d, 96d, PixelFormats.Pbgra32);
+            render.Render(targetImage);
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(render));
+            encoder.Save(fs);
+        }
+
+        public void SaveImageToFile(string imgName = "image", string path = "./SaveImage/")
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            string savePath = path + imgName + ".jpg";
+
+            using (FileStream fs = new FileStream(path + imgName + ".jpg", FileMode.Create))
+            {
+                SaveImageToFile(fs);
+            }
         }
     }
 
-    internal struct LimitRange
+    public struct LimitRange
     {
         public double from;
         public double to;
 
         public LimitRange(double from, double to)
         {
+            if (from > to)
+                throw new ArgumentException("from必须小于或等于to");
             this.from = from;
             this.to = to;
         }
+
+        public double RestrictNum(double num)
+            => Max(Min(to, num), from);
 
         public bool Contains(double num)
             => from <= num && num <= to;

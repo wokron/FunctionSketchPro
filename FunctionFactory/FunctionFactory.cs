@@ -11,8 +11,7 @@ namespace FunctionSketch
 
         public FunctionFactory(string funcsExp)
         {
-            string[] funcs = funcsExp.ToUpper().Split(';', StringSplitOptions.RemoveEmptyEntries);
-
+            string[] funcs = FixZeroInExpression(funcsExp).ToUpper().Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var func in funcs)
             {
                 if (isParamFunction(func))
@@ -25,6 +24,20 @@ namespace FunctionSketch
                     throw new ArgumentException("表达式无法转换成函数");
             }
         }
+
+        private string FixZeroInExpression(string funcExp)
+        {
+            StringBuilder sb = new StringBuilder(funcExp);
+            for (int i = 0; i < sb.Length; i++)
+            {
+                if (IsOmitZeroInsertPosition(sb, i))
+                    sb.Insert(i, '0');
+            }
+            return sb.ToString();
+        }
+
+        private bool IsOmitZeroInsertPosition(StringBuilder sb, int index)
+            => sb[index] == '-' && (index == 0 || sb[index - 1] == '(' || sb[index - 1] == ';');
 
         private bool isDoubleFunction(string func)
             => func.Contains('X') && func.Contains('Y') && func.Contains('=');
@@ -54,7 +67,7 @@ namespace FunctionSketch
 
         private ParamVarFuncStorage parseParamFunc(string func)
         {
-            string[] funcs = func.Split(',');
+            string[] funcs = func.Replace('T', 'X').Split(',');
             if (isSingleFunction(funcs[0]) && isSingleFunction(funcs[1]))
             {
                 var p1 = new FunctionParser(funcs[0]);

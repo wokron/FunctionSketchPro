@@ -7,10 +7,18 @@ public abstract class Operator : ExpressionElement
 {
     protected abstract int GetPriority();
 
-    public bool IsSmallerThan(Operator op2)
+    public bool IsSmallerOrEqualThan(Operator op2)
     {
-        return this.GetPriority() < op2.GetPriority();
+        return this.GetPriority() <= op2.GetPriority();
     }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
+    }
+
+    protected abstract void SimplifiedChildren();
 }
 
 public abstract class SingleElementOperator : Operator
@@ -20,11 +28,22 @@ public abstract class SingleElementOperator : Operator
         childElements = new ExpressionElement[1];
     }
 
+    public SingleElementOperator(ExpressionElement childElem) : this()
+    {
+        ChildElem = childElem;
+    }
+
     public ExpressionElement ChildElem
     {
         get => childElements[0];
         set => childElements[0] = value;
     }
+
+    protected override void SimplifiedChildren()
+    {
+        ChildElem = ChildElem.Simplified();
+    }
+
     public override double Calculate(double x)
     {
         double num = ChildElem.Calculate(x);
@@ -47,6 +66,12 @@ public abstract class DoubleElementsOperator : Operator
         childElements = new ExpressionElement[2];
     }
 
+    public DoubleElementsOperator(ExpressionElement left, ExpressionElement right) : this()
+    {
+        Left = left;
+        Right = right;
+    }
+
     public ExpressionElement Left
     {
         get => childElements[0];
@@ -58,6 +83,13 @@ public abstract class DoubleElementsOperator : Operator
         get => childElements[1];
         set => childElements[1] = value;
     }
+
+    protected override void SimplifiedChildren()
+    {
+        Left = Left.Simplified();
+        Right = Right.Simplified();
+    }
+
     public override double Calculate(double x)
     {
         double numLeft = Left.Calculate(x), numRight = Right.Calculate(x);
@@ -75,20 +107,30 @@ public abstract class DoubleElementsOperator : Operator
 
 public class OpPlus : DoubleElementsOperator
 {
+    public OpPlus() { }
+    
+    public OpPlus(ExpressionElement left, ExpressionElement right) : base(left, right) { }
+    
     public override ExpressionElement Clone()
     {
-        OpPlus rt = new OpPlus();
-        rt.Left = this.Left.Clone();
-        rt.Right = this.Right.Clone();
+        OpPlus rt = new OpPlus(Left.Clone(), Right.Clone());
         return rt;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        if (Left is Value val1 && val1.Val == 0)
+            return Right;
+        if (Right is Value val2 && val2.Val == 0)
+            return Left;
+        return this;
     }
 
     public override ExpressionElement Derivative()
     {
         ExpressionElement leftDerive = Left.Derivative(), rightDerive = Right.Derivative();
-        OpPlus rt = new OpPlus();
-        rt.Left = leftDerive;
-        rt.Right = rightDerive;
+        OpPlus rt = new OpPlus(leftDerive, rightDerive);
 
         return rt;
     }
@@ -97,100 +139,161 @@ public class OpPlus : DoubleElementsOperator
         => left + right;
 
     protected override int GetPriority() => 1;
+
+    public override string ToString()
+    {
+        return $"({Left}+{Right})";
+    }
 }
 
 public class OpSubtract : DoubleElementsOperator
 {
+    public OpSubtract() { }
+
+    public OpSubtract(ExpressionElement left, ExpressionElement right) : base(left, right) { }
     public override ExpressionElement Clone()
     {
-        OpSubtract rt = new OpSubtract();
-        rt.Left = this.Left.Clone();
-        rt.Right = this.Right.Clone();
+        OpSubtract rt = new OpSubtract(Left.Clone(), Right.Clone());
+
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
         ExpressionElement leftDerive = Left.Derivative(), rightDerive = Right.Derivative();
-        OpSubtract rt = new OpSubtract();
-        rt.Left = leftDerive;
-        rt.Right = rightDerive;
+        OpSubtract rt = new OpSubtract(leftDerive, rightDerive);
 
         return rt;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        if (Right is Value val && val.Val == 0)
+            return Left;
+        return this;
     }
 
     protected override double DoCalculation(double left, double right)
         => left - right;
 
     protected override int GetPriority() => 1;
+
+    public override string ToString()
+    {
+        if (Left is Value v && v.Val == 0)
+            return $"-{Right}";
+        else
+            return $"({Left}-{Right})";
+    }
 }
 
 public class OpMultiply : DoubleElementsOperator
 {
+    public OpMultiply() { }
+
+    public OpMultiply(ExpressionElement left, ExpressionElement right) : base(left, right) { }
     public override ExpressionElement Clone()
     {
-        OpMultiply rt = new OpMultiply();
-        rt.Left = this.Left.Clone();
-        rt.Right = this.Right.Clone();
+        OpMultiply rt = new OpMultiply(Left.Clone(), Right.Clone());
+
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
         ExpressionElement leftDerive = Left.Derivative(), rightDerive = Right.Derivative();
-        OpMultiply leftBranch = new OpMultiply(), rightBranch = new OpMultiply();
-        leftBranch.Left = leftDerive;
-        leftBranch.Right = Right.Clone();
-        rightBranch.Left = Left.Clone();
-        rightBranch.Right = rightDerive;
-        OpPlus rt = new OpPlus();
-        rt.Left = leftBranch;
-        rt.Right = rightBranch;
+        OpMultiply leftBranch = new OpMultiply(leftDerive, Right.Clone()),
+            rightBranch = new OpMultiply(Left.Clone(), rightDerive);
+        OpPlus rt = new OpPlus(leftBranch, rightBranch);
 
         return rt;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+
+        if (Left is Value v1)
+        {
+            if (v1.Val == 0)
+                return Left;
+            if (v1.Val == 1)
+                return Right;
+        }
+        if (Right is Value v2)
+        {
+            if (v2.Val == 0)
+                return Right;
+            if (v2.Val == 1)
+                return Left;
+        }
+        return this;
     }
 
     protected override double DoCalculation(double left, double right)
         => left * right;
 
     protected override int GetPriority() => 2;
+
+    public override string ToString()
+    {
+        if (Left is Value v && v.Val == -1)
+            return $"-{Right}";
+        else
+            return $"({Left}*{Right})";
+    }
 }
 
 public class OpDivide : DoubleElementsOperator
 {
+    public OpDivide() { }
+
+    public OpDivide(ExpressionElement left, ExpressionElement right) : base(left, right) { }
     public override ExpressionElement Clone()
     {
-        OpDivide rt = new OpDivide();
-        rt.Left = this.Left.Clone();
-        rt.Right = this.Right.Clone();
+        OpDivide rt = new OpDivide(Left.Clone(), Right.Clone());
+
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpExponentiation pow = new OpExponentiation();
-        pow.Left = this.Right.Clone();
-        pow.Right = new Value(-1);
-        OpMultiply root = new OpMultiply();
-        root.Left = this.Left.Clone();
-        root.Right = pow;
+        OpExponentiation pow = new OpExponentiation(Right.Clone(), new Value(-1));
+        OpMultiply root = new OpMultiply(Left.Clone(), pow);
 
         return root.Derivative();
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        if (Left is Value v1 && v1.Val == 0)
+            return Left;
+        if (Right is Value v2 && v2.Val == 1)
+            return Left;
+        return this;
     }
 
     protected override double DoCalculation(double left, double right)
         => left / right;
 
     protected override int GetPriority() => 2;
+
+    public override string ToString()
+    {
+        return $"({Left}/{Right})";
+    }
 }
 
 public class OpExponentiation : DoubleElementsOperator
 {
+    public OpExponentiation() { }
+
+    public OpExponentiation(ExpressionElement left, ExpressionElement right) : base(left, right) { }
     public override ExpressionElement Clone()
     {
-        OpExponentiation rt = new OpExponentiation();
-        rt.Left = this.Left.Clone();
-        rt.Right = this.Right.Clone();
+        OpExponentiation rt = new OpExponentiation(Left.Clone(), Right.Clone());
+
         return rt;
     }
 
@@ -199,27 +302,17 @@ public class OpExponentiation : DoubleElementsOperator
         if (this.Left is Value) // 指数函数
         {
             double ln = Log((this.Left as Value).Val);
-            OpMultiply mul = new OpMultiply();
-            mul.Left = new Value(ln);
-            mul.Right = this.Clone();
-            OpMultiply rt = new OpMultiply();
-            rt.Left = mul;
-            rt.Right = this.Right.Derivative();
+            OpMultiply mul = new OpMultiply(new Value(ln), Clone());
+            OpMultiply rt = new OpMultiply(mul, Right.Derivative());
 
             return rt;
         }
         else if (this.Right is Value) // 多项式函数
         {
             double poli = (this.Right as Value).Val;
-            OpExponentiation exp = new OpExponentiation();
-            exp.Left = this.Left.Clone();
-            exp.Right = new Value(poli - 1);
-            OpMultiply mul = new OpMultiply();
-            mul.Left = new Value(poli);
-            mul.Right = exp;
-            OpMultiply rt = new OpMultiply();
-            rt.Left = mul;
-            rt.Right = this.Left.Derivative();
+            OpExponentiation exp = new OpExponentiation(Left.Clone(), new Value(poli - 1));
+            OpMultiply mul = new OpMultiply(new Value(poli), exp);
+            OpMultiply rt = new OpMultiply(mul, Left.Derivative());
 
             return rt;
         }
@@ -227,19 +320,45 @@ public class OpExponentiation : DoubleElementsOperator
             throw new InvalidOperationException("过于困难的求导");
     }
 
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+
+        if (Left is Value v1)
+        {
+            if (v1.Val == 0 || v1.Val == 1)
+                return Left;
+        }
+        if (Right is Value v2)
+        {
+            if (v2.Val == 0)
+                return new Value(1);
+            if (v2.Val == 1)
+                return Left;
+        }
+        return this;
+    }
+
     protected override double DoCalculation(double left, double right)
         => Pow(left, right);
 
     protected override int GetPriority() => 3;
+
+    public override string ToString()
+    {
+        return $"({Left}^{Right})";
+    }
 }
 
 public class OpLogarithm : DoubleElementsOperator
 {
+    public OpLogarithm() { }
+
+    public OpLogarithm(ExpressionElement left, ExpressionElement right) : base(left, right) { }
     public override ExpressionElement Clone()
     {
-        OpLogarithm rt = new OpLogarithm();
-        rt.Left = this.Left.Clone();
-        rt.Right = this.Right.Clone();
+        OpLogarithm rt = new OpLogarithm(Left.Clone(), Right.Clone());
+
         return rt;
     }
 
@@ -248,12 +367,8 @@ public class OpLogarithm : DoubleElementsOperator
         if (this.Left is Value)
         {
             double ln = Log((this.Left as Value).Val);
-            OpMultiply mul = new OpMultiply();
-            mul.Left = this.Right.Clone();
-            mul.Right = new Value(ln);
-            OpDivide divide = new OpDivide();
-            divide.Left = this.Right.Derivative();
-            divide.Right = mul;
+            OpMultiply mul = new OpMultiply(Right.Clone(), new Value(ln));
+            OpDivide divide = new OpDivide(Right.Derivative(), mul);
 
             return divide;
         }
@@ -265,10 +380,15 @@ public class OpLogarithm : DoubleElementsOperator
         => Log(right, left);
 
     protected override int GetPriority() => 4;
+
+    public override string ToString()
+    {
+        return $"log{Left}({Right})";
+    }
 }
 
 public class OpLeftBracket : SingleElementOperator
-{
+{   
     public override ExpressionElement Clone()
     {
         OpLeftBracket rt = new OpLeftBracket();
@@ -309,20 +429,26 @@ public class OpRightBranket : SingleElementOperator
 
 public class OpSin : SingleElementOperator
 {
+    public OpSin() { }
+
+    public OpSin(ExpressionElement childElem) : base(childElem) { }
     public override ExpressionElement Clone()
     {
-        OpSin rt = new OpSin();
-        rt.ChildElem = this.ChildElem.Clone();
+        OpSin rt = new OpSin(ChildElem.Clone());
+
         return rt;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpCos cos = new OpCos();
-        cos.ChildElem = this.ChildElem.Clone();
-        OpMultiply rt = new OpMultiply();
-        rt.Left = cos;
-        rt.Right = this.ChildElem.Derivative();
+        OpCos cos = new OpCos(ChildElem.Clone());
+        OpMultiply rt = new OpMultiply(cos, ChildElem.Derivative());
 
         return rt;
     }
@@ -331,152 +457,201 @@ public class OpSin : SingleElementOperator
         => Sin(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"sin{ChildElem}";
+    }
 }
 
 public class OpCos : SingleElementOperator
 {
+    public OpCos() { }
+
+    public OpCos(ExpressionElement childElem) : base(childElem) { }
     public override ExpressionElement Clone()
     {
-        OpCos rt = new OpCos();
-        rt.ChildElem = this.ChildElem.Clone();
+        OpCos rt = new OpCos(ChildElem.Clone());
+
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpSin sin = new OpSin();
-        sin.ChildElem = this.ChildElem.Clone();
-        OpMultiply mul = new OpMultiply();
-        mul.Left = sin;
-        mul.Right = this.ChildElem.Derivative();
-        OpDivide divide = new OpDivide();
-        divide.Left = new Value(0);
-        divide.Right = mul;
+        OpSin sin = new OpSin(ChildElem.Clone());
+        OpMultiply mul = new OpMultiply(sin, ChildElem.Derivative());
+        OpSubtract divide = new OpSubtract(new Value(0), mul);
 
         return divide;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
         => Cos(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"cos{ChildElem}";
+    }
 }
 
 public class OpTan : SingleElementOperator
 {
+    public OpTan() { }
+
+    public OpTan(ExpressionElement childElem) : base(childElem) { }
     public override ExpressionElement Clone()
     {
-        OpTan rt = new OpTan();
-        rt.ChildElem = this.ChildElem.Clone();
+        OpTan rt = new OpTan(ChildElem.Clone());
+
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpSin sin = new OpSin();
-        sin.ChildElem = this.ChildElem.Clone();
-        OpCos cos = new OpCos();
-        cos.ChildElem = this.ChildElem.Clone();
-        OpDivide divide = new OpDivide();
-        divide.Left = sin;
-        divide.Right = cos;
+        OpSin sin = new OpSin(ChildElem.Clone());
+        OpCos cos = new OpCos(ChildElem.Clone());
+        OpDivide divide = new OpDivide(sin, cos);
 
         return divide.Derivative();
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
         => Tan(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"tan{ChildElem}";
+    }
 }
 
 public class OpArcsin : SingleElementOperator
 {
+    public OpArcsin() { }
+
+    public OpArcsin(ExpressionElement childElem) : base(childElem) { }
     public override ExpressionElement Clone()
     {
-        OpArcsin rt = new OpArcsin();
-        rt.ChildElem = this.ChildElem.Clone();
+        OpArcsin rt = new OpArcsin(ChildElem.Clone());
+        
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpExponentiation exp1 = new OpExponentiation();
-        exp1.Left = this.ChildElem.Clone();
-        exp1.Right = new Value(2);
-        OpSubtract subtract = new OpSubtract();
-        subtract.Left = new Value(1);
-        subtract.Right = exp1;
-        OpExponentiation exp2 = new OpExponentiation();
-        exp2.Left = subtract;
-        exp2.Right = new Value(0.5);
-        OpDivide divide = new OpDivide();
-        divide.Left = this.ChildElem.Derivative();
-        divide.Right = exp2;
+        OpExponentiation exp1 = new OpExponentiation(ChildElem.Clone(), new Value(2));
+        OpSubtract subtract = new OpSubtract(new Value(1), exp1);
+        OpExponentiation exp2 = new OpExponentiation(subtract, new Value(0.5));
+        OpDivide divide = new OpDivide(ChildElem.Derivative(), exp2);
 
         return divide;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
         => Asin(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"arcsin{ChildElem}";
+    }
 }
 
 public class OpArccos : SingleElementOperator
 {
+    public OpArccos() { }
+
+    public OpArccos(ExpressionElement childElem) : base(childElem) { }
     public override ExpressionElement Clone()
     {
-        OpArccos rt = new OpArccos();
-        rt.ChildElem = this.ChildElem.Clone();
+        OpArccos rt = new OpArccos(ChildElem.Clone());
+
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpArcsin arcsin = new OpArcsin();
-        arcsin.ChildElem = this.ChildElem.Clone();
-        OpSubtract subtract = new OpSubtract();
-        subtract.Left = new Value(0);
-        subtract.Right = arcsin.Derivative();
+        OpArcsin arcsin = new OpArcsin(ChildElem.Clone());
+        OpSubtract subtract = new OpSubtract(new Value(0), arcsin.Derivative());
 
         return subtract;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
         => Acos(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"arccos{ChildElem}";
+    }
 }
 
 public class OpArctan : SingleElementOperator
 {
+    public OpArctan() { }
+
+    public OpArctan(ExpressionElement childElem) : base(childElem) { }
     public override ExpressionElement Clone()
     {
-        OpArctan rt = new OpArctan();
-        rt.ChildElem = this.ChildElem.Clone();
+        OpArctan rt = new OpArctan(ChildElem.Clone());
+        
         return rt;
     }
 
     public override ExpressionElement Derivative()
     {
-        OpExponentiation exp = new OpExponentiation();
-        exp.Left = this.ChildElem.Clone();
-        exp.Right = new Value(2);
-        OpPlus plus = new OpPlus();
-        plus.Left = exp;
-        plus.Right = new Value(1);
-        OpDivide divide = new OpDivide();
-        divide.Left = this.ChildElem.Derivative();
-        divide.Right = plus;
+        OpExponentiation exp = new OpExponentiation(ChildElem.Clone(), new Value(2));
+        OpPlus plus = new OpPlus(exp, new Value(1));
+        OpDivide divide = new OpDivide(ChildElem.Derivative(), plus);
 
         return divide;
+    }
+
+    public override ExpressionElement Simplified()
+    {
+        SimplifiedChildren();
+        return this;
     }
 
     protected override double DoCalculation(double right)
         => Atan(right);
 
     protected override int GetPriority() => 5;
+
+    public override string ToString()
+    {
+        return $"arctan{ChildElem}";
+    }
 }
 
 public static class OperatorFactory
