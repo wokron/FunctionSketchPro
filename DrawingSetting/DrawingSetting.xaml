@@ -33,7 +33,7 @@
 
             <Border Grid.Column="1" BorderBrush="#3F3F46" BorderThickness="5">
                 <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
-                    <Frame x:Name="mainFrame"/>
+                    <Frame x:Name="mainFrame" NavigationUIVisibility="Hidden"></Frame>
                 </Border>
             </Border>
             
@@ -42,7 +42,7 @@
         <Grid Grid.Row="1" Background="#3F3F46">
             <StackPanel FlowDirection="RightToLeft" Orientation="Horizontal">
                 <Button Content="取消" Margin="5,0,5,5" Width="50" Click="DisApplySetting"></Button>
-                <Button Content="确定" Margin="5,0,5,5" Width="50" Click="ApplySetting"></Button>
+                <Button Content="应用" Margin="5,0,5,5" Width="50" Click="ApplySetting"></Button>
             </StackPanel>
         </Grid>
         

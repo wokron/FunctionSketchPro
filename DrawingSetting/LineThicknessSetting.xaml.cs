@@ -17,15 +17,15 @@ namespace 函数画板
     /// <summary>
     /// LineSticknessSetting.xaml 的交互逻辑
     /// </summary>
-    public partial class LineSticknessSetting : Page
+    public partial class LineThicknessSetting : Page
     {
         private FunctionDrawing drawing;
-        public LineSticknessSetting()
+        public LineThicknessSetting()
         {
             InitializeComponent();
         }
 
-        public LineSticknessSetting(FunctionDrawing drawing) : this()
+        public LineThicknessSetting(FunctionDrawing drawing) : this()
         {
             this.drawing = drawing;
             ShowOldSettings();

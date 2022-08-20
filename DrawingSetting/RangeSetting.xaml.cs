@@ -33,8 +33,9 @@ namespace 函数画板
 
         private void ShowOldSettings()
         {
-            positionGetter.Text = drawing.GetMiddlePosition().ToString();
-            unitLengthGetter.Text = drawing.UnitNumForWidth.ToString();
+            Point point = drawing.GetMiddlePosition();
+            positionGetter.Text = $"{point.X:N2},{point.Y:N2}";
+            unitLengthGetter.Text = $"{drawing.UnitNumForWidth:N2}";
         }
 
         public (string, string) GetSettings()
