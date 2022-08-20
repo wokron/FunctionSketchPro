@@ -96,5 +96,10 @@ namespace 函数画板
         {
             drawing.SaveImageToFile();
         }
+
+        private void SourceCodeClick(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "https://github.com/wokron/FunctionSketchPro");
+        }
     }
 }

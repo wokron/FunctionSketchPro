@@ -21,7 +21,7 @@
             </MenuItem>
             <MenuItem Header="设置" Foreground="White" Margin="5,5,0,0"></MenuItem>
             <MenuItem Header="帮助" Foreground="White" Margin="5,5,0,0">
-                <MenuItem Header="源代码" Foreground="Black"></MenuItem>
+                <MenuItem Header="源代码" Foreground="Black" Click="SourceCodeClick"></MenuItem>
                 <MenuItem Header="操作说明" Foreground="Black"></MenuItem>
             </MenuItem>
         </Menu>
