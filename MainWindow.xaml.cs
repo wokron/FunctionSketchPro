@@ -111,10 +111,9 @@ namespace 函数画板
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "JPeg Image|*.jpg";
-            saveFileDialog.Title = "Save an Image File";
+            saveFileDialog.Title = "保存函数图像";
             saveFileDialog.FileName = "FunctionImage";
-            saveFileDialog.InitialDirectory = Directory.GetCurrentDirectory() + "SaveImage";
-           
+
             if ((bool)saveFileDialog.ShowDialog() && saveFileDialog.FileName != "")
             {
                 using (FileStream fs = (FileStream)saveFileDialog.OpenFile())
