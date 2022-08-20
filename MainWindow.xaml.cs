@@ -57,9 +57,9 @@ namespace 函数画板
             drawing.Refresh();
         }
 
-        bool isDown = false;
-        Point oriMiddle;
-        Point mouseDownp;
+        private bool isDown = false;
+        private Point oriMiddle;
+        private Point mouseDownp;
         private void Img_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDown)

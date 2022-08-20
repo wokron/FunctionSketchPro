@@ -54,7 +54,7 @@ namespace FunctionSketch
 
         private ParamVarFuncStorage parseParamFunc(string func)
         {
-            string[] funcs = func.Split(',');
+            string[] funcs = func.Replace('T', 'X').Split(',');
             if (isSingleFunction(funcs[0]) && isSingleFunction(funcs[1]))
             {
                 var p1 = new FunctionParser(funcs[0]);

@@ -138,7 +138,8 @@ namespace FunctionSketch
 
         public override string ToString()
         {
-            return $"x={expressionTree[0]},y={expressionTree[1]}".Replace('x', 't');
+            return $"x={expressionTree[0].ToString().Replace('x', 't')}," +
+                $"y={expressionTree[1].ToString().Replace('x', 't')}";
         }
     }
 
