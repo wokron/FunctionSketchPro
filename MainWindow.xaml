@@ -17,7 +17,7 @@
         <Menu Background="#3F3F46">
             <MenuItem Header="文件" Foreground="White" Margin="5,5,0,0">
                 <MenuItem Header="保存" Foreground="Black" Click="SaveImageClick"></MenuItem>
-                <MenuItem Header="打开默认保存位置" Foreground="Black"></MenuItem>
+                <MenuItem Header="打开默认保存位置" Foreground="Black" Click="CheckDefaultSavePath"></MenuItem>
             </MenuItem>
             <MenuItem Header="设置" Foreground="White" Margin="5,5,0,0"></MenuItem>
             <MenuItem Header="帮助" Foreground="White" Margin="5,5,0,0">

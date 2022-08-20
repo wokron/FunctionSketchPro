@@ -101,7 +101,7 @@ namespace 函数画板
 
         private void SourceCodeClick(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "https://github.com/wokron/FunctionSketchPro");
+            System.Diagnostics.Process.Start("Explorer.exe", "https://github.com/wokron/FunctionSketchPro");
         }
 
         private void SaveImageClick(object sender, RoutedEventArgs e)
@@ -114,15 +114,19 @@ namespace 函数画板
             saveFileDialog.Title = "Save an Image File";
             saveFileDialog.FileName = "FunctionImage";
             saveFileDialog.InitialDirectory = Directory.GetCurrentDirectory() + "SaveImage";
-            saveFileDialog.ShowDialog();
-
-            if (saveFileDialog.FileName != "")
+           
+            if ((bool)saveFileDialog.ShowDialog() && saveFileDialog.FileName != "")
             {
                 using (FileStream fs = (FileStream)saveFileDialog.OpenFile())
                 {
                     drawing.SaveImageToFile(fs);
                 }
             }
+        }
+
+        private void CheckDefaultSavePath(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("Explorer.exe", ".\\SaveImage");
         }
     }
 }
