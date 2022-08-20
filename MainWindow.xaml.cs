@@ -128,5 +128,11 @@ namespace 函数画板
         {
             System.Diagnostics.Process.Start("Explorer.exe", ".\\SaveImage");
         }
+
+        private void ShowHelper(object sender, RoutedEventArgs e)
+        {
+            var helper = new Helper();
+            helper.Show();
+        }
     }
 }
