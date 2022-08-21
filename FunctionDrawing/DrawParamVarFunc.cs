@@ -71,8 +71,8 @@ namespace FunctionSketch
             }
         }
 
-        private readonly double smoothRate = 0.1d;
-        private readonly int maxRecur = 5;
+        public double SmoothRate { get; set; } = 0.1d;
+        public int maxRecur { get; set; } = 5;
 
         private void SmoothGraphByAddingPoint(
             SortedList<double, Point> points,
@@ -80,7 +80,7 @@ namespace FunctionSketch
             double t1, double t2, double t3, int recurNum = 1)
         {
             Point p1 = points[t1], p2 = points[t2], p3 = points[t3];
-            if (Abs((p2.Y - p1.Y) + (p2.Y - p3.Y)) < smoothRate
+            if (Abs((p2.Y - p1.Y) + (p2.Y - p3.Y)) < SmoothRate
                 || p1.X == double.NaN || p2.X == double.NaN || p3.X == double.NaN
                 || recurNum > maxRecur)
                 return;

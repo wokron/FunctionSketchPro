@@ -8,8 +8,8 @@ namespace FunctionSketch
 {
     public partial class FunctionDrawing
     {
-        private readonly double partialRate = 10d;
-        private double Deci { get => dx * partialRate; }
+        public double PartialRate { get; set; } = 10d;
+        private double Deci { get => dx * PartialRate; }
         public void DrawFunction(DoubleVarFuncStorage save)
         {
             if (save == null)
@@ -69,8 +69,6 @@ namespace FunctionSketch
             SquareType type = SquareType.GetType(GetSquareType(v1, v2, v3, v4));
             return type.GetVectorPairs(Deci, v1, v2, v3, v4);
         }
-
-        
 
         private byte GetSquareType(double v1, double v2, double v3, double v4)
         {

@@ -16,26 +16,19 @@ namespace FunctionSketch
         private DrawingContext brush;
         private Image targetImage = null;
         private Point middlePoint = new Point(0d, 0d);
-        private readonly double dx = 0.05;
+        public double dx { get; set; } = 0.05;
 
-        public double UnitNumForWidth { get; set; }
-        public double AspectRatio { get; set; }
-        public Brush FuncsPenSetting { get; set; }
-        public Brush CoordPenSetting { get; set; }
-        public Brush IntegrationAreaSetting { get; set; }
-        public double FunctionLineThickness { get; set; }
-        public double CoordLineThickness { get; set; }
-        public bool AutoRefresh { get; set; }
+        public double UnitNumForWidth { get; set; } = 20;
+        public double AspectRatio { get; set; } = 412.8 / 549.92;
+        public Brush FuncsPenSetting { get; set; } = Brushes.White;
+        public Brush CoordPenSetting { get; set; } = Brushes.Green;
+        public Brush IntegrationAreaSetting { get; set; } = Brushes.OrangeRed;
+        public double FunctionLineThickness { get; set; } = 0.02;
+        public double CoordLineThickness { get; set; } = 0.02;
+        public bool AutoRefresh { get; set; } = true;
 
         public FunctionDrawing()
         {
-            UnitNumForWidth = 20;
-            AutoRefresh = true;
-            AspectRatio = 412.8 / 549.92;
-            FuncsPenSetting = Brushes.White;
-            CoordPenSetting = Brushes.Green;
-            IntegrationAreaSetting = Brushes.OrangeRed;
-            FunctionLineThickness = CoordLineThickness = 0.02;
             Refresh();
         }
         public FunctionDrawing(FunctionStorage[] funcsStore) : this()
