@@ -38,9 +38,12 @@ namespace 函数画板
             unitLengthGetter.Text = $"{drawing.UnitNumForWidth:N2}";
         }
 
-        public (string, string) GetSettings()
+        public (Point, double) GetSettings()
         {
-            return (positionGetter.Text, unitLengthGetter.Text);
+            string[] nums = positionGetter.Text.Split(',');
+            return (new Point(Convert.ToDouble(nums[0]),
+                Convert.ToDouble(nums[1])),
+                Convert.ToDouble(unitLengthGetter.Text));
         }
     }
 }

@@ -34,13 +34,14 @@ namespace 函数画板
             {
                 new RangeSetting(drawing),
                 new LineColorSetting(drawing),
-                new LineThicknessSetting(drawing)
+                new LineThicknessSetting(drawing),
+                new AlgorithmSetting(drawing)
             };
-            InitFrame(null, null);
+            InitFrame();
         }
 
-        int addIndex = 2;
-        private void InitFrame(object sender, RoutedEventArgs e)
+        int addIndex = 3;
+        private void InitFrame()
         {
             mainFrame.Navigate(settings[addIndex]);
             mainFrame.LoadCompleted += MainFrame_LoadCompleted;
@@ -75,6 +76,12 @@ namespace 函数画板
             mainFrame.Navigate(settings[2]);
         }
 
+        private void SetAlgorithm(object sender, RoutedEventArgs e)
+        {
+            ChooseThisOne(sender as ToggleButton);
+            mainFrame.Navigate(settings[3]);
+        }
+
         private void ChooseThisOne(ToggleButton button)
         {
             ClearAllChoose();
@@ -94,15 +101,15 @@ namespace 函数画板
             ApplyRangeSetting();
             ApplyLineColorSetting();
             ApplyLineThicknessSetting();
+            ApplyAlgorithmSetting();
             drawing.Refresh();
         }
 
         private void ApplyRangeSetting()
         {
-            (string str1, string str2) = (settings[0] as RangeSetting).GetSettings();
-            string[] xy = str1.Split(',');
-            drawing.SetMiddlePosition(Convert.ToDouble(xy[0]), Convert.ToDouble(xy[1]));
-            drawing.UnitNumForWidth = Convert.ToDouble(str2);
+            (Point p, double unitLen) = (settings[0] as RangeSetting).GetSettings();
+            drawing.SetMiddlePosition(p);
+            drawing.UnitNumForWidth = unitLen;
         }
 
         private void ApplyLineColorSetting()
@@ -115,9 +122,19 @@ namespace 函数画板
 
         private void ApplyLineThicknessSetting()
         {
-            (string s1, string s2) = (settings[2] as LineThicknessSetting).GetSettings();
-            drawing.FunctionLineThickness = Convert.ToDouble(s1);
-            drawing.CoordLineThickness = Convert.ToDouble(s2);
+            (double forFunc, double forCoord) = (settings[2] as LineThicknessSetting).GetSettings();
+            drawing.FunctionLineThickness = forFunc;
+            drawing.CoordLineThickness = forCoord;
+        }
+
+        private void ApplyAlgorithmSetting()
+        {
+            (double dx, double smoothRate, int maxRecur, double partialRate)
+                = (settings[3] as AlgorithmSetting).GetSettings();
+            drawing.dx = dx;
+            drawing.SmoothRate = smoothRate;
+            drawing.maxRecur = maxRecur;
+            drawing.PartialRate = partialRate;
         }
 
         private Brush GetBrush(string s) => new SolidColorBrush((Color)ColorConverter.ConvertFromString(s));

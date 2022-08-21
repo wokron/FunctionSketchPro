@@ -37,9 +37,10 @@ namespace 函数画板
             coordTicknessGetter.Text = drawing.CoordLineThickness.ToString();
         }
 
-        public (string, string) GetSettings()
+        public (double, double) GetSettings()
         {
-            return (funcThicknessGetter.Text, coordTicknessGetter.Text);
+            return (Convert.ToDouble(funcThicknessGetter.Text),
+                Convert.ToDouble(coordTicknessGetter.Text));
         }
     }
 }

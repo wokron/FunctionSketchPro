@@ -26,6 +26,7 @@
                             <ToggleButton Content="显示范围" Height="30" Click="SetShowArea" Margin="5,5,5,0"></ToggleButton>
                             <ToggleButton Content="线条颜色" Height="30" Click="SetLineColor" Margin="5,5,5,0"></ToggleButton>
                             <ToggleButton Content="线条宽度" Height="30" Click="SetLineStickness" Margin="5,5,5,0"></ToggleButton>
+                            <ToggleButton Content="算法" Height="30" Click="SetAlgorithm" Margin="5,5,5,0"></ToggleButton>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
