@@ -13,7 +13,7 @@
             <Label Foreground="White">基本：</Label>
             <Label Foreground="White" Margin="10,0,0,0">最小绘制间隔(dx):</Label>
             <TextBox x:Name="dxGetter" Background="#333333" Foreground="White" Margin="10,0,0,0"></TextBox>
-            <Label Foreground="White" Margin="0,15,0,0">插值算法(单变量和参数函数绘制)：</Label>
+            <Label Foreground="White" Margin="0,15,0,0">平滑算法(单变量和参数函数绘制)：</Label>
             <Label Foreground="White" Margin="10,0,0,0">平滑率：</Label>
             <TextBox x:Name="smoothRateGetter" Background="#333333" Foreground="White" Margin="10,0,0,0"></TextBox>
             <Label Foreground="White" Margin="10,0,0,0">最大递归层数：</Label>
