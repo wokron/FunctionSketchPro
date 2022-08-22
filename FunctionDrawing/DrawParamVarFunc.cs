@@ -80,7 +80,7 @@ namespace FunctionSketch
             double t1, double t2, double t3, int recurNum = 1)
         {
             Point p1 = points[t1], p2 = points[t2], p3 = points[t3];
-            if (Abs((p2.Y - p1.Y) + (p2.Y - p3.Y)) < SmoothRate
+            if (Abs((p2.Y - p1.Y)/(p2.X - p1.X) - (p3.Y - p2.Y)/(p3.X - p2.X)) < SmoothRate
                 || p1.X == double.NaN || p2.X == double.NaN || p3.X == double.NaN
                 || recurNum > maxRecur)
                 return;
