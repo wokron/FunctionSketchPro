@@ -60,6 +60,7 @@ namespace 函数画板
             {
                 AddPanelContent(pnl, "直角坐标");
                 AddPanelContent(pnl, "隐函数");
+                AddDoubleFuncSetting(save as DoubleVarFuncStorage);
             }
         }
 
@@ -126,6 +127,12 @@ namespace 函数画板
         {
             popPnl.Children.Clear();
             popPnl.Children.Add(new SettingForParamFunc(save, ReturnAndRefresh));
+        }
+
+        private void AddDoubleFuncSetting(DoubleVarFuncStorage save)
+        {
+            popPnl.Children.Clear();
+            popPnl.Children.Add(new SettingForDoubleFunc(save, ReturnAndRefresh));
         }
 
         private void ReturnAndRefresh(object sender, EventArgs e)

@@ -35,7 +35,8 @@ namespace FunctionSketch
                     nowVals[icnt] = func(i, j);
                     if (icnt > 0 && jcnt > 0)
                     {
-                        DrawLineInSquare(new Point(i, j),
+                        DrawLineInSquare(save,
+                            new Point(i, j),
                             preVals[icnt - 1],
                             preVals[icnt],
                             nowVals[icnt],
@@ -54,12 +55,12 @@ namespace FunctionSketch
             arr2 = tmp;
         }
 
-        private void DrawLineInSquare(Point point, double v1, double v2, double v3, double v4)
+        private void DrawLineInSquare(DoubleVarFuncStorage save, Point point, double v1, double v2, double v3, double v4)
         {
             var vPairs = GetTransferVectorPaires(v1, v2, v3, v4);
             foreach ((Vector v1, Vector v2) vPair in vPairs)
             {
-                DrawLineWithCoordPoints(DefaultFuncsPenBrush, FunctionLineThickness, point + vPair.v1, point + vPair.v2);
+                DrawLineWithCoordPoints(GetPenBrush(save), FunctionLineThickness, point + vPair.v1, point + vPair.v2);
             }
         }
 
