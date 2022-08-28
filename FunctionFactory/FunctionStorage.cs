@@ -9,6 +9,8 @@ namespace FunctionSketch
     {
         protected ExpressionElement[] expressionTree;
 
+        public Color? FuncColor { get; set; } = null;
+
         public override string ToString()
         {
             string rt = string.Empty;
@@ -118,7 +120,8 @@ namespace FunctionSketch
             var rt = new ParamVarFuncStorage(new ArgumentX(), expressionTree[0])
             {
                 IsPolarPlot = this.IsPolarPlot,
-                Transform = this.Transform
+                Transform = this.Transform,
+                FuncColor = this.FuncColor
             };
             return rt;
         }

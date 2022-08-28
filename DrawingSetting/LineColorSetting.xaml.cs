@@ -33,9 +33,9 @@ namespace 函数画板
 
         private void ShowOldSettings()
         {
-            funcColorGetter.Text = drawing.FuncsPenSetting.ToString();
-            coordColorGetter.Text = drawing.CoordPenSetting.ToString();
-            integrateColorGetter.Text = drawing.IntegrationAreaSetting.ToString();
+            funcColorGetter.Text = drawing.DefaultFuncsPenBrush.ToString();
+            coordColorGetter.Text = drawing.CoordPenBrush.ToString();
+            integrateColorGetter.Text = drawing.IntegrationAreaBrush.ToString();
         }
 
         public (string, string, string) GetSettings()

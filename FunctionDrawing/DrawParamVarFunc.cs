@@ -67,8 +67,16 @@ namespace FunctionSketch
                 Point p1 = sortedPoints[i - 1], p2 = sortedPoints[i];
                 if (FindDiscontinuityPoint(p1, p2))
                     continue;
-                DrawLineWithCoordPoints(FuncsPenSetting, FunctionLineThickness, p1, p2);
+                DrawLineWithCoordPoints(GetPenBrush(save), FunctionLineThickness, p1, p2);
             }
+        }
+
+        private Brush GetPenBrush(FunctionStorage storage)
+        {
+            if (storage.FuncColor == null)
+                return DefaultFuncsPenBrush;
+            else
+                return new SolidColorBrush((Color)storage.FuncColor);
         }
 
         public double SmoothRate { get; set; } = 0.1d;

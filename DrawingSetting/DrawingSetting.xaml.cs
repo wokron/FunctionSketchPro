@@ -115,9 +115,9 @@ namespace 函数画板
         private void ApplyLineColorSetting()
         {
             (string s1, string s2, string s3) = (settings[1] as LineColorSetting).GetSettings();
-            drawing.FuncsPenSetting = GetBrush(s1);
-            drawing.CoordPenSetting = GetBrush(s2);
-            drawing.IntegrationAreaSetting = GetBrush(s3);
+            drawing.DefaultFuncsPenBrush = GetBrush(s1);
+            drawing.CoordPenBrush = GetBrush(s2);
+            drawing.IntegrationAreaBrush = GetBrush(s3);
         }
 
         private void ApplyLineThicknessSetting()

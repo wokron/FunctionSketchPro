@@ -20,9 +20,9 @@ namespace FunctionSketch
 
         public double UnitNumForWidth { get; set; } = 20;
         public double AspectRatio { get; set; } = 412.8 / 549.92;
-        public Brush FuncsPenSetting { get; set; } = Brushes.White;
-        public Brush CoordPenSetting { get; set; } = Brushes.Green;
-        public Brush IntegrationAreaSetting { get; set; } = Brushes.OrangeRed;
+        public Brush DefaultFuncsPenBrush { get; set; } = Brushes.White;
+        public Brush CoordPenBrush { get; set; } = Brushes.Green;
+        public Brush IntegrationAreaBrush { get; set; } = Brushes.OrangeRed;
         public double FunctionLineThickness { get; set; } = 0.02;
         public double CoordLineThickness { get; set; } = 0.02;
         public bool AutoRefresh { get; set; } = true;

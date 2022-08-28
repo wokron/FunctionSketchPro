@@ -78,7 +78,7 @@ namespace FunctionSketch
                     }
                 }
             };
-            brush.DrawGeometry(IntegrationAreaSetting, null, geometry);
+            brush.DrawGeometry(IntegrationAreaBrush, null, geometry);
         }
     }
 }
