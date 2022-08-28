@@ -10,7 +10,7 @@
 
     <Grid>
         <StackPanel Background="#2D2D30" Margin="10">
-            <Label Foreground="White">曲线颜色：</Label>
+            <Label Foreground="White">曲线默认颜色：</Label>
             <TextBox x:Name="funcColorGetter" Background="#333333" Foreground="White"></TextBox>
             <Label Foreground="White">坐标轴颜色：</Label>
             <TextBox x:Name="coordColorGetter" Background="#333333" Foreground="White"></TextBox>

@@ -44,6 +44,7 @@ namespace 函数画板
             moveGetter.Text = $"({trans.OffsetX:N2},{trans.OffsetY:N2})";
             LimitRange range = save.GetRange();
             paramGetter.Text = $"{range.from:N2},{range.to:N2}";
+            colorGetter.Text = save.FuncColor == null ? "default" : $"{save.FuncColor}";
         }
 
         private void SwapGetter_Click(object sender, RoutedEventArgs e)
@@ -74,6 +75,19 @@ namespace 函数画板
                 range = save.GetRange();
             }
             save.SetRange(range);
+
+            var tmpSaveColor = save.FuncColor;
+            try
+            {
+                if (colorGetter.Text == "default")
+                    save.FuncColor = null;
+                else
+                    save.FuncColor = (Color)ColorConverter.ConvertFromString(colorGetter.Text);
+            }
+            catch (Exception)
+            {
+                save.FuncColor = tmpSaveColor;
+            }
 
             this.e.Invoke(sender, e);
             ShowSetting();
