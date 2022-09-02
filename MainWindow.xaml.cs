@@ -108,10 +108,12 @@ namespace 函数画板
             if (!Directory.Exists("./SaveImage/"))
                 Directory.CreateDirectory("./SaveImage/");
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JPeg Image|*.jpg|Expression|*.express";
-            saveFileDialog.Title = "保存函数图像";
-            saveFileDialog.FileName = "FunctionImage";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JPeg Image|*.jpg|Expression|*.express",
+                Title = "保存函数图像",
+                FileName = "FunctionImage"
+            };
 
             if ((bool)saveFileDialog.ShowDialog() && saveFileDialog.FileName != "")
             {
@@ -140,6 +142,33 @@ namespace 函数画板
         {
             var drawingSetting = new DrawingSetting(drawing);
             drawingSetting.ShowDialog();
+        }
+
+        private void LoadExpressionClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Expression|*.express",
+                Title = "加载表达式"
+            };
+
+            if ((bool)openFileDialog.ShowDialog() && openFileDialog.FileName != "")
+            {
+                using (FileStream fs = (FileStream)openFileDialog.OpenFile())
+                {
+                    AddExpressionFromFile(fs);
+                }
+            }
+        }
+
+        private void AddExpressionFromFile(FileStream fs)
+        {
+            StreamReader sr = new StreamReader(fs);
+            string exp = sr.ReadLine();
+
+            var fileff = new FunctionFactory(exp);
+            var funcs = fileff.GetFunctions();
+            GetFunctionEvent(null, new GetFuncEventArgs(funcs));
         }
     }
 }
