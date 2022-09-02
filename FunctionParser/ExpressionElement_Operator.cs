@@ -144,6 +144,11 @@ public class OpPlus : DoubleElementsOperator
     {
         return $"({Left}+{Right})";
     }
+
+    protected override string GetExpContent()
+    {
+        return $"{Left.GetExp()}+{Right.GetExp()}";
+    }
 }
 
 public class OpSubtract : DoubleElementsOperator
@@ -185,6 +190,11 @@ public class OpSubtract : DoubleElementsOperator
             return $"-{Right}";
         else
             return $"({Left}-{Right})";
+    }
+
+    protected override string GetExpContent()
+    {
+        return $"{Left.GetExp()}-{Right.GetExp()}";
     }
 }
 
@@ -243,6 +253,11 @@ public class OpMultiply : DoubleElementsOperator
         else
             return $"({Left}*{Right})";
     }
+
+    protected override string GetExpContent()
+    {
+        return $"{Left.GetExp()}*{Right.GetExp()}";
+    }
 }
 
 public class OpDivide : DoubleElementsOperator
@@ -282,6 +297,11 @@ public class OpDivide : DoubleElementsOperator
     public override string ToString()
     {
         return $"({Left}/{Right})";
+    }
+
+    protected override string GetExpContent()
+    {
+        return $"{Left.GetExp()}/{Right.GetExp()}";
     }
 }
 
@@ -348,6 +368,11 @@ public class OpExponentiation : DoubleElementsOperator
     {
         return $"({Left}^{Right})";
     }
+
+    protected override string GetExpContent()
+    {
+        return $"{Left.GetExp()}^{Right.GetExp()}";
+    }
 }
 
 public class OpLogarithm : DoubleElementsOperator
@@ -385,6 +410,11 @@ public class OpLogarithm : DoubleElementsOperator
     {
         return $"log{Left}({Right})";
     }
+
+    protected override string GetExpContent()
+    {
+        return $"{Left.GetExp()}log{Right.GetExp()}";
+    }
 }
 
 public class OpLeftBracket : SingleElementOperator
@@ -405,6 +435,11 @@ public class OpLeftBracket : SingleElementOperator
         => double.NaN;
 
     protected override int GetPriority() => 6;
+
+    protected override string GetExpContent()
+    {
+        return "()";
+    }
 }
 
 public class OpRightBranket : SingleElementOperator
@@ -425,6 +460,11 @@ public class OpRightBranket : SingleElementOperator
         => double.NaN;
 
     protected override int GetPriority() => 6;
+
+    protected override string GetExpContent()
+    {
+        return "()";
+    }
 }
 
 public class OpSin : SingleElementOperator
@@ -461,6 +501,11 @@ public class OpSin : SingleElementOperator
     public override string ToString()
     {
         return $"sin{ChildElem}";
+    }
+
+    protected override string GetExpContent()
+    {
+        return $"sin{ChildElem.GetExp()}";
     }
 }
 
@@ -500,6 +545,11 @@ public class OpCos : SingleElementOperator
     {
         return $"cos{ChildElem}";
     }
+
+    protected override string GetExpContent()
+    {
+        return $"cos{ChildElem.GetExp()}";
+    }
 }
 
 public class OpTan : SingleElementOperator
@@ -537,6 +587,11 @@ public class OpTan : SingleElementOperator
     public override string ToString()
     {
         return $"tan{ChildElem}";
+    }
+
+    protected override string GetExpContent()
+    {
+        return $"tan{ChildElem.GetExp()}";
     }
 }
 
@@ -577,6 +632,11 @@ public class OpArcsin : SingleElementOperator
     {
         return $"arcsin{ChildElem}";
     }
+
+    protected override string GetExpContent()
+    {
+        return $"arcsin{ChildElem.GetExp()}";
+    }
 }
 
 public class OpArccos : SingleElementOperator
@@ -613,6 +673,11 @@ public class OpArccos : SingleElementOperator
     public override string ToString()
     {
         return $"arccos{ChildElem}";
+    }
+
+    protected override string GetExpContent()
+    {
+        return $"arccos{ChildElem.GetExp()}";
     }
 }
 
@@ -651,6 +716,11 @@ public class OpArctan : SingleElementOperator
     public override string ToString()
     {
         return $"arctan{ChildElem}";
+    }
+
+    protected override string GetExpContent()
+    {
+        return $"arctan{ChildElem.GetExp()}";
     }
 }
 

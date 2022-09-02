@@ -12,6 +12,13 @@ public abstract class ExpressionElement
     {
         return this;
     }
+
+    public string GetExp()
+    {
+        return $"({GetExpContent()})";
+    }
+
+    protected abstract string GetExpContent();
 }
 
 public class Value : ExpressionElement
@@ -69,6 +76,9 @@ public class Value : ExpressionElement
         else
             return val.ToString();
     }
+
+    protected override string GetExpContent()
+        => val.ToString();
 }
 
 public class ArgumentX : ExpressionElement
@@ -93,6 +103,9 @@ public class ArgumentX : ExpressionElement
     {
         return "x";
     }
+
+    protected override string GetExpContent()
+        => ToString();
 }
 
 public class ArgumentY : ExpressionElement
@@ -119,4 +132,7 @@ public class ArgumentY : ExpressionElement
     {
         return "y";
     }
+
+    protected override string GetExpContent()
+        => ToString();
 }

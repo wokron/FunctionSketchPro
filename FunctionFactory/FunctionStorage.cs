@@ -18,6 +18,8 @@ namespace FunctionSketch
                 rt += exp + ";";
             return rt;
         }
+
+        public abstract string GetExpContent();
     }
 
     public class DoubleVarFuncStorage : FunctionStorage
@@ -25,6 +27,11 @@ namespace FunctionSketch
         public DoubleVarFuncStorage(ExpressionElement expression)
         {
             expressionTree = new ExpressionElement[] { expression };
+        }
+
+        public override string GetExpContent()
+        {
+            return $"{expressionTree[0].GetExp()}=0";
         }
 
         public Func<double, double, double> GetFunc()
@@ -125,6 +132,11 @@ namespace FunctionSketch
             };
             return rt;
         }
+
+        public override string GetExpContent()
+        {
+            return expressionTree[0].GetExp();
+        }
     }
 
     public class ParamVarFuncStorage : AbstractParamFuncStorage
@@ -132,6 +144,11 @@ namespace FunctionSketch
         public ParamVarFuncStorage(ExpressionElement express1, ExpressionElement express2)
         {
             expressionTree = new ExpressionElement[] { express1, express2 };
+        }
+
+        public override string GetExpContent()
+        {
+            return $"{expressionTree[0].GetExp()},{expressionTree[1].GetExp()}";
         }
 
         public Func<double, (double, double)> GetFunc()
