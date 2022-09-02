@@ -160,6 +160,21 @@ namespace FunctionSketch
                 SaveImageToFile(fs);
             }
         }
+
+        public void SaveExpressToFile(FileStream fs)
+        {
+            string exp = string.Empty;
+            foreach (var save in saveFunctions)
+            {
+                exp += save.GetExp() + ";";
+            }
+
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                sw.WriteLine(exp);
+                sw.Flush();
+            }
+        }
     }
 
     public struct LimitRange

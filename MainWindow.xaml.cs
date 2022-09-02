@@ -109,7 +109,7 @@ namespace 函数画板
                 Directory.CreateDirectory("./SaveImage/");
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JPeg Image|*.jpg";
+            saveFileDialog.Filter = "JPeg Image|*.jpg|Expression|*.express";
             saveFileDialog.Title = "保存函数图像";
             saveFileDialog.FileName = "FunctionImage";
 
@@ -117,7 +117,10 @@ namespace 函数画板
             {
                 using (FileStream fs = (FileStream)saveFileDialog.OpenFile())
                 {
-                    drawing.SaveImageToFile(fs);
+                    if (saveFileDialog.FilterIndex == 1)
+                        drawing.SaveImageToFile(fs);
+                    else if (saveFileDialog.FilterIndex == 2)
+                        drawing.SaveExpressToFile(fs);
                 }
             }
         }

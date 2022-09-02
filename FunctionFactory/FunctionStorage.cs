@@ -19,7 +19,7 @@ namespace FunctionSketch
             return rt;
         }
 
-        public abstract string GetExpContent();
+        public abstract string GetExp();
     }
 
     public class DoubleVarFuncStorage : FunctionStorage
@@ -29,7 +29,7 @@ namespace FunctionSketch
             expressionTree = new ExpressionElement[] { expression };
         }
 
-        public override string GetExpContent()
+        public override string GetExp()
         {
             return $"{expressionTree[0].GetExp()}=0";
         }
@@ -133,7 +133,7 @@ namespace FunctionSketch
             return rt;
         }
 
-        public override string GetExpContent()
+        public override string GetExp()
         {
             return expressionTree[0].GetExp();
         }
@@ -146,7 +146,7 @@ namespace FunctionSketch
             expressionTree = new ExpressionElement[] { express1, express2 };
         }
 
-        public override string GetExpContent()
+        public override string GetExp()
         {
             return $"{expressionTree[0].GetExp()},{expressionTree[1].GetExp()}";
         }
